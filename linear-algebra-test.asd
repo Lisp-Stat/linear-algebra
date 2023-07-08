@@ -3,13 +3,14 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(defsystem "linear-algebra-test"
+(in-package :asdf)
+
+(defsystem :linear-algebra-test
   :description "Unit Tests for Linear Algebra in Common Lisp"
-  :version "0.1.1"
+  :version "0.1.0"
   :author "Thomas M. Hermann <thomas.m.hermann@odonata-research.com>"
-  :maintainer "Steve Nunez <steve@symbolics.tech>"
-  :maintainer "Brian Eberman <bseberman@gmail.com>"
-  :license :MS-PL
+  :license "MIT"
+  :pathname "test/"
   :depends-on ("lisp-unit" "linear-algebra")
   :components
   ((:file "linear-algebra-test")

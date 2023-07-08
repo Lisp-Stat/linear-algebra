@@ -1,0 +1,3 @@
+This system is a high level interface for linear algebra and matrix manipulation.  It was forked from Thomas Hermann's linear-algebra library (https://github.com/OdonataResearchLLC/linear-algebra) and currently maintained by Brian Eberman and Steve Nunez.
+
+Current goals are to implement backends that use BLAS/LAPACK and CUDA.
