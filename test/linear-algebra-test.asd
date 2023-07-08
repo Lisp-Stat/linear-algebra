@@ -12,10 +12,10 @@
   :license :MS-PL
   :depends-on ("lisp-unit" "linear-algebra")
   :components
-  ((:file "linear-algebra-test")
+  ((:file "pkgdcl")
    ;; Linear algebra kernel tests
    (:module kernel
-    :depends-on ("linear-algebra-test")
+    :depends-on ("pkgdcl")
     :components
     ((:file "utility")
      (:file "permute")
@@ -28,7 +28,7 @@
      (:file "tridiagonal")))
    ;; Linear algebra interface
    (:module interface
-    :depends-on ("linear-algebra-test")
+    :depends-on ("pkgdcl")
     :components
     ((:file "matrix")
      (:file "identity-matrix" :depends-on ("matrix"))
@@ -41,7 +41,7 @@
      (:file "vector")
      (:file "array")))
    ;; Linear algebra tests
-   (:file "data-vector" :depends-on ("linear-algebra-test"))
+   (:file "data-vector" :depends-on ("pkgdcl"))
    (:file "dense-matrix" :depends-on ("interface"))
    (:file "square-matrix" :depends-on ("interface"))
    (:file "hermitian-matrix" :depends-on ("interface"))

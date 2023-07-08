@@ -17,28 +17,28 @@
   :source-control (:git "https://github.com/Lisp-Stat/linear-algebra.git")
   :bug-tracker "https://github.com/Lisp-Stat/linear-algebra/issues"
 
-  :pathname "lisp/"
+  :pathname "src/"
   :depends-on ("closer-mop" "floating-point")
   :components
-  ((:file "linear-algebra" :depends-on ("kernel"))
+  ((:file "pkgdcl" :depends-on ("kernel"))
    ;; Linear algebra kernel functions
    (:module kernel
+    :pathname "kernel/"
     :components
-    ((:file "linear-algebra-kernel")
-     (:file "utility" :depends-on ("linear-algebra-kernel"))
-     (:file "permute" :depends-on ("linear-algebra-kernel"))
-     (:file "unary-operations"
-      :depends-on ("linear-algebra-kernel"))
-     (:file "binary-operations"
-      :depends-on ("linear-algebra-kernel"))
+    ((:file "pkgdcl")
+     (:file "utility" :depends-on ("pkgdcl"))
+     (:file "permute" :depends-on ("pkgdcl"))
+     (:file "unary-operations" :depends-on ("pkgdcl"))
+     (:file "binary-operations" :depends-on ("pkgdcl"))
      (:file "rotation" :depends-on ("unary-operations"))
-     (:file "gauss" :depends-on ("linear-algebra-kernel"))
+     (:file "gauss" :depends-on ("pkgdcl"))
      (:file "cholesky" :depends-on ("unary-operations"))
      (:file "conjugate-gradient" :depends-on ("binary-operations"))
-     (:file "tridiagonal" :depends-on ("linear-algebra-kernel"))))
+     (:file "tridiagonal" :depends-on ("pkgdcl"))))
    ;; Interface
    (:module interface
-    :depends-on ("linear-algebra" "kernel")
+    :pathname "interface/"
+    :depends-on ("kernel")
     :components
     ((:file "fundamental-ops")
      (:file "vector" :depends-on ("fundamental-ops"))
@@ -78,5 +78,5 @@
 (defmethod perform :after
   ((operation load-op) (system (eql (find-system :linear-algebra))))
   "Update *FEATURES* if the system loads successfully."
-  (pushnew :linear-algebra-kernel common-lisp:*features*)
+  (pushnew :linear-algebra common-lisp:*features*)
   (pushnew :linear-algebra common-lisp:*features*))
