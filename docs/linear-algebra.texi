@@ -1,0 +1,6554 @@
+\input texinfo
+
+@c linear-algebra.texi --- Reference manual
+
+@c Copyright (C) 2019-2023 Steve Nunez
+@c Copyright (C) 2019-2023 Thomas M. Hermann
+
+@c This file is part of LINEAR-ALGEBRA.
+
+@c This program is distributed under the terms of the Microsoft Public
+@c License.
+
+
+@c Commentary:
+
+@c Generated automatically by Declt version 4.0 beta 2 "William Riker"
+@c on Sat Jul 08 14:11:49 2023 GMT+8.
+
+
+@c ====================================================================
+@c Header
+@c ====================================================================
+@c %**start of header
+@setfilename linear-algebra.info
+@settitle The LINEAR-ALGEBRA Reference Manual
+@afourpaper
+@documentencoding UTF-8
+@c %**end of header
+
+
+
+@c ====================================================================
+@c Format Specific Tweaks
+@c ====================================================================
+@tex
+%% Declt uses several Unicode characters to "reveal" blanks. This
+%% works fine in HTML or Info output, but TeX will have problems with
+%% these. The code below translates those characters to something that
+%% TeX can handle.
+
+%% U+23B5 (Bottom Square Bracket), used to reveal white spaces, is
+%% translated to its Computer Modern teletype version.
+\DeclareUnicodeCharacter{23B5}{{\tt\char'040}}
+
+%% U+21B5 (Downwards Arrow With Corner Leftwards), used to reveal
+%% carriage returns, is translated to \hookleftarrow in math mode.
+\DeclareUnicodeCharacter{21B5}{\ensuremath\hookleftarrow}
+
+%% U+21E5 (Rightwards Arrow To Bar), used to reveal tabs, is
+%% translated to something that looks similar, based on a rightarrow
+%% and a vertical bar from the math extension font.
+\DeclareUnicodeCharacter{21E5}{%
+  \ensuremath{\rightarrow\kern-.5em\mathchar\"130C}}
+
+
+%% Declt uses several Unicode characters to replace "fragile" ones in
+%% anchor names and references. These characters are chosen to resemble
+%% the original ones, without interfering with Info syntax. In TeX
+%% however, we can switch them back to the original versions, because
+%% cross-references are done differently. In theory, I think we could do
+%% something similar for HTML output (again, only the Info syntax poses
+%% problems), but I don't know how to do something similar to what's
+%% below.
+
+%% U+2024 (One Dot Leader) replaces periods.
+\DeclareUnicodeCharacter{2024}{.}
+
+%% U+2236 (Ratio) replaces colons.
+\DeclareUnicodeCharacter{2236}{:}
+
+%% U+2768 (Medium Left Parenthesis Ornament) replaces left parenthesis.
+\DeclareUnicodeCharacter{2768}{(}
+
+%% U+2769 (Medium Right Parenthesis Ornament) replaces right parenthesis.
+\DeclareUnicodeCharacter{2769}{)}
+
+%% U+214B (Turned Ampersand) replaces ampersands.
+\DeclareUnicodeCharacter{214B}{&}
+
+%% U+2216 (Set Minus) replaces backslashes.
+\DeclareUnicodeCharacter{2216}{\char"5C}
+
+%% The following ones are already defined in texinfo.tex so we have nothing
+%% more to do:
+%% U+201A (Single Low-9 Quotation Mark) replaces commas.
+%% U+2205 (Empty Set) replaces empty symbol names.
+
+@end tex
+
+
+
+@c ====================================================================
+@c Settings
+@c ====================================================================
+@setchapternewpage odd
+@documentdescription
+The LINEAR-ALGEBRA Reference Manual, version 0.1.1.
+@end documentdescription
+
+
+
+@c ====================================================================
+@c New Commands
+@c ====================================================================
+
+@c ---------------
+@c Indexing macros
+@c ---------------
+
+@c Packages
+@macro packageindex{name}
+@tpindex \name\
+@tpindex @r{Package, }\name\
+@end macro
+
+@c Systems
+@macro systemindex{name}
+@tpindex \name\
+@tpindex @r{System, }\name\
+@end macro
+
+@c Modules
+@macro moduleindex{name}
+@tpindex @t{\name\}
+@tpindex Module, @t{\name\}
+@end macro
+
+@c Files
+@macro fileindex{name}
+@tpindex @t{\name\}
+@tpindex File, @t{\name\}
+@end macro
+
+@c The following macros are meant to be used within @defxxx environments.
+@c Texinfo performs half the indexing job and we do the other half.
+
+@c Constants
+@macro constantsubindex{name}
+@vindex @r{Constant, }\name\
+@end macro
+
+@c Special variables
+@macro specialsubindex{name}
+@vindex @r{Special Variable, }\name\
+@end macro
+
+@c Symbol macros
+@macro symbolmacrosubindex{name}
+@vindex @r{Symbol Macro, }\name\
+@end macro
+
+@c Slots
+@macro slotsubindex{name}
+@vindex @r{Slot, }\name\
+@end macro
+
+@c Macros
+@macro macrosubindex{name}
+@findex @r{Macro, }\name\
+@end macro
+
+@c Compiler Macros
+@macro compilermacrosubindex{name}
+@findex @r{Compiler Macro, }\name\
+@end macro
+
+@c Functions
+@macro functionsubindex{name}
+@findex @r{Function, }\name\
+@end macro
+
+@c Methods
+@macro methodsubindex{name}
+@findex @r{Method, }\name\
+@end macro
+
+@c Generic Functions
+@macro genericsubindex{name}
+@findex @r{Generic Function, }\name\
+@end macro
+
+@c Setf Expanders
+@macro expandersubindex{name}
+@findex @r{Setf Expander, }\name\
+@end macro
+
+@c Method Combinations
+@macro combinationsubindex{name}
+@findex @r{Method Combination, }\name\
+@end macro
+
+@c Conditions
+@macro conditionsubindex{name}
+@tpindex @r{Condition, }\name\
+@end macro
+
+@c Structures
+@macro structuresubindex{name}
+@tpindex @r{Structure, }\name\
+@end macro
+
+@c Types
+@macro typesubindex{name}
+@tpindex @r{Type, }\name\
+@end macro
+
+@c Classes
+@macro classsubindex{name}
+@tpindex @r{Class, }\name\
+@end macro
+
+
+
+@c ====================================================================
+@c Info Category and Directory
+@c ====================================================================
+@dircategory Common Lisp
+@direntry
+* LINEAR-ALGEBRA Reference Manual: (linear-algebra). The LINEAR-ALGEBRA Reference Manual.
+@end direntry
+
+
+
+@c ====================================================================
+@c Copying
+@c ====================================================================
+@copying
+@quotation
+Copyright @copyright{} 2019-2023 Steve Nunez
+Copyright @copyright{} 2019-2023 Thomas M. Hermann
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries a copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided also that the
+section entitled ``Copying'' is included exactly as in the original.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be translated as well.
+@end quotation
+@end copying
+
+
+
+@c ====================================================================
+@c Title Page
+@c ====================================================================
+@titlepage
+@title The LINEAR-ALGEBRA Reference Manual
+@subtitle Linear Algebra for Common Lisp, version 0.1.1
+
+@author Steve Nunez <@email{steve@atchar{}symbolics.tech}>
+@author Thomas M. Hermann <@email{thomas.m.hermann@atchar{}odonata-research.com}>
+
+@page
+@quotation
+This manual was generated automatically by Declt 4.0b2.
+@end quotation
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+
+
+@c ====================================================================
+@c Table of Contents
+@c ====================================================================
+@contents
+
+
+
+@c ====================================================================
+@c Top
+@c ====================================================================
+@ifnottex
+@node Top, Copying, (dir), (dir)
+@top The LINEAR-ALGEBRA Reference Manual
+This is the LINEAR-ALGEBRA Reference Manual, version 0.1.1,
+generated automatically by Declt version 4.0b2.
+
+@menu
+* Copying:: The Microsoft Public License
+* Systems:: The systems documentation
+* Modules:: The modules documentation
+* Files:: The files documentation
+* Packages:: The packages documentation
+* Definitions:: The symbols documentation
+* Indexes:: Concepts, functions, variables and data types
+@end menu
+
+@insertcopying
+@end ifnottex
+
+
+
+@c ====================================================================
+@c Copying
+@c ====================================================================
+@node Copying, Systems, Top, Top
+@unnumbered Copying
+@quotation
+This program is distributed under the terms of the Microsoft Public
+License.
+@end quotation
+
+
+
+@c ====================================================================
+@c Systems
+@c ====================================================================
+@node Systems, Modules, Copying, Top
+@chapter Systems
+The main system appears first, followed by any subsystem dependency.
+
+@menu
+* The linear-algebra system::
+@end menu
+
+
+@c -------------------------
+@c The linear-algebra system
+@c -------------------------
+@node The linear-algebra system, , Systems, Systems
+@section @t{linear-algebra}
+@anchor{❨1❩}@c
+@systemindex{linear-algebra}@c
+Linear Algebra for Common Lisp
+@table @strong
+@item Long Name
+Linear Algebra for Common Lisp
+@item Maintainer
+Steve Nunez <@email{steve@atchar{}symbolics.tech}>
+@item Author
+Thomas M. Hermann <@email{thomas.m.hermann@atchar{}odonata-research.com}>
+@item Home Page
+@uref{https://lisp-stat.dev/docs/manuals/lla}
+@item Source Control
+@t{(GIT https://github.com/Lisp-Stat/linear-algebra.git)}
+@item Bug Tracker
+@uref{https://github.com/Lisp-Stat/linear-algebra/issues}
+@item License
+MS-PL
+@item Long Description
+This system is a high level interface for linear algebra and matrix manipulation.  It was forked from Thomas Hermann's linear-algebra library (https://github.com/OdonataResearchLLC/linear-algebra) and currently maintained by Brian Eberman and Steve Nunez.
+
+Current goals are to implement backends that use BLAS/LAPACK and CUDA.
+@item Version
+0.1.1
+@item Dependencies
+@itemize @bullet
+@item
+@t{closer-mop}@: (system).
+@item
+@t{floating-point}@: (system).
+@end itemize
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Child Components
+@itemize @bullet
+@item
+@ref{❨6❩, , @t{pkgdcl.lisp}}@: (file).
+@item
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item
+@ref{❨3❩, , @t{interface}}@: (module).
+@item
+@ref{❨4❩, , @t{sequence}}@: (module).
+@item
+@ref{❨25❩, , @t{data-vector.lisp}}@: (file).
+@item
+@ref{❨26❩, , @t{dense-matrix.lisp}}@: (file).
+@item
+@ref{❨27❩, , @t{square-matrix.lisp}}@: (file).
+@item
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}@: (file).
+@item
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}@: (file).
+@end itemize
+@end table
+
+
+
+@c ====================================================================
+@c Modules
+@c ====================================================================
+@node Modules, Files, Systems, Top
+@chapter Modules
+Modules are listed depth-first from the system components tree.
+
+@menu
+* The linear-algebra/kernel module::
+* The linear-algebra/interface module::
+* The linear-algebra/sequence module::
+@end menu
+
+
+@c --------------------------------
+@c The linear-algebra/kernel module
+@c --------------------------------
+@node The linear-algebra/kernel module, The linear-algebra/interface module, Modules, Modules
+@section @t{linear-algebra/kernel}
+@anchor{❨2❩}@c
+@moduleindex{kernel}@c
+@table @strong
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{linear-algebra}}@: (system).
+@item Child Components
+@itemize @bullet
+@item
+@ref{❨7❩, , @t{pkgdcl.lisp}}@: (file).
+@item
+@ref{❨8❩, , @t{utility.lisp}}@: (file).
+@item
+@ref{❨9❩, , @t{permute.lisp}}@: (file).
+@item
+@ref{❨10❩, , @t{unary-operations.lisp}}@: (file).
+@item
+@ref{❨11❩, , @t{binary-operations.lisp}}@: (file).
+@item
+@ref{❨12❩, , @t{rotation.lisp}}@: (file).
+@item
+@ref{❨13❩, , @t{gauss.lisp}}@: (file).
+@item
+@ref{❨14❩, , @t{cholesky.lisp}}@: (file).
+@item
+@ref{❨15❩, , @t{conjugate-gradient.lisp}}@: (file).
+@item
+@ref{❨16❩, , @t{tridiagonal.lisp}}@: (file).
+@end itemize
+@end table
+
+
+@c -----------------------------------
+@c The linear-algebra/interface module
+@c -----------------------------------
+@node The linear-algebra/interface module, The linear-algebra/sequence module, The linear-algebra/kernel module, Modules
+@section @t{linear-algebra/interface}
+@anchor{❨3❩}@c
+@moduleindex{interface}@c
+@table @strong
+@item Dependency
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{linear-algebra}}@: (system).
+@item Child Components
+@itemize @bullet
+@item
+@ref{❨17❩, , @t{fundamental-ops.lisp}}@: (file).
+@item
+@ref{❨18❩, , @t{vector.lisp}}@: (file).
+@item
+@ref{❨19❩, , @t{matrix.lisp}}@: (file).
+@item
+@ref{❨20❩, , @t{identity-matrix.lisp}}@: (file).
+@item
+@ref{❨21❩, , @t{permutation-matrix.lisp}}@: (file).
+@end itemize
+@end table
+
+
+@c ----------------------------------
+@c The linear-algebra/sequence module
+@c ----------------------------------
+@node The linear-algebra/sequence module, , The linear-algebra/interface module, Modules
+@section @t{linear-algebra/sequence}
+@anchor{❨4❩}@c
+@moduleindex{sequence}@c
+@table @strong
+@item Dependency
+@ref{❨3❩, , @t{interface}}@: (module).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{linear-algebra}}@: (system).
+@item Child Components
+@itemize @bullet
+@item
+@ref{❨22❩, , @t{list.lisp}}@: (file).
+@item
+@ref{❨23❩, , @t{vector.lisp}}@: (file).
+@item
+@ref{❨24❩, , @t{array.lisp}}@: (file).
+@end itemize
+@end table
+
+
+
+@c ====================================================================
+@c Files
+@c ====================================================================
+@node Files, Packages, Modules, Top
+@chapter Files
+Files are sorted by type and then listed depth-first from the systems
+components trees.
+
+@menu
+* Lisp files::
+@end menu
+
+
+@c ----------
+@c Lisp files
+@c ----------
+@node Lisp files, , Files, Files
+@section Lisp
+@menu
+* The linear-algebra/linear-algebra․asd file::
+* The linear-algebra/pkgdcl․lisp file::
+* The linear-algebra/kernel/pkgdcl․lisp file::
+* The linear-algebra/kernel/utility․lisp file::
+* The linear-algebra/kernel/permute․lisp file::
+* The linear-algebra/kernel/unary-operations․lisp file::
+* The linear-algebra/kernel/binary-operations․lisp file::
+* The linear-algebra/kernel/rotation․lisp file::
+* The linear-algebra/kernel/gauss․lisp file::
+* The linear-algebra/kernel/cholesky․lisp file::
+* The linear-algebra/kernel/conjugate-gradient․lisp file::
+* The linear-algebra/kernel/tridiagonal․lisp file::
+* The linear-algebra/interface/fundamental-ops․lisp file::
+* The linear-algebra/interface/vector․lisp file::
+* The linear-algebra/interface/matrix․lisp file::
+* The linear-algebra/interface/identity-matrix․lisp file::
+* The linear-algebra/interface/permutation-matrix․lisp file::
+* The linear-algebra/sequence/list․lisp file::
+* The linear-algebra/sequence/vector․lisp file::
+* The linear-algebra/sequence/array․lisp file::
+* The linear-algebra/data-vector․lisp file::
+* The linear-algebra/dense-matrix․lisp file::
+* The linear-algebra/square-matrix․lisp file::
+* The linear-algebra/hermitian-matrix․lisp file::
+* The linear-algebra/symmetric-matrix․lisp file::
+@end menu
+
+@node The linear-algebra/linear-algebra․asd file, The linear-algebra/pkgdcl․lisp file, Lisp files, Lisp files
+@subsection @t{linear-algebra/linear-algebra.asd}
+@anchor{❨5❩}@c
+@fileindex{linear-algebra.asd}@c
+@table @strong
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{linear-algebra}}@: (system).
+@item ASDF Systems
+@ref{❨1❩, , @t{linear-algebra}}.
+@end table
+
+@node The linear-algebra/pkgdcl․lisp file, The linear-algebra/kernel/pkgdcl․lisp file, The linear-algebra/linear-algebra․asd file, Lisp files
+@subsection @t{linear-algebra/pkgdcl.lisp}
+@anchor{❨6❩}@c
+@fileindex{pkgdcl.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{linear-algebra}}@: (system).
+@item Packages
+@ref{❨31❩, , @t{linear-algebra}}.
+@end table
+
+@node The linear-algebra/kernel/pkgdcl․lisp file, The linear-algebra/kernel/utility․lisp file, The linear-algebra/pkgdcl․lisp file, Lisp files
+@subsection @t{linear-algebra/kernel/pkgdcl.lisp}
+@anchor{❨7❩}@c
+@fileindex{pkgdcl.lisp}@c
+@table @strong
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item Packages
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@end table
+
+@node The linear-algebra/kernel/utility․lisp file, The linear-algebra/kernel/permute․lisp file, The linear-algebra/kernel/pkgdcl․lisp file, Lisp files
+@subsection @t{linear-algebra/kernel/utility.lisp}
+@anchor{❨8❩}@c
+@fileindex{utility.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨7❩, , @t{pkgdcl.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨38❩, , @t{common-array-element-type}}@: (function).
+@item
+@ref{❨46❩, , @t{common-class-of}}@: (function).
+@item
+@ref{❨107❩, , @t{complex-equal}}@: (function).
+@item
+@ref{❨90❩, , @t{copy-array}}@: (generic function).
+@item
+@ref{❨111❩, , @t{number-equal}}@: (function).
+@item
+@ref{❨88❩, , @t{specific-array-element-type}}@: (function).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨115❩, , @t{zero-array}}@: (function).
+@item
+@ref{❨139❩, , @t{zero-vector}}@: (function).
+@end itemize
+@end table
+
+@node The linear-algebra/kernel/permute․lisp file, The linear-algebra/kernel/unary-operations․lisp file, The linear-algebra/kernel/utility․lisp file, Lisp files
+@subsection @t{linear-algebra/kernel/permute.lisp}
+@anchor{❨9❩}@c
+@fileindex{permute.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨7❩, , @t{pkgdcl.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨47❩, , @t{left-permute}}@: (generic function).
+@item
+@ref{❨32❩, , @t{right-permute}}@: (generic function).
+@end itemize
+@end table
+
+@node The linear-algebra/kernel/unary-operations․lisp file, The linear-algebra/kernel/binary-operations․lisp file, The linear-algebra/kernel/permute․lisp file, Lisp files
+@subsection @t{linear-algebra/kernel/unary-operations.lisp}
+@anchor{❨10❩}@c
+@fileindex{unary-operations.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨7❩, , @t{pkgdcl.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨78❩, , @t{norm-array}}@: (generic function).
+@item
+@ref{❨59❩, , @t{norm-vector}}@: (generic function).
+@item
+@ref{❨42❩, , @t{sump}}@: (generic function).
+@item
+@ref{❨74❩, , @t{sumsq}}@: (generic function).
+@item
+@ref{❨103❩, , @t{sumsq-column}}@: (function).
+@item
+@ref{❨108❩, , @t{sumsq-row}}@: (function).
+@item
+@ref{❨72❩, , @t{sumsq2}}@: (function).
+@item
+@ref{❨83❩, , @t{sumsq3}}@: (function).
+@end itemize
+@item Internals
+@ref{❨133❩, , @t{%abs-vector}}@: (function).
+@end table
+
+@node The linear-algebra/kernel/binary-operations․lisp file, The linear-algebra/kernel/rotation․lisp file, The linear-algebra/kernel/unary-operations․lisp file, Lisp files
+@subsection @t{linear-algebra/kernel/binary-operations.lisp}
+@anchor{❨11❩}@c
+@fileindex{binary-operations.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨7❩, , @t{pkgdcl.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨40❩, , @t{add-array}}@: (function).
+@item
+@ref{❨58❩, , @t{add-vector}}@: (function).
+@item
+@ref{❨93❩, , @t{compatible-dimensions-p}}@: (generic function).
+@item
+@ref{❨41❩, , @t{inner-product-vector}}@: (function).
+@item
+@ref{❨66❩, , @t{nadd-array}}@: (function).
+@item
+@ref{❨35❩, , @t{nadd-vector}}@: (function).
+@item
+@ref{❨37❩, , @t{nsubtract-array}}@: (function).
+@item
+@ref{❨67❩, , @t{nsubtract-vector}}@: (function).
+@item
+@ref{❨105❩, , @t{product-array-array}}@: (function).
+@item
+@ref{❨69❩, , @t{product-array-vector}}@: (function).
+@item
+@ref{❨71❩, , @t{product-vector-array}}@: (function).
+@item
+@ref{❨50❩, , @t{scaled-binary-op}}@: (generic function).
+@item
+@ref{❨70❩, , @t{subtract-array}}@: (function).
+@item
+@ref{❨84❩, , @t{subtract-vector}}@: (function).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨120❩, , @t{%array1<-array1-op-array2}}@: (function).
+@item
+@ref{❨122❩, , @t{%array<-array1-op-array2}}@: (function).
+@item
+@ref{❨129❩, , @t{%product-array-array}}@: (function).
+@item
+@ref{❨138❩, , @t{%product-array-vector}}@: (function).
+@item
+@ref{❨128❩, , @t{%product-vector-array}}@: (function).
+@item
+@ref{❨117❩, , @t{%scaled-product-array-array}}@: (function).
+@item
+@ref{❨135❩, , @t{%scaled-product-array-vector}}@: (function).
+@item
+@ref{❨127❩, , @t{%scaled-product-vector-array}}@: (function).
+@item
+@ref{❨113❩, , @t{%vector1<-vector1-op-vector2}}@: (function).
+@item
+@ref{❨118❩, , @t{%vector<-vector1-op-vector2}}@: (function).
+@end itemize
+@end table
+
+@node The linear-algebra/kernel/rotation․lisp file, The linear-algebra/kernel/gauss․lisp file, The linear-algebra/kernel/binary-operations․lisp file, Lisp files
+@subsection @t{linear-algebra/kernel/rotation.lisp}
+@anchor{❨12❩}@c
+@fileindex{rotation.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨10❩, , @t{unary-operations.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨64❩, , @t{givens-rotation}}@: (function).
+@item
+@ref{❨85❩, , @t{householder-reflection}}@: (function).
+@item
+@ref{❨104❩, , @t{jacobi-rotation}}@: (function).
+@end itemize
+@end table
+
+@node The linear-algebra/kernel/gauss․lisp file, The linear-algebra/kernel/cholesky․lisp file, The linear-algebra/kernel/rotation․lisp file, Lisp files
+@subsection @t{linear-algebra/kernel/gauss.lisp}
+@anchor{❨13❩}@c
+@fileindex{gauss.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨7❩, , @t{pkgdcl.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨86❩, , @t{gauss-invert}}@: (function).
+@item
+@ref{❨89❩, , @t{gauss-solver}}@: (function).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨131❩, , @t{column-pivot}}@: (function).
+@item
+@ref{❨130❩, , @t{column-pivot-search}}@: (function).
+@item
+@ref{❨136❩, , @t{gauss-backsubstitution}}@: (function).
+@item
+@ref{❨134❩, , @t{gauss-factorization}}@: (function).
+@item
+@ref{❨132❩, , @t{gauss-update}}@: (function).
+@item
+@ref{❨116❩, , @t{initialize-pivot-selection-vector}}@: (function).
+@item
+@ref{❨126❩, , @t{swap-rows}}@: (function).
+@item
+@ref{❨124❩, , @t{unit-pivot-value}}@: (function).
+@end itemize
+@end table
+
+@node The linear-algebra/kernel/cholesky․lisp file, The linear-algebra/kernel/conjugate-gradient․lisp file, The linear-algebra/kernel/gauss․lisp file, Lisp files
+@subsection @t{linear-algebra/kernel/cholesky.lisp}
+@anchor{❨14❩}@c
+@fileindex{cholesky.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨10❩, , @t{unary-operations.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨109❩, , @t{hermitian-cholesky-decomposition}}@: (function).
+@item
+@ref{❨39❩, , @t{hermitian-cholesky-invert}}@: (function).
+@item
+@ref{❨87❩, , @t{hermitian-cholesky-solver}}@: (function).
+@item
+@ref{❨106❩, , @t{root-free-hermitian-cholesky-decomposition}}@: (function).
+@item
+@ref{❨73❩, , @t{root-free-symmetric-cholesky-decomposition}}@: (function).
+@item
+@ref{❨110❩, , @t{symmetric-cholesky-decomposition}}@: (function).
+@item
+@ref{❨65❩, , @t{symmetric-cholesky-invert}}@: (function).
+@item
+@ref{❨102❩, , @t{symmetric-cholesky-solver}}@: (function).
+@end itemize
+@end table
+
+@node The linear-algebra/kernel/conjugate-gradient․lisp file, The linear-algebra/kernel/tridiagonal․lisp file, The linear-algebra/kernel/cholesky․lisp file, Lisp files
+@subsection @t{linear-algebra/kernel/conjugate-gradient.lisp}
+@anchor{❨15❩}@c
+@fileindex{conjugate-gradient.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨11❩, , @t{binary-operations.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item Public Interface
+@ref{❨68❩, , @t{conjugate-gradient-solver}}@: (function).
+@item Internals
+@itemize @bullet
+@item
+@ref{❨123❩, , @t{%default-cg-epsilon}}@: (function).
+@item
+@ref{❨125❩, , @t{%initialize-cg-residual}}@: (function).
+@item
+@ref{❨119❩, , @t{%initialize-cg-solution}}@: (function).
+@item
+@ref{❨137❩, , @t{%negative-residual}}@: (function).
+@end itemize
+@end table
+
+@node The linear-algebra/kernel/tridiagonal․lisp file, The linear-algebra/interface/fundamental-ops․lisp file, The linear-algebra/kernel/conjugate-gradient․lisp file, Lisp files
+@subsection @t{linear-algebra/kernel/tridiagonal.lisp}
+@anchor{❨16❩}@c
+@fileindex{tridiagonal.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨7❩, , @t{pkgdcl.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨2❩, , @t{kernel}}@: (module).
+@item Public Interface
+@ref{❨36❩, , @t{tridiagonal-solver}}@: (function).
+@item Internals
+@itemize @bullet
+@item
+@ref{❨112❩, , @t{tridiagonal-backsubstitution}}@: (function).
+@item
+@ref{❨114❩, , @t{tridiagonal-factorization}}@: (function).
+@item
+@ref{❨121❩, , @t{tridiagonal-update}}@: (function).
+@end itemize
+@end table
+
+@node The linear-algebra/interface/fundamental-ops․lisp file, The linear-algebra/interface/vector․lisp file, The linear-algebra/kernel/tridiagonal․lisp file, Lisp files
+@subsection @t{linear-algebra/interface/fundamental-ops.lisp}
+@anchor{❨17❩}@c
+@fileindex{fundamental-ops.lisp}@c
+@table @strong
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨3❩, , @t{interface}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨287❩, , @t{add}}@: (generic function).
+@item
+@ref{❨337❩, , @t{invert}}@: (generic function).
+@item
+@ref{❨159❩, , @t{nadd}}@: (generic function).
+@item
+@ref{❨274❩, , @t{ninvert}}@: (generic function).
+@item
+@ref{❨320❩, , @t{norm}}@: (generic function).
+@item
+@ref{❨266❩, , @t{nscale}}@: (generic function).
+@item
+@ref{❨300❩, , @t{nsolve}}@: (generic function).
+@item
+@ref{❨352❩, , @t{nsubtract}}@: (generic function).
+@item
+@ref{❨329❩, , @t{ntranspose}}@: (generic function).
+@item
+@ref{❨243❩, , @t{permute}}@: (generic function).
+@item
+@ref{❨364❩, , @t{product}}@: (generic function).
+@item
+@ref{❨185❩, , @t{scale}}@: (generic function).
+@item
+@ref{❨200❩, , @t{solve}}@: (generic function).
+@item
+@ref{❨221❩, , @t{subtract}}@: (generic function).
+@item
+@ref{❨146❩, , @t{transpose}}@: (generic function).
+@end itemize
+@end table
+
+@node The linear-algebra/interface/vector․lisp file, The linear-algebra/interface/matrix․lisp file, The linear-algebra/interface/fundamental-ops․lisp file, Lisp files
+@subsection @t{linear-algebra/interface/vector.lisp}
+@anchor{❨18❩}@c
+@fileindex{vector.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨17❩, , @t{fundamental-ops.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨3❩, , @t{interface}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨261❩, , @t{apply-rotation}}@: (generic function).
+@item
+@ref{❨219❩, , @t{copy-vector}}@: (generic function).
+@item
+@ref{❨319❩, , @t{dovector}}@: (macro).
+@item
+@ref{❨351❩, , @t{make-vector}}@: (function).
+@item
+@ref{❨311❩, , @t{map-into-vector}}@: (generic function).
+@item
+@ref{❨197❩, , @t{map-vector}}@: (generic function).
+@item
+@ref{❨326❩, , @t{napply-rotation}}@: (generic function).
+@item
+@ref{❨298❩, , @t{replace-vector}}@: (generic function).
+@item
+@ref{❨236❩, , @t{subvector}}@: (generic function).
+@item
+@ref{❨238❩, , @t{(setf subvector)}}@: (generic function).
+@item
+@ref{❨264❩, , @t{vector-element-type}}@: (generic function).
+@item
+@ref{❨230❩, , @t{vector-in-bounds-p}}@: (generic function).
+@item
+@ref{❨296❩, , @t{vector-length}}@: (generic function).
+@item
+@ref{❨170❩, , @t{vref}}@: (generic function).
+@item
+@ref{❨172❩, , @t{(setf vref)}}@: (generic function).
+@end itemize
+@end table
+
+@node The linear-algebra/interface/matrix․lisp file, The linear-algebra/interface/identity-matrix․lisp file, The linear-algebra/interface/vector․lisp file, Lisp files
+@subsection @t{linear-algebra/interface/matrix.lisp}
+@anchor{❨19❩}@c
+@fileindex{matrix.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨17❩, , @t{fundamental-ops.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨3❩, , @t{interface}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨280❩, , @t{copy-matrix}}@: (generic function).
+@item
+@ref{❨284❩, , @t{make-matrix}}@: (function).
+@item
+@ref{❨343❩, , @t{matrix-column-dimension}}@: (generic function).
+@item
+@ref{❨155❩, , @t{matrix-dimensions}}@: (generic function).
+@item
+@ref{❨347❩, , @t{matrix-element-type}}@: (generic function).
+@item
+@ref{❨307❩, , @t{matrix-in-bounds-p}}@: (generic function).
+@item
+@ref{❨242❩, , @t{matrix-object}}@: (class).
+@item
+@ref{❨232❩, , @t{matrix-row-dimension}}@: (generic function).
+@item
+@ref{❨258❩, , @t{matrix-validated-range}}@: (function).
+@item
+@ref{❨306❩, , @t{matrixp}}@: (function).
+@item
+@ref{❨174❩, , @t{mref}}@: (generic function).
+@item
+@ref{❨178❩, , @t{(setf mref)}}@: (generic function).
+@item
+@ref{❨140❩, , @t{replace-matrix}}@: (generic function).
+@item
+@ref{❨208❩, , @t{submatrix}}@: (generic function).
+@item
+@ref{❨213❩, , @t{(setf submatrix)}}@: (generic function).
+@end itemize
+@item Internals
+@ref{❨398❩, , @t{initialize-matrix-contents}}@: (generic function).
+@end table
+
+@node The linear-algebra/interface/identity-matrix․lisp file, The linear-algebra/interface/permutation-matrix․lisp file, The linear-algebra/interface/matrix․lisp file, Lisp files
+@subsection @t{linear-algebra/interface/identity-matrix.lisp}
+@anchor{❨20❩}@c
+@fileindex{identity-matrix.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨19❩, , @t{matrix.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨3❩, , @t{interface}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨283❩, , @t{copy-matrix}}@: (method).
+@item
+@ref{❨191❩, , @t{identity-matrix}}@: (class).
+@item
+@ref{❨194❩, , @t{identity-matrix-p}}@: (function).
+@item
+@ref{❨441❩, , @t{initialize-instance}}@: (method).
+@item
+@ref{❨346❩, , @t{matrix-column-dimension}}@: (reader method).
+@item
+@ref{❨158❩, , @t{matrix-dimensions}}@: (method).
+@item
+@ref{❨350❩, , @t{matrix-element-type}}@: (method).
+@item
+@ref{❨310❩, , @t{matrix-in-bounds-p}}@: (method).
+@item
+@ref{❨235❩, , @t{matrix-row-dimension}}@: (reader method).
+@item
+@ref{❨177❩, , @t{mref}}@: (method).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨386❩, , @t{contents}}@: (reader method).
+@item
+@ref{❨416❩, , @t{size}}@: (reader method).
+@end itemize
+@end table
+
+@node The linear-algebra/interface/permutation-matrix․lisp file, The linear-algebra/sequence/list․lisp file, The linear-algebra/interface/identity-matrix․lisp file, Lisp files
+@subsection @t{linear-algebra/interface/permutation-matrix.lisp}
+@anchor{❨21❩}@c
+@fileindex{permutation-matrix.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨19❩, , @t{matrix.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨3❩, , @t{interface}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨282❩, , @t{copy-matrix}}@: (method).
+@item
+@ref{❨452❩, , @t{initialize-instance}}@: (method).
+@item
+@ref{❨345❩, , @t{matrix-column-dimension}}@: (method).
+@item
+@ref{❨157❩, , @t{matrix-dimensions}}@: (method).
+@item
+@ref{❨349❩, , @t{matrix-element-type}}@: (method).
+@item
+@ref{❨309❩, , @t{matrix-in-bounds-p}}@: (method).
+@item
+@ref{❨234❩, , @t{matrix-row-dimension}}@: (method).
+@item
+@ref{❨176❩, , @t{mref}}@: (method).
+@item
+@ref{❨182❩, , @t{(setf mref)}}@: (method).
+@item
+@ref{❨317❩, , @t{permutation-matrix}}@: (class).
+@item
+@ref{❨207❩, , @t{permutation-matrix-p}}@: (function).
+@item
+@ref{❨154❩, , @t{transpose}}@: (method).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨380❩, , @t{%initialize-permutation-matrix-with-seq}}@: (function).
+@item
+@ref{❨385❩, , @t{contents}}@: (reader method).
+@item
+@ref{❨390❩, , @t{(setf contents)}}@: (writer method).
+@item
+@ref{❨411❩, , @t{initialize-matrix-contents}}@: (method).
+@item
+@ref{❨412❩, , @t{initialize-matrix-contents}}@: (method).
+@item
+@ref{❨413❩, , @t{initialize-matrix-contents}}@: (method).
+@end itemize
+@end table
+
+@node The linear-algebra/sequence/list․lisp file, The linear-algebra/sequence/vector․lisp file, The linear-algebra/interface/permutation-matrix․lisp file, Lisp files
+@subsection @t{linear-algebra/sequence/list.lisp}
+@anchor{❨22❩}@c
+@fileindex{list.lisp}@c
+@table @strong
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨4❩, , @t{sequence}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨295❩, , @t{add}}@: (method).
+@item
+@ref{❨169❩, , @t{nadd}}@: (method).
+@item
+@ref{❨325❩, , @t{norm}}@: (method).
+@item
+@ref{❨271❩, , @t{nscale}}@: (method).
+@item
+@ref{❨362❩, , @t{nsubtract}}@: (method).
+@item
+@ref{❨336❩, , @t{ntranspose}}@: (method).
+@item
+@ref{❨256❩, , @t{permute}}@: (method).
+@item
+@ref{❨257❩, , @t{permute}}@: (method).
+@item
+@ref{❨377❩, , @t{product}}@: (method).
+@item
+@ref{❨190❩, , @t{scale}}@: (method).
+@item
+@ref{❨229❩, , @t{subtract}}@: (method).
+@item
+@ref{❨153❩, , @t{transpose}}@: (method).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨394❩, , @t{%norm}}@: (method).
+@item
+@ref{❨395❩, , @t{%norm}}@: (method).
+@item
+@ref{❨396❩, , @t{%norm}}@: (method).
+@item
+@ref{❨397❩, , @t{%norm}}@: (method).
+@end itemize
+@end table
+
+@node The linear-algebra/sequence/vector․lisp file, The linear-algebra/sequence/array․lisp file, The linear-algebra/sequence/list․lisp file, Lisp files
+@subsection @t{linear-algebra/sequence/vector.lisp}
+@anchor{❨23❩}@c
+@fileindex{vector.lisp}@c
+@table @strong
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨4❩, , @t{sequence}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨294❩, , @t{add}}@: (method).
+@item
+@ref{❨168❩, , @t{nadd}}@: (method).
+@item
+@ref{❨324❩, , @t{norm}}@: (method).
+@item
+@ref{❨270❩, , @t{nscale}}@: (method).
+@item
+@ref{❨361❩, , @t{nsubtract}}@: (method).
+@item
+@ref{❨335❩, , @t{ntranspose}}@: (method).
+@item
+@ref{❨254❩, , @t{permute}}@: (method).
+@item
+@ref{❨255❩, , @t{permute}}@: (method).
+@item
+@ref{❨376❩, , @t{product}}@: (method).
+@item
+@ref{❨189❩, , @t{scale}}@: (method).
+@item
+@ref{❨228❩, , @t{subtract}}@: (method).
+@item
+@ref{❨152❩, , @t{transpose}}@: (method).
+@end itemize
+@end table
+
+@node The linear-algebra/sequence/array․lisp file, The linear-algebra/data-vector․lisp file, The linear-algebra/sequence/vector․lisp file, Lisp files
+@subsection @t{linear-algebra/sequence/array.lisp}
+@anchor{❨24❩}@c
+@fileindex{array.lisp}@c
+@table @strong
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨4❩, , @t{sequence}}@: (module).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨293❩, , @t{add}}@: (method).
+@item
+@ref{❨96❩, , @t{compatible-dimensions-p}}@: (method).
+@item
+@ref{❨342❩, , @t{invert}}@: (method).
+@item
+@ref{❨167❩, , @t{nadd}}@: (method).
+@item
+@ref{❨279❩, , @t{ninvert}}@: (method).
+@item
+@ref{❨323❩, , @t{norm}}@: (method).
+@item
+@ref{❨269❩, , @t{nscale}}@: (method).
+@item
+@ref{❨305❩, , @t{nsolve}}@: (method).
+@item
+@ref{❨360❩, , @t{nsubtract}}@: (method).
+@item
+@ref{❨334❩, , @t{ntranspose}}@: (method).
+@item
+@ref{❨252❩, , @t{permute}}@: (method).
+@item
+@ref{❨253❩, , @t{permute}}@: (method).
+@item
+@ref{❨373❩, , @t{product}}@: (method).
+@item
+@ref{❨374❩, , @t{product}}@: (method).
+@item
+@ref{❨375❩, , @t{product}}@: (method).
+@item
+@ref{❨188❩, , @t{scale}}@: (method).
+@item
+@ref{❨205❩, , @t{solve}}@: (method).
+@item
+@ref{❨227❩, , @t{subtract}}@: (method).
+@item
+@ref{❨151❩, , @t{transpose}}@: (method).
+@end itemize
+@end table
+
+@node The linear-algebra/data-vector․lisp file, The linear-algebra/dense-matrix․lisp file, The linear-algebra/sequence/array․lisp file, Lisp files
+@subsection @t{linear-algebra/data-vector.lisp}
+@anchor{❨25❩}@c
+@fileindex{data-vector.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨3❩, , @t{interface}}@: (module).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{linear-algebra}}@: (system).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨290❩, , @t{add}}@: (method).
+@item
+@ref{❨291❩, , @t{add}}@: (method).
+@item
+@ref{❨292❩, , @t{add}}@: (method).
+@item
+@ref{❨262❩, , @t{apply-rotation}}@: (method).
+@item
+@ref{❨263❩, , @t{apply-rotation}}@: (method).
+@item
+@ref{❨195❩, , @t{column-vector}}@: (function).
+@item
+@ref{❨196❩, , @t{column-vector}}@: (class).
+@item
+@ref{❨285❩, , @t{column-vector-p}}@: (function).
+@item
+@ref{❨220❩, , @t{copy-vector}}@: (method).
+@item
+@ref{❨183❩, , @t{data-vector}}@: (class).
+@item
+@ref{❨436❩, , @t{initialize-instance}}@: (method).
+@item
+@ref{❨312❩, , @t{map-into-vector}}@: (method).
+@item
+@ref{❨313❩, , @t{map-into-vector}}@: (method).
+@item
+@ref{❨198❩, , @t{map-vector}}@: (method).
+@item
+@ref{❨199❩, , @t{map-vector}}@: (method).
+@item
+@ref{❨164❩, , @t{nadd}}@: (method).
+@item
+@ref{❨165❩, , @t{nadd}}@: (method).
+@item
+@ref{❨166❩, , @t{nadd}}@: (method).
+@item
+@ref{❨327❩, , @t{napply-rotation}}@: (method).
+@item
+@ref{❨328❩, , @t{napply-rotation}}@: (method).
+@item
+@ref{❨322❩, , @t{norm}}@: (method).
+@item
+@ref{❨268❩, , @t{nscale}}@: (method).
+@item
+@ref{❨357❩, , @t{nsubtract}}@: (method).
+@item
+@ref{❨358❩, , @t{nsubtract}}@: (method).
+@item
+@ref{❨359❩, , @t{nsubtract}}@: (method).
+@item
+@ref{❨332❩, , @t{ntranspose}}@: (method).
+@item
+@ref{❨333❩, , @t{ntranspose}}@: (method).
+@item
+@ref{❨248❩, , @t{permute}}@: (method).
+@item
+@ref{❨249❩, , @t{permute}}@: (method).
+@item
+@ref{❨250❩, , @t{permute}}@: (method).
+@item
+@ref{❨251❩, , @t{permute}}@: (method).
+@item
+@ref{❨371❩, , @t{product}}@: (method).
+@item
+@ref{❨372❩, , @t{product}}@: (method).
+@item
+@ref{❨299❩, , @t{replace-vector}}@: (method).
+@item
+@ref{❨272❩, , @t{row-vector}}@: (function).
+@item
+@ref{❨273❩, , @t{row-vector}}@: (class).
+@item
+@ref{❨206❩, , @t{row-vector-p}}@: (function).
+@item
+@ref{❨187❩, , @t{scale}}@: (method).
+@item
+@ref{❨224❩, , @t{subtract}}@: (method).
+@item
+@ref{❨225❩, , @t{subtract}}@: (method).
+@item
+@ref{❨226❩, , @t{subtract}}@: (method).
+@item
+@ref{❨237❩, , @t{subvector}}@: (method).
+@item
+@ref{❨239❩, , @t{(setf subvector)}}@: (method).
+@item
+@ref{❨149❩, , @t{transpose}}@: (method).
+@item
+@ref{❨150❩, , @t{transpose}}@: (method).
+@item
+@ref{❨265❩, , @t{vector-element-type}}@: (method).
+@item
+@ref{❨231❩, , @t{vector-in-bounds-p}}@: (method).
+@item
+@ref{❨297❩, , @t{vector-length}}@: (method).
+@item
+@ref{❨171❩, , @t{vref}}@: (method).
+@item
+@ref{❨173❩, , @t{(setf vref)}}@: (method).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨379❩, , @t{%map-data-vector}}@: (function).
+@item
+@ref{❨421❩, , @t{%map-into-data-vector}}@: (function).
+@item
+@ref{❨384❩, , @t{contents}}@: (reader method).
+@item
+@ref{❨389❩, , @t{(setf contents)}}@: (writer method).
+@end itemize
+@end table
+
+@node The linear-algebra/dense-matrix․lisp file, The linear-algebra/square-matrix․lisp file, The linear-algebra/data-vector․lisp file, Lisp files
+@subsection @t{linear-algebra/dense-matrix.lisp}
+@anchor{❨26❩}@c
+@fileindex{dense-matrix.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨25❩, , @t{data-vector.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{linear-algebra}}@: (system).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨288❩, , @t{add}}@: (method).
+@item
+@ref{❨289❩, , @t{add}}@: (method).
+@item
+@ref{❨95❩, , @t{compatible-dimensions-p}}@: (method).
+@item
+@ref{❨281❩, , @t{copy-matrix}}@: (method).
+@item
+@ref{❨315❩, , @t{dense-matrix}}@: (class).
+@item
+@ref{❨241❩, , @t{dense-matrix-p}}@: (function).
+@item
+@ref{❨443❩, , @t{initialize-instance}}@: (method).
+@item
+@ref{❨341❩, , @t{invert}}@: (method).
+@item
+@ref{❨344❩, , @t{matrix-column-dimension}}@: (method).
+@item
+@ref{❨156❩, , @t{matrix-dimensions}}@: (method).
+@item
+@ref{❨348❩, , @t{matrix-element-type}}@: (method).
+@item
+@ref{❨308❩, , @t{matrix-in-bounds-p}}@: (method).
+@item
+@ref{❨233❩, , @t{matrix-row-dimension}}@: (method).
+@item
+@ref{❨175❩, , @t{mref}}@: (method).
+@item
+@ref{❨181❩, , @t{(setf mref)}}@: (method).
+@item
+@ref{❨162❩, , @t{nadd}}@: (method).
+@item
+@ref{❨163❩, , @t{nadd}}@: (method).
+@item
+@ref{❨278❩, , @t{ninvert}}@: (method).
+@item
+@ref{❨321❩, , @t{norm}}@: (method).
+@item
+@ref{❨267❩, , @t{nscale}}@: (method).
+@item
+@ref{❨303❩, , @t{nsolve}}@: (method).
+@item
+@ref{❨304❩, , @t{nsolve}}@: (method).
+@item
+@ref{❨355❩, , @t{nsubtract}}@: (method).
+@item
+@ref{❨356❩, , @t{nsubtract}}@: (method).
+@item
+@ref{❨331❩, , @t{ntranspose}}@: (method).
+@item
+@ref{❨246❩, , @t{permute}}@: (method).
+@item
+@ref{❨247❩, , @t{permute}}@: (method).
+@item
+@ref{❨365❩, , @t{product}}@: (method).
+@item
+@ref{❨366❩, , @t{product}}@: (method).
+@item
+@ref{❨367❩, , @t{product}}@: (method).
+@item
+@ref{❨368❩, , @t{product}}@: (method).
+@item
+@ref{❨369❩, , @t{product}}@: (method).
+@item
+@ref{❨370❩, , @t{product}}@: (method).
+@item
+@ref{❨145❩, , @t{replace-matrix}}@: (method).
+@item
+@ref{❨186❩, , @t{scale}}@: (method).
+@item
+@ref{❨203❩, , @t{solve}}@: (method).
+@item
+@ref{❨204❩, , @t{solve}}@: (method).
+@item
+@ref{❨212❩, , @t{submatrix}}@: (method).
+@item
+@ref{❨218❩, , @t{(setf submatrix)}}@: (method).
+@item
+@ref{❨222❩, , @t{subtract}}@: (method).
+@item
+@ref{❨223❩, , @t{subtract}}@: (method).
+@item
+@ref{❨148❩, , @t{transpose}}@: (method).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨383❩, , @t{contents}}@: (reader method).
+@item
+@ref{❨388❩, , @t{(setf contents)}}@: (writer method).
+@item
+@ref{❨407❩, , @t{initialize-matrix-contents}}@: (method).
+@item
+@ref{❨408❩, , @t{initialize-matrix-contents}}@: (method).
+@item
+@ref{❨409❩, , @t{initialize-matrix-contents}}@: (method).
+@item
+@ref{❨410❩, , @t{initialize-matrix-contents}}@: (method).
+@end itemize
+@end table
+
+@node The linear-algebra/square-matrix․lisp file, The linear-algebra/hermitian-matrix․lisp file, The linear-algebra/dense-matrix․lisp file, Lisp files
+@subsection @t{linear-algebra/square-matrix.lisp}
+@anchor{❨27❩}@c
+@fileindex{square-matrix.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨26❩, , @t{dense-matrix.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{linear-algebra}}@: (system).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨94❩, , @t{compatible-dimensions-p}}@: (method).
+@item
+@ref{❨340❩, , @t{invert}}@: (method).
+@item
+@ref{❨277❩, , @t{ninvert}}@: (method).
+@item
+@ref{❨240❩, , @t{square-matrix}}@: (class).
+@item
+@ref{❨260❩, , @t{square-matrix-p}}@: (function).
+@item
+@ref{❨211❩, , @t{submatrix}}@: (method).
+@end itemize
+@item Internals
+@ref{❨406❩, , @t{initialize-matrix-contents}}@: (method).
+@end table
+
+@node The linear-algebra/hermitian-matrix․lisp file, The linear-algebra/symmetric-matrix․lisp file, The linear-algebra/square-matrix․lisp file, Lisp files
+@subsection @t{linear-algebra/hermitian-matrix.lisp}
+@anchor{❨28❩}@c
+@fileindex{hermitian-matrix.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨27❩, , @t{square-matrix.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{linear-algebra}}@: (system).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨363❩, , @t{hermitian-matrix}}@: (class).
+@item
+@ref{❨259❩, , @t{hermitian-matrix-p}}@: (function).
+@item
+@ref{❨339❩, , @t{invert}}@: (method).
+@item
+@ref{❨180❩, , @t{(setf mref)}}@: (method).
+@item
+@ref{❨276❩, , @t{ninvert}}@: (method).
+@item
+@ref{❨302❩, , @t{nsolve}}@: (method).
+@item
+@ref{❨330❩, , @t{ntranspose}}@: (method).
+@item
+@ref{❨244❩, , @t{permute}}@: (method).
+@item
+@ref{❨245❩, , @t{permute}}@: (method).
+@item
+@ref{❨143❩, , @t{replace-matrix}}@: (method).
+@item
+@ref{❨144❩, , @t{replace-matrix}}@: (method).
+@item
+@ref{❨202❩, , @t{solve}}@: (method).
+@item
+@ref{❨210❩, , @t{submatrix}}@: (method).
+@item
+@ref{❨216❩, , @t{(setf submatrix)}}@: (method).
+@item
+@ref{❨217❩, , @t{(setf submatrix)}}@: (method).
+@item
+@ref{❨147❩, , @t{transpose}}@: (method).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨422❩, , @t{%initialize-hermitian-matrix-with-seq}}@: (function).
+@item
+@ref{❨391❩, , @t{%replace-hermitian-matrix-off-diagonal}}@: (function).
+@item
+@ref{❨378❩, , @t{%replace-hermitian-matrix-on-diagonal}}@: (function).
+@item
+@ref{❨419❩, , @t{%setf-hermitian-submatrix-off-diagonal}}@: (function).
+@item
+@ref{❨392❩, , @t{%setf-hermitian-submatrix-on-diagonal}}@: (function).
+@item
+@ref{❨402❩, , @t{initialize-matrix-contents}}@: (method).
+@item
+@ref{❨403❩, , @t{initialize-matrix-contents}}@: (method).
+@item
+@ref{❨404❩, , @t{initialize-matrix-contents}}@: (method).
+@item
+@ref{❨405❩, , @t{initialize-matrix-contents}}@: (method).
+@end itemize
+@end table
+
+@node The linear-algebra/symmetric-matrix․lisp file, , The linear-algebra/hermitian-matrix․lisp file, Lisp files
+@subsection @t{linear-algebra/symmetric-matrix.lisp}
+@anchor{❨29❩}@c
+@fileindex{symmetric-matrix.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨27❩, , @t{square-matrix.lisp}}@: (file).
+@item Source
+@ref{❨5❩, , @t{linear-algebra.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{linear-algebra}}@: (system).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨338❩, , @t{invert}}@: (method).
+@item
+@ref{❨179❩, , @t{(setf mref)}}@: (method).
+@item
+@ref{❨160❩, , @t{nadd}}@: (method).
+@item
+@ref{❨161❩, , @t{nadd}}@: (method).
+@item
+@ref{❨275❩, , @t{ninvert}}@: (method).
+@item
+@ref{❨301❩, , @t{nsolve}}@: (method).
+@item
+@ref{❨353❩, , @t{nsubtract}}@: (method).
+@item
+@ref{❨354❩, , @t{nsubtract}}@: (method).
+@item
+@ref{❨141❩, , @t{replace-matrix}}@: (method).
+@item
+@ref{❨142❩, , @t{replace-matrix}}@: (method).
+@item
+@ref{❨201❩, , @t{solve}}@: (method).
+@item
+@ref{❨209❩, , @t{submatrix}}@: (method).
+@item
+@ref{❨214❩, , @t{(setf submatrix)}}@: (method).
+@item
+@ref{❨215❩, , @t{(setf submatrix)}}@: (method).
+@item
+@ref{❨314❩, , @t{symmetric-matrix}}@: (class).
+@item
+@ref{❨286❩, , @t{symmetric-matrix-p}}@: (function).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨417❩, , @t{%initialize-symmetric-matrix-with-seq}}@: (function).
+@item
+@ref{❨381❩, , @t{%replace-symmetric-matrix-off-diagonal}}@: (function).
+@item
+@ref{❨414❩, , @t{%replace-symmetric-matrix-on-diagonal}}@: (function).
+@item
+@ref{❨418❩, , @t{%setf-symmetric-submatrix-off-diagonal}}@: (function).
+@item
+@ref{❨420❩, , @t{%setf-symmetric-submatrix-on-diagonal}}@: (function).
+@item
+@ref{❨399❩, , @t{initialize-matrix-contents}}@: (method).
+@item
+@ref{❨400❩, , @t{initialize-matrix-contents}}@: (method).
+@item
+@ref{❨401❩, , @t{initialize-matrix-contents}}@: (method).
+@end itemize
+@end table
+
+
+
+@c ====================================================================
+@c Packages
+@c ====================================================================
+@node Packages, Definitions, Files, Top
+@chapter Packages
+Packages are listed by definition order.
+
+@menu
+* The linear-algebra-kernel package::
+* The linear-algebra package::
+@end menu
+
+
+@c ---------------------------------
+@c The linear-algebra-kernel package
+@c ---------------------------------
+@node The linear-algebra-kernel package, The linear-algebra package, Packages, Packages
+@section @t{linear-algebra-kernel}
+@anchor{❨30❩}@c
+@packageindex{linear-algebra-kernel}@c
+@table @strong
+@item Source
+@ref{❨7❩, , @t{pkgdcl.lisp}}.
+@item Use List
+@itemize @bullet
+@item
+@t{common-lisp}.
+@item
+@t{floating-point}.
+@end itemize
+@item Used By List
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨40❩, , @t{add-array}}@: (function).
+@item
+@ref{❨58❩, , @t{add-vector}}@: (function).
+@item
+@ref{❨38❩, , @t{common-array-element-type}}@: (function).
+@item
+@ref{❨46❩, , @t{common-class-of}}@: (function).
+@item
+@ref{❨93❩, , @t{compatible-dimensions-p}}@: (generic function).
+@item
+@ref{❨107❩, , @t{complex-equal}}@: (function).
+@item
+@ref{❨68❩, , @t{conjugate-gradient-solver}}@: (function).
+@item
+@ref{❨90❩, , @t{copy-array}}@: (generic function).
+@item
+@ref{❨86❩, , @t{gauss-invert}}@: (function).
+@item
+@ref{❨89❩, , @t{gauss-solver}}@: (function).
+@item
+@ref{❨64❩, , @t{givens-rotation}}@: (function).
+@item
+@ref{❨109❩, , @t{hermitian-cholesky-decomposition}}@: (function).
+@item
+@ref{❨39❩, , @t{hermitian-cholesky-invert}}@: (function).
+@item
+@ref{❨87❩, , @t{hermitian-cholesky-solver}}@: (function).
+@item
+@ref{❨85❩, , @t{householder-reflection}}@: (function).
+@item
+@ref{❨41❩, , @t{inner-product-vector}}@: (function).
+@item
+@ref{❨104❩, , @t{jacobi-rotation}}@: (function).
+@item
+@ref{❨47❩, , @t{left-permute}}@: (generic function).
+@item
+@ref{❨66❩, , @t{nadd-array}}@: (function).
+@item
+@ref{❨35❩, , @t{nadd-vector}}@: (function).
+@item
+@ref{❨78❩, , @t{norm-array}}@: (generic function).
+@item
+@ref{❨59❩, , @t{norm-vector}}@: (generic function).
+@item
+@ref{❨37❩, , @t{nsubtract-array}}@: (function).
+@item
+@ref{❨67❩, , @t{nsubtract-vector}}@: (function).
+@item
+@ref{❨111❩, , @t{number-equal}}@: (function).
+@item
+@ref{❨105❩, , @t{product-array-array}}@: (function).
+@item
+@ref{❨69❩, , @t{product-array-vector}}@: (function).
+@item
+@ref{❨71❩, , @t{product-vector-array}}@: (function).
+@item
+@ref{❨32❩, , @t{right-permute}}@: (generic function).
+@item
+@ref{❨106❩, , @t{root-free-hermitian-cholesky-decomposition}}@: (function).
+@item
+@ref{❨73❩, , @t{root-free-symmetric-cholesky-decomposition}}@: (function).
+@item
+@ref{❨50❩, , @t{scaled-binary-op}}@: (generic function).
+@item
+@ref{❨88❩, , @t{specific-array-element-type}}@: (function).
+@item
+@ref{❨70❩, , @t{subtract-array}}@: (function).
+@item
+@ref{❨84❩, , @t{subtract-vector}}@: (function).
+@item
+@ref{❨42❩, , @t{sump}}@: (generic function).
+@item
+@ref{❨74❩, , @t{sumsq}}@: (generic function).
+@item
+@ref{❨103❩, , @t{sumsq-column}}@: (function).
+@item
+@ref{❨108❩, , @t{sumsq-row}}@: (function).
+@item
+@ref{❨72❩, , @t{sumsq2}}@: (function).
+@item
+@ref{❨83❩, , @t{sumsq3}}@: (function).
+@item
+@ref{❨110❩, , @t{symmetric-cholesky-decomposition}}@: (function).
+@item
+@ref{❨65❩, , @t{symmetric-cholesky-invert}}@: (function).
+@item
+@ref{❨102❩, , @t{symmetric-cholesky-solver}}@: (function).
+@item
+@ref{❨36❩, , @t{tridiagonal-solver}}@: (function).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨133❩, , @t{%abs-vector}}@: (function).
+@item
+@ref{❨120❩, , @t{%array1<-array1-op-array2}}@: (function).
+@item
+@ref{❨122❩, , @t{%array<-array1-op-array2}}@: (function).
+@item
+@ref{❨123❩, , @t{%default-cg-epsilon}}@: (function).
+@item
+@ref{❨125❩, , @t{%initialize-cg-residual}}@: (function).
+@item
+@ref{❨119❩, , @t{%initialize-cg-solution}}@: (function).
+@item
+@ref{❨137❩, , @t{%negative-residual}}@: (function).
+@item
+@ref{❨129❩, , @t{%product-array-array}}@: (function).
+@item
+@ref{❨138❩, , @t{%product-array-vector}}@: (function).
+@item
+@ref{❨128❩, , @t{%product-vector-array}}@: (function).
+@item
+@ref{❨117❩, , @t{%scaled-product-array-array}}@: (function).
+@item
+@ref{❨135❩, , @t{%scaled-product-array-vector}}@: (function).
+@item
+@ref{❨127❩, , @t{%scaled-product-vector-array}}@: (function).
+@item
+@ref{❨113❩, , @t{%vector1<-vector1-op-vector2}}@: (function).
+@item
+@ref{❨118❩, , @t{%vector<-vector1-op-vector2}}@: (function).
+@item
+@ref{❨131❩, , @t{column-pivot}}@: (function).
+@item
+@ref{❨130❩, , @t{column-pivot-search}}@: (function).
+@item
+@ref{❨136❩, , @t{gauss-backsubstitution}}@: (function).
+@item
+@ref{❨134❩, , @t{gauss-factorization}}@: (function).
+@item
+@ref{❨132❩, , @t{gauss-update}}@: (function).
+@item
+@ref{❨116❩, , @t{initialize-pivot-selection-vector}}@: (function).
+@item
+@ref{❨126❩, , @t{swap-rows}}@: (function).
+@item
+@ref{❨112❩, , @t{tridiagonal-backsubstitution}}@: (function).
+@item
+@ref{❨114❩, , @t{tridiagonal-factorization}}@: (function).
+@item
+@ref{❨121❩, , @t{tridiagonal-update}}@: (function).
+@item
+@ref{❨124❩, , @t{unit-pivot-value}}@: (function).
+@item
+@ref{❨115❩, , @t{zero-array}}@: (function).
+@item
+@ref{❨139❩, , @t{zero-vector}}@: (function).
+@end itemize
+@end table
+
+
+@c --------------------------
+@c The linear-algebra package
+@c --------------------------
+@node The linear-algebra package, , The linear-algebra-kernel package, Packages
+@section @t{linear-algebra}
+@anchor{❨31❩}@c
+@packageindex{linear-algebra}@c
+@table @strong
+@item Source
+@ref{❨6❩, , @t{pkgdcl.lisp}}.
+@item Use List
+@itemize @bullet
+@item
+@t{common-lisp}.
+@item
+@t{floating-point}.
+@item
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@end itemize
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨287❩, , @t{add}}@: (generic function).
+@item
+@ref{❨261❩, , @t{apply-rotation}}@: (generic function).
+@item
+@ref{❨195❩, , @t{column-vector}}@: (function).
+@item
+@ref{❨196❩, , @t{column-vector}}@: (class).
+@item
+@ref{❨285❩, , @t{column-vector-p}}@: (function).
+@item
+@ref{❨280❩, , @t{copy-matrix}}@: (generic function).
+@item
+@ref{❨219❩, , @t{copy-vector}}@: (generic function).
+@item
+@ref{❨183❩, , @t{data-vector}}@: (class).
+@item
+@ref{❨315❩, , @t{dense-matrix}}@: (class).
+@item
+@ref{❨241❩, , @t{dense-matrix-p}}@: (function).
+@item
+@ref{❨319❩, , @t{dovector}}@: (macro).
+@item
+@ref{❨363❩, , @t{hermitian-matrix}}@: (class).
+@item
+@ref{❨259❩, , @t{hermitian-matrix-p}}@: (function).
+@item
+@ref{❨191❩, , @t{identity-matrix}}@: (class).
+@item
+@ref{❨194❩, , @t{identity-matrix-p}}@: (function).
+@item
+@ref{❨337❩, , @t{invert}}@: (generic function).
+@item
+@ref{❨284❩, , @t{make-matrix}}@: (function).
+@item
+@ref{❨351❩, , @t{make-vector}}@: (function).
+@item
+@ref{❨311❩, , @t{map-into-vector}}@: (generic function).
+@item
+@ref{❨197❩, , @t{map-vector}}@: (generic function).
+@item
+@ref{❨343❩, , @t{matrix-column-dimension}}@: (generic function).
+@item
+@ref{❨155❩, , @t{matrix-dimensions}}@: (generic function).
+@item
+@ref{❨347❩, , @t{matrix-element-type}}@: (generic function).
+@item
+@ref{❨307❩, , @t{matrix-in-bounds-p}}@: (generic function).
+@item
+@ref{❨242❩, , @t{matrix-object}}@: (class).
+@item
+@ref{❨232❩, , @t{matrix-row-dimension}}@: (generic function).
+@item
+@ref{❨258❩, , @t{matrix-validated-range}}@: (function).
+@item
+@ref{❨306❩, , @t{matrixp}}@: (function).
+@item
+@ref{❨174❩, , @t{mref}}@: (generic function).
+@item
+@ref{❨178❩, , @t{(setf mref)}}@: (generic function).
+@item
+@ref{❨159❩, , @t{nadd}}@: (generic function).
+@item
+@ref{❨326❩, , @t{napply-rotation}}@: (generic function).
+@item
+@ref{❨274❩, , @t{ninvert}}@: (generic function).
+@item
+@ref{❨320❩, , @t{norm}}@: (generic function).
+@item
+@ref{❨266❩, , @t{nscale}}@: (generic function).
+@item
+@ref{❨300❩, , @t{nsolve}}@: (generic function).
+@item
+@ref{❨352❩, , @t{nsubtract}}@: (generic function).
+@item
+@ref{❨329❩, , @t{ntranspose}}@: (generic function).
+@item
+@ref{❨317❩, , @t{permutation-matrix}}@: (class).
+@item
+@ref{❨207❩, , @t{permutation-matrix-p}}@: (function).
+@item
+@ref{❨243❩, , @t{permute}}@: (generic function).
+@item
+@ref{❨364❩, , @t{product}}@: (generic function).
+@item
+@ref{❨140❩, , @t{replace-matrix}}@: (generic function).
+@item
+@ref{❨298❩, , @t{replace-vector}}@: (generic function).
+@item
+@ref{❨272❩, , @t{row-vector}}@: (function).
+@item
+@ref{❨273❩, , @t{row-vector}}@: (class).
+@item
+@ref{❨206❩, , @t{row-vector-p}}@: (function).
+@item
+@ref{❨185❩, , @t{scale}}@: (generic function).
+@item
+@ref{❨200❩, , @t{solve}}@: (generic function).
+@item
+@ref{❨240❩, , @t{square-matrix}}@: (class).
+@item
+@ref{❨260❩, , @t{square-matrix-p}}@: (function).
+@item
+@ref{❨208❩, , @t{submatrix}}@: (generic function).
+@item
+@ref{❨213❩, , @t{(setf submatrix)}}@: (generic function).
+@item
+@ref{❨221❩, , @t{subtract}}@: (generic function).
+@item
+@ref{❨236❩, , @t{subvector}}@: (generic function).
+@item
+@ref{❨238❩, , @t{(setf subvector)}}@: (generic function).
+@item
+@ref{❨314❩, , @t{symmetric-matrix}}@: (class).
+@item
+@ref{❨286❩, , @t{symmetric-matrix-p}}@: (function).
+@item
+@ref{❨146❩, , @t{transpose}}@: (generic function).
+@item
+@ref{❨264❩, , @t{vector-element-type}}@: (generic function).
+@item
+@ref{❨230❩, , @t{vector-in-bounds-p}}@: (generic function).
+@item
+@ref{❨296❩, , @t{vector-length}}@: (generic function).
+@item
+@ref{❨170❩, , @t{vref}}@: (generic function).
+@item
+@ref{❨172❩, , @t{(setf vref)}}@: (generic function).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨422❩, , @t{%initialize-hermitian-matrix-with-seq}}@: (function).
+@item
+@ref{❨380❩, , @t{%initialize-permutation-matrix-with-seq}}@: (function).
+@item
+@ref{❨417❩, , @t{%initialize-symmetric-matrix-with-seq}}@: (function).
+@item
+@ref{❨379❩, , @t{%map-data-vector}}@: (function).
+@item
+@ref{❨421❩, , @t{%map-into-data-vector}}@: (function).
+@item
+@ref{❨393❩, , @t{%norm}}@: (generic function).
+@item
+@ref{❨391❩, , @t{%replace-hermitian-matrix-off-diagonal}}@: (function).
+@item
+@ref{❨378❩, , @t{%replace-hermitian-matrix-on-diagonal}}@: (function).
+@item
+@ref{❨381❩, , @t{%replace-symmetric-matrix-off-diagonal}}@: (function).
+@item
+@ref{❨414❩, , @t{%replace-symmetric-matrix-on-diagonal}}@: (function).
+@item
+@ref{❨419❩, , @t{%setf-hermitian-submatrix-off-diagonal}}@: (function).
+@item
+@ref{❨392❩, , @t{%setf-hermitian-submatrix-on-diagonal}}@: (function).
+@item
+@ref{❨418❩, , @t{%setf-symmetric-submatrix-off-diagonal}}@: (function).
+@item
+@ref{❨420❩, , @t{%setf-symmetric-submatrix-on-diagonal}}@: (function).
+@item
+@ref{❨382❩, , @t{contents}}@: (generic reader).
+@item
+@ref{❨387❩, , @t{(setf contents)}}@: (generic writer).
+@item
+@ref{❨398❩, , @t{initialize-matrix-contents}}@: (generic function).
+@item
+@ref{❨415❩, , @t{size}}@: (generic reader).
+@end itemize
+@end table
+
+
+
+@c ====================================================================
+@c Definitions
+@c ====================================================================
+@node Definitions, Indexes, Packages, Top
+@chapter Definitions
+Definitions are sorted by export status, category, package, and then by
+lexicographic order.
+
+@menu
+* Public Interface::
+* Internals::
+@end menu
+
+
+@c ----------------
+@c Public Interface
+@c ----------------
+@node Public Interface, Internals, Definitions, Definitions
+@section Public Interface
+@menu
+* Public macros::
+* Public ordinary functions::
+* Public generic functions::
+* Public standalone methods::
+* Public classes::
+@end menu
+
+@node Public macros, Public ordinary functions, Public Interface, Public Interface
+@subsection Macros
+@deffn {Macro} {dovector} ((element vector &optional result) &body body)
+@anchor{❨319❩}@c
+@macrosubindex{dovector}@c
+Iterate over vector returning result.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+
+@node Public ordinary functions, Public generic functions, Public macros, Public Interface
+@subsection Ordinary functions
+@deffn {Function} {add-array} (array1 array2 scalar1 scalar2)
+@anchor{❨40❩}@c
+@functionsubindex{add-array}@c
+Array binary addition.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {add-vector} (vector1 vector2 scalar1 scalar2)
+@anchor{❨58❩}@c
+@functionsubindex{add-vector}@c
+Vector binary addition.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {column-vector} (&rest numbers)
+@anchor{❨195❩}@c
+@functionsubindex{column-vector}@c
+Create a column vector from the numbers.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {column-vector-p} (object)
+@anchor{❨285❩}@c
+@functionsubindex{column-vector-p}@c
+Return true if object is a column-vector@comma{} NIL otherwise.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {common-array-element-type} (array1 array2)
+@anchor{❨38❩}@c
+@functionsubindex{common-array-element-type}@c
+Return the array type common to both arrays.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨8❩, , @t{utility.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {common-class-of} (object1 object2)
+@anchor{❨46❩}@c
+@functionsubindex{common-class-of}@c
+Return the common class of the 2 objects or default-class.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨8❩, , @t{utility.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {complex-equal} (complex1 complex2 &optional epsilon)
+@anchor{❨107❩}@c
+@functionsubindex{complex-equal}@c
+Return true if both numbers are complex and equal.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨8❩, , @t{utility.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {conjugate-gradient-solver} (array vector &optional epsilon limit)
+@anchor{❨68❩}@c
+@functionsubindex{conjugate-gradient-solver}@c
+Linear system solver using the conjugate gradient method.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨15❩, , @t{conjugate-gradient.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {dense-matrix-p} (object)
+@anchor{❨241❩}@c
+@functionsubindex{dense-matrix-p}@c
+Return true if object is a dense matrix.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {gauss-invert} (array)
+@anchor{❨86❩}@c
+@functionsubindex{gauss-invert}@c
+Find A^-1 via Gauss algorithm with partial column pivot search.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨13❩, , @t{gauss.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {gauss-solver} (array vector)
+@anchor{❨89❩}@c
+@functionsubindex{gauss-solver}@c
+Gauss algorithm with column pivot search.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨13❩, , @t{gauss.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {givens-rotation} (f g)
+@anchor{❨64❩}@c
+@functionsubindex{givens-rotation}@c
+Return c@comma{}s@comma{}r defined from the Givens rotation.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨12❩, , @t{rotation.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {hermitian-cholesky-decomposition} (array)
+@anchor{❨109❩}@c
+@functionsubindex{hermitian-cholesky-decomposition}@c
+Factor A = LL^T.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨14❩, , @t{cholesky.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {hermitian-cholesky-invert} (array)
+@anchor{❨39❩}@c
+@functionsubindex{hermitian-cholesky-invert}@c
+Invert a positive definite matrices using the root-free Cholesky
+decomposition.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨14❩, , @t{cholesky.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {hermitian-cholesky-solver} (array vector)
+@anchor{❨87❩}@c
+@functionsubindex{hermitian-cholesky-solver}@c
+Linear system solver for positive definite matrices using the
+root-free Cholesky decomposition.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨14❩, , @t{cholesky.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {hermitian-matrix-p} (object)
+@anchor{❨259❩}@c
+@functionsubindex{hermitian-matrix-p}@c
+Return true if object is a hermitian-matrix@comma{} NIL otherwise.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {householder-reflection} (alpha vector)
+@anchor{❨85❩}@c
+@functionsubindex{householder-reflection}@c
+Return Beta@comma{} Tau and the Householder vector.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨12❩, , @t{rotation.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {identity-matrix-p} (object)
+@anchor{❨194❩}@c
+@functionsubindex{identity-matrix-p}@c
+Return true if object is an identity-matrix.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨20❩, , @t{identity-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {inner-product-vector} (vector1 vector2 scalar)
+@anchor{❨41❩}@c
+@functionsubindex{inner-product-vector}@c
+Return the vector inner product.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {jacobi-rotation} (x y z)
+@anchor{❨104❩}@c
+@functionsubindex{jacobi-rotation}@c
+Return a@comma{} b@comma{} cos(theta) and sin(theta) terms from the Jacobi rotation.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨12❩, , @t{rotation.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {make-matrix} (rows columns &key matrix-type element-type initial-element initial-contents)
+@anchor{❨284❩}@c
+@functionsubindex{make-matrix}@c
+Return a new matrix instance.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {make-vector} (size &key vector-type element-type initial-element initial-contents)
+@anchor{❨351❩}@c
+@functionsubindex{make-vector}@c
+Create the data structure to represent a vector.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {matrix-validated-range} (matrix start-row start-column &optional end-row end-column)
+@anchor{❨258❩}@c
+@functionsubindex{matrix-validated-range}@c
+Returns a validated range of rows and columns for the matrix.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {matrixp} (object)
+@anchor{❨306❩}@c
+@functionsubindex{matrixp}@c
+Return true if object is a matrix@comma{} NIL otherwise.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {nadd-array} (array1 array2 scalar1 scalar2)
+@anchor{❨66❩}@c
+@functionsubindex{nadd-array}@c
+Destructive array binary addition.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {nadd-vector} (vector1 vector2 scalar1 scalar2)
+@anchor{❨35❩}@c
+@functionsubindex{nadd-vector}@c
+Destructive vector binary addition.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {nsubtract-array} (array1 array2 scalar1 scalar2)
+@anchor{❨37❩}@c
+@functionsubindex{nsubtract-array}@c
+Destructive array binary subtraction.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {nsubtract-vector} (vector1 vector2 scalar1 scalar2)
+@anchor{❨67❩}@c
+@functionsubindex{nsubtract-vector}@c
+Destructive vector binary subtraction.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {number-equal} (number1 number2 &optional epsilon)
+@anchor{❨111❩}@c
+@functionsubindex{number-equal}@c
+Return true if the numbers are equal using the appropriate
+comparison.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨8❩, , @t{utility.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {permutation-matrix-p} (object)
+@anchor{❨207❩}@c
+@functionsubindex{permutation-matrix-p}@c
+Return true if object is a permutation-matrix.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {product-array-array} (array1 array2 &optional scalar result)
+@anchor{❨105❩}@c
+@functionsubindex{product-array-array}@c
+Return the scaled result of the product of 2 arrays.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {product-array-vector} (array vector &optional scalar result)
+@anchor{❨69❩}@c
+@functionsubindex{product-array-vector}@c
+Return the result of the array postmultiplied by the vector and
+scaled.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {product-vector-array} (vector array &optional scalar result)
+@anchor{❨71❩}@c
+@functionsubindex{product-vector-array}@c
+Return the result of the array premultiplied by the vector and
+scaled.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {root-free-hermitian-cholesky-decomposition} (array)
+@anchor{❨106❩}@c
+@functionsubindex{root-free-hermitian-cholesky-decomposition}@c
+Factor A = LDL^t.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨14❩, , @t{cholesky.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {root-free-symmetric-cholesky-decomposition} (array)
+@anchor{❨73❩}@c
+@functionsubindex{root-free-symmetric-cholesky-decomposition}@c
+Factor A = LDL^t.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨14❩, , @t{cholesky.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {row-vector} (&rest numbers)
+@anchor{❨272❩}@c
+@functionsubindex{row-vector}@c
+Create a row vector from the numbers.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {row-vector-p} (object)
+@anchor{❨206❩}@c
+@functionsubindex{row-vector-p}@c
+Return true if object is a row-vector@comma{} NIL otherwise.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {specific-array-element-type} (array &rest subscripts)
+@anchor{❨88❩}@c
+@functionsubindex{specific-array-element-type}@c
+Return the specific type of the element specified by subscripts.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨8❩, , @t{utility.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {square-matrix-p} (object)
+@anchor{❨260❩}@c
+@functionsubindex{square-matrix-p}@c
+Return true if OBJECT is a square matrix.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨27❩, , @t{square-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {subtract-array} (array1 array2 scalar1 scalar2)
+@anchor{❨70❩}@c
+@functionsubindex{subtract-array}@c
+Array binary subtraction.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {subtract-vector} (vector1 vector2 scalar1 scalar2)
+@anchor{❨84❩}@c
+@functionsubindex{subtract-vector}@c
+Vector binary subtraction.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {sumsq-column} (array column &key scale sumsq start end)
+@anchor{❨103❩}@c
+@functionsubindex{sumsq-column}@c
+Return the scaling parameter and the sum of the squares of the
+array column.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨10❩, , @t{unary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {sumsq-row} (array row &key scale sumsq start end)
+@anchor{❨108❩}@c
+@functionsubindex{sumsq-row}@c
+Return the scaling parameter and the sum of the squares of the
+array row.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨10❩, , @t{unary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {sumsq2} (x y)
+@anchor{❨72❩}@c
+@functionsubindex{sumsq2}@c
+Return the square root of |x|^2 + |y|^2.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨10❩, , @t{unary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {sumsq3} (x y z)
+@anchor{❨83❩}@c
+@functionsubindex{sumsq3}@c
+Return the square root of |x|^2 + |y|^2 + |z|^2.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨10❩, , @t{unary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {symmetric-cholesky-decomposition} (array)
+@anchor{❨110❩}@c
+@functionsubindex{symmetric-cholesky-decomposition}@c
+Factor A = LL^T.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨14❩, , @t{cholesky.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {symmetric-cholesky-invert} (array)
+@anchor{❨65❩}@c
+@functionsubindex{symmetric-cholesky-invert}@c
+Invert a positive definite matrices using the root-free Cholesky
+decomposition.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨14❩, , @t{cholesky.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {symmetric-cholesky-solver} (array vector)
+@anchor{❨102❩}@c
+@functionsubindex{symmetric-cholesky-solver}@c
+Linear system solver for positive definite matrices using the
+root-free Cholesky decomposition.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨14❩, , @t{cholesky.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {symmetric-matrix-p} (object)
+@anchor{❨286❩}@c
+@functionsubindex{symmetric-matrix-p}@c
+Return true if object is a symmetric-matrix@comma{} NIL otherwise.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {tridiagonal-solver} (array vector)
+@anchor{❨36❩}@c
+@functionsubindex{tridiagonal-solver}@c
+Linear equation solver for a tridiagonal matrix.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨16❩, , @t{tridiagonal.lisp}}.
+@end table
+@end deffn
+
+@node Public generic functions, Public standalone methods, Public ordinary functions, Public Interface
+@subsection Generic functions
+@deffn {Generic Function} {add} (vector-or-matrix-1 vector-or-matrix-2 &key scalar1 scalar2)
+@anchor{❨287❩}@c
+@genericsubindex{add}@c
+Vector or matrix binary addition.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {add} ((matrix1 @ref{❨315❩, , @t{dense-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key scalar1 scalar2)
+@anchor{❨288❩}@c
+@methodsubindex{add}@c
+Return the addition of the 2 matrices.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {add} :before ((matrix1 @ref{❨315❩, , @t{dense-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key scalar1 scalar2)
+@anchor{❨289❩}@c
+@methodsubindex{add}@c
+Audit the input data.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {add} ((vector1 @ref{❨273❩, , @t{row-vector}}) (vector2 @ref{❨273❩, , @t{row-vector}}) &key scalar1 scalar2)
+@anchor{❨290❩}@c
+@methodsubindex{add}@c
+Return the addition of scalar1*vector1 with scalar2*vector2.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {add} ((vector1 @ref{❨196❩, , @t{column-vector}}) (vector2 @ref{❨196❩, , @t{column-vector}}) &key scalar1 scalar2)
+@anchor{❨291❩}@c
+@methodsubindex{add}@c
+Return the addition of scalar1*vector1 with scalar2*vector2.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {add} :before ((vector1 @ref{❨183❩, , @t{data-vector}}) (vector2 @ref{❨183❩, , @t{data-vector}}) &key scalar1 scalar2)
+@anchor{❨292❩}@c
+@methodsubindex{add}@c
+Verify that the dimensions are equal.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {add} ((array1 @t{array}) (array2 @t{array}) &key scalar1 scalar2)
+@anchor{❨293❩}@c
+@methodsubindex{add}@c
+Return the addition of the 2 arrays.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {add} ((vector1 @t{vector}) (vector2 @t{vector}) &key scalar1 scalar2)
+@anchor{❨294❩}@c
+@methodsubindex{add}@c
+Return the addition of scalar1*vector1 with scalar2*vector2
+@table @strong
+@item Source
+@ref{❨23❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {add} ((list1 @t{list}) (list2 @t{list}) &key scalar1 scalar2)
+@anchor{❨295❩}@c
+@methodsubindex{add}@c
+Return the addition of scalar1*list1 with scalar2*list2
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {apply-rotation} (vector1 vector2 cc ss)
+@anchor{❨261❩}@c
+@genericsubindex{apply-rotation}@c
+Return the plane rotations of vector1 and vector2 by cc and ss.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {apply-rotation} ((vector1 @ref{❨183❩, , @t{data-vector}}) (vector2 @ref{❨183❩, , @t{data-vector}}) cc ss)
+@anchor{❨262❩}@c
+@methodsubindex{apply-rotation}@c
+Return the plane rotations of vector1 and vector2 by cc and ss.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {apply-rotation} :before ((vector1 @ref{❨183❩, , @t{data-vector}}) (vector2 @ref{❨183❩, , @t{data-vector}}) cc ss)
+@anchor{❨263❩}@c
+@methodsubindex{apply-rotation}@c
+Verify the input to apply-rotation.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {compatible-dimensions-p} (operation vector-or-matrix-1 vector-or-matrix-2)
+@anchor{❨93❩}@c
+@genericsubindex{compatible-dimensions-p}@c
+Return true if the vector and matrix dimensions are compatible for
+the operation.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@item Methods
+@deffn {Method} {compatible-dimensions-p} ((operation @t{(eql :solve)}) (matrix @ref{❨240❩, , @t{square-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨94❩}@c
+@methodsubindex{compatible-dimensions-p}@c
+Return true if the array dimensions are compatible for product.
+@table @strong
+@item Source
+@ref{❨27❩, , @t{square-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {compatible-dimensions-p} ((operation @t{(eql :solve)}) (matrix @ref{❨315❩, , @t{dense-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨95❩}@c
+@methodsubindex{compatible-dimensions-p}@c
+Return true if the array dimensions are compatible for product.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {compatible-dimensions-p} ((operation @t{(eql :solve)}) (array @t{array}) (vector @t{vector}))
+@anchor{❨96❩}@c
+@methodsubindex{compatible-dimensions-p}@c
+Return true if the array dimensions are compatible for product.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {compatible-dimensions-p} ((operation @t{(eql :product)}) (array1 @t{array}) (array2 @t{array}))
+@anchor{❨97❩}@c
+@methodsubindex{compatible-dimensions-p}@c
+Return true if the array dimensions are compatible for product.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {compatible-dimensions-p} ((operation @t{(eql :add)}) (array1 @t{array}) (array2 @t{array}))
+@anchor{❨98❩}@c
+@methodsubindex{compatible-dimensions-p}@c
+Return true if the array dimensions are compatible for an
+addition.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {compatible-dimensions-p} ((operation @t{(eql :product)}) (array @t{array}) (vector @t{vector}))
+@anchor{❨99❩}@c
+@methodsubindex{compatible-dimensions-p}@c
+Return true if the array dimensions are compatible for product.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {compatible-dimensions-p} ((operation @t{(eql :product)}) (vector @t{vector}) (array @t{array}))
+@anchor{❨100❩}@c
+@methodsubindex{compatible-dimensions-p}@c
+Return true if the array dimensions are compatible for product.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {compatible-dimensions-p} ((operation @t{(eql :add)}) (vector1 @t{vector}) (vector2 @t{vector}))
+@anchor{❨101❩}@c
+@methodsubindex{compatible-dimensions-p}@c
+Return true if the vector dimensions are compatible for an
+addition.
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {copy-array} (array)
+@anchor{❨90❩}@c
+@genericsubindex{copy-array}@c
+Return an element-wise copy of the original array.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨8❩, , @t{utility.lisp}}.
+@item Methods
+@deffn {Method} {copy-array} ((original @t{array}))
+@anchor{❨91❩}@c
+@methodsubindex{copy-array}@c
+Return an element-wise copy of the original array.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {copy-array} ((original @t{vector}))
+@anchor{❨92❩}@c
+@methodsubindex{copy-array}@c
+Return an element-wise copy of the original vector.
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {copy-matrix} (matrix)
+@anchor{❨280❩}@c
+@genericsubindex{copy-matrix}@c
+Return a copy of the matrix.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Methods
+@deffn {Method} {copy-matrix} ((matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨281❩}@c
+@methodsubindex{copy-matrix}@c
+Return a copy of the dense matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {copy-matrix} ((matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨282❩}@c
+@methodsubindex{copy-matrix}@c
+Return a copy of the permutation matrix.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {copy-matrix} ((matrix @ref{❨191❩, , @t{identity-matrix}}))
+@anchor{❨283❩}@c
+@methodsubindex{copy-matrix}@c
+Return a copy of the matrix.
+@table @strong
+@item Source
+@ref{❨20❩, , @t{identity-matrix.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {copy-vector} (vector)
+@anchor{❨219❩}@c
+@genericsubindex{copy-vector}@c
+Return a copy of the vector.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {copy-vector} ((vector @ref{❨183❩, , @t{data-vector}}))
+@anchor{❨220❩}@c
+@methodsubindex{copy-vector}@c
+Return a copy of the vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {invert} (matrix)
+@anchor{❨337❩}@c
+@genericsubindex{invert}@c
+Return the invert of the matrix.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {invert} ((matrix @ref{❨314❩, , @t{symmetric-matrix}}))
+@anchor{❨338❩}@c
+@methodsubindex{invert}@c
+Return the invert of the symmetric matrix.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {invert} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}))
+@anchor{❨339❩}@c
+@methodsubindex{invert}@c
+Return the invert of the hermitian matrix.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {invert} ((matrix @ref{❨240❩, , @t{square-matrix}}))
+@anchor{❨340❩}@c
+@methodsubindex{invert}@c
+Return the invert of the square matrix.
+@table @strong
+@item Source
+@ref{❨27❩, , @t{square-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {invert} ((matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨341❩}@c
+@methodsubindex{invert}@c
+Return the invert of the dense matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {invert} ((array @t{array}))
+@anchor{❨342❩}@c
+@methodsubindex{invert}@c
+Return the invert of the array.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {left-permute} (permutation vector-or-array)
+@anchor{❨47❩}@c
+@genericsubindex{left-permute}@c
+Permute the column vector or rows of the array.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨9❩, , @t{permute.lisp}}.
+@item Methods
+@deffn {Method} {left-permute} ((permutation @t{vector}) (data @t{array}))
+@anchor{❨48❩}@c
+@methodsubindex{left-permute}@c
+Permute the rows of the array.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {left-permute} ((permutation @t{vector}) (data @t{vector}))
+@anchor{❨49❩}@c
+@methodsubindex{left-permute}@c
+Permute the column vector to create a row vector.
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {map-into-vector} (result-vector function &rest vectors)
+@anchor{❨311❩}@c
+@genericsubindex{map-into-vector}@c
+Destructively modifies the result vector with the result of
+applying the function to each element of the vectors.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {map-into-vector} ((result-vector @ref{❨183❩, , @t{data-vector}}) (function @t{function}) &rest vectors)
+@anchor{❨312❩}@c
+@methodsubindex{map-into-vector}@c
+Destructively modifies the result vector with the result of
+applying the function to each element of the vectors.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {map-into-vector} :before ((result-vector @ref{❨183❩, , @t{data-vector}}) (function @t{function}) &rest vectors)
+@anchor{❨313❩}@c
+@methodsubindex{map-into-vector}@c
+Verify the arguments to map-into-vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {map-vector} (result-type function first-vector &rest more-vectors)
+@anchor{❨197❩}@c
+@genericsubindex{map-vector}@c
+Calls function on successive sets of vector objects.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {map-vector} (result-type (function @t{function}) (first-vector @ref{❨183❩, , @t{data-vector}}) &rest more-vectors)
+@anchor{❨198❩}@c
+@methodsubindex{map-vector}@c
+Calls function on successive sets of data vectors.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {map-vector} :before (result-type (function @t{function}) (first-vector @ref{❨183❩, , @t{data-vector}}) &rest more-vectors)
+@anchor{❨199❩}@c
+@methodsubindex{map-vector}@c
+Verify the arguments to map-vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {matrix-column-dimension} (matrix)
+@anchor{❨343❩}@c
+@genericsubindex{matrix-column-dimension}@c
+Return the number of columns in MATRIX.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Methods
+@deffn {Method} {matrix-column-dimension} ((matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨344❩}@c
+@methodsubindex{matrix-column-dimension}@c
+Return the number of columns in matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {matrix-column-dimension} ((matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨345❩}@c
+@methodsubindex{matrix-column-dimension}@c
+Return the number of columns in matrix.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Reader Method} {matrix-column-dimension} ((identity-matrix @ref{❨191❩, , @t{identity-matrix}}))
+@anchor{❨346❩}@c
+@methodsubindex{matrix-column-dimension}@c
+automatically generated reader method
+@table @strong
+@item Source
+@ref{❨20❩, , @t{identity-matrix.lisp}}.
+@item Target Slot
+@ref{❨192❩, , @t{size}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {matrix-dimensions} (matrix)
+@anchor{❨155❩}@c
+@genericsubindex{matrix-dimensions}@c
+Return the number of rows and columns in MATRIX.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Methods
+@deffn {Method} {matrix-dimensions} ((matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨156❩}@c
+@methodsubindex{matrix-dimensions}@c
+Return the number of rows and columns in matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {matrix-dimensions} ((matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨157❩}@c
+@methodsubindex{matrix-dimensions}@c
+Return the number of rows and columns in matrix.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {matrix-dimensions} ((matrix @ref{❨191❩, , @t{identity-matrix}}))
+@anchor{❨158❩}@c
+@methodsubindex{matrix-dimensions}@c
+Return the number of rows and columns in matrix.
+@table @strong
+@item Source
+@ref{❨20❩, , @t{identity-matrix.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {matrix-element-type} (matrix)
+@anchor{❨347❩}@c
+@genericsubindex{matrix-element-type}@c
+Return the element type of MATRIX.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Methods
+@deffn {Method} {matrix-element-type} ((matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨348❩}@c
+@methodsubindex{matrix-element-type}@c
+Return the element type of the matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {matrix-element-type} ((matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨349❩}@c
+@methodsubindex{matrix-element-type}@c
+Element type of the permutation matrix.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {matrix-element-type} ((matrix @ref{❨191❩, , @t{identity-matrix}}))
+@anchor{❨350❩}@c
+@methodsubindex{matrix-element-type}@c
+Return the element type of the identity matrix.
+@table @strong
+@item Source
+@ref{❨20❩, , @t{identity-matrix.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {matrix-in-bounds-p} (matrix row column)
+@anchor{❨307❩}@c
+@genericsubindex{matrix-in-bounds-p}@c
+Return true if ROW and COLUMN do not exceed the dimensions of
+MATRIX.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Methods
+@deffn {Method} {matrix-in-bounds-p} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (row @t{integer}) (column @t{integer}))
+@anchor{❨308❩}@c
+@methodsubindex{matrix-in-bounds-p}@c
+Return true if row and column do not exceed the dimensions of matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {matrix-in-bounds-p} ((matrix @ref{❨317❩, , @t{permutation-matrix}}) (row @t{integer}) (column @t{integer}))
+@anchor{❨309❩}@c
+@methodsubindex{matrix-in-bounds-p}@c
+Return true if row and column do not exceed the dimensions of matrix.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {matrix-in-bounds-p} ((matrix @ref{❨191❩, , @t{identity-matrix}}) (row @t{integer}) (column @t{integer}))
+@anchor{❨310❩}@c
+@methodsubindex{matrix-in-bounds-p}@c
+Return true if row and column do not exceed the dimensions of matrix.
+@table @strong
+@item Source
+@ref{❨20❩, , @t{identity-matrix.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {matrix-row-dimension} (matrix)
+@anchor{❨232❩}@c
+@genericsubindex{matrix-row-dimension}@c
+Return the number of rows in MATRIX.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Methods
+@deffn {Method} {matrix-row-dimension} ((matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨233❩}@c
+@methodsubindex{matrix-row-dimension}@c
+Return the number of rows in matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {matrix-row-dimension} ((matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨234❩}@c
+@methodsubindex{matrix-row-dimension}@c
+Return the number of rows in matrix.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Reader Method} {matrix-row-dimension} ((identity-matrix @ref{❨191❩, , @t{identity-matrix}}))
+@anchor{❨235❩}@c
+@methodsubindex{matrix-row-dimension}@c
+automatically generated reader method
+@table @strong
+@item Source
+@ref{❨20❩, , @t{identity-matrix.lisp}}.
+@item Target Slot
+@ref{❨192❩, , @t{size}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {mref} (matrix row column)
+@anchor{❨174❩}@c
+@genericsubindex{mref}@c
+Return the matrix element at ROW@comma{}COLUMN.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Methods
+@deffn {Method} {mref} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (row @t{integer}) (column @t{integer}))
+@anchor{❨175❩}@c
+@methodsubindex{mref}@c
+Return the element of matrix at row@comma{}column.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {mref} ((matrix @ref{❨317❩, , @t{permutation-matrix}}) (row @t{integer}) (column @t{integer}))
+@anchor{❨176❩}@c
+@methodsubindex{mref}@c
+Return 1 if a permutation and 0 otherwise.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {mref} ((matrix @ref{❨191❩, , @t{identity-matrix}}) (row @t{integer}) (column @t{integer}))
+@anchor{❨177❩}@c
+@methodsubindex{mref}@c
+Return the element of the matrix at row@comma{}column.
+@table @strong
+@item Source
+@ref{❨20❩, , @t{identity-matrix.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {(setf mref)} (matrix row column)
+@anchor{❨178❩}@c
+@genericsubindex{(setf mref)}@c
+Set the element at row@comma{}column of matrix to data.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Methods
+@deffn {Method} {(setf mref)} ((matrix @ref{❨314❩, , @t{symmetric-matrix}}) (row @t{integer}) (column @t{integer}))
+@anchor{❨179❩}@c
+@methodsubindex{(setf mref)}@c
+Set the element of matrix at row@comma{}column.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {(setf mref)} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}) (row @t{integer}) (column @t{integer}))
+@anchor{❨180❩}@c
+@methodsubindex{(setf mref)}@c
+Set the element at row@comma{}column of matrix to data.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {(setf mref)} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (row @t{integer}) (column @t{integer}))
+@anchor{❨181❩}@c
+@methodsubindex{(setf mref)}@c
+Set the element of matrix at row@comma{}column.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {(setf mref)} ((matrix @ref{❨317❩, , @t{permutation-matrix}}) (row @t{integer}) (column @t{integer}))
+@anchor{❨182❩}@c
+@methodsubindex{(setf mref)}@c
+Swap rows of the permutation matrix.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {nadd} (vector-or-matrix-1 vector-or-matrix-2 &key scalar1 scalar2)
+@anchor{❨159❩}@c
+@genericsubindex{nadd}@c
+Destructive vector or matrix addition.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {nadd} ((matrix1 @ref{❨314❩, , @t{symmetric-matrix}}) (matrix2 @ref{❨314❩, , @t{symmetric-matrix}}) &key scalar1 scalar2)
+@anchor{❨160❩}@c
+@methodsubindex{nadd}@c
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nadd} ((matrix1 @ref{❨314❩, , @t{symmetric-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key scalar1 scalar2)
+@anchor{❨161❩}@c
+@methodsubindex{nadd}@c
+Generate an error if a non-symmetric matrix is destructively added
+to a symmetric matrix.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nadd} ((matrix1 @ref{❨315❩, , @t{dense-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key scalar1 scalar2)
+@anchor{❨162❩}@c
+@methodsubindex{nadd}@c
+Return the addition of the 2 matrices.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nadd} :before ((matrix1 @ref{❨315❩, , @t{dense-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key scalar1 scalar2)
+@anchor{❨163❩}@c
+@methodsubindex{nadd}@c
+Audit the input data.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nadd} ((vector1 @ref{❨273❩, , @t{row-vector}}) (vector2 @ref{❨273❩, , @t{row-vector}}) &key scalar1 scalar2)
+@anchor{❨164❩}@c
+@methodsubindex{nadd}@c
+Return the addition of scalar2*vector2 to scalar1*vector1.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nadd} ((vector1 @ref{❨196❩, , @t{column-vector}}) (vector2 @ref{❨196❩, , @t{column-vector}}) &key scalar1 scalar2)
+@anchor{❨165❩}@c
+@methodsubindex{nadd}@c
+Return the addition of scalar2*vector2 to scalar1*vector1.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nadd} :before ((vector1 @ref{❨183❩, , @t{data-vector}}) (vector2 @ref{❨183❩, , @t{data-vector}}) &key scalar1 scalar2)
+@anchor{❨166❩}@c
+@methodsubindex{nadd}@c
+Verify that the dimensions are equal.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nadd} ((array1 @t{array}) (array2 @t{array}) &key scalar1 scalar2)
+@anchor{❨167❩}@c
+@methodsubindex{nadd}@c
+Destructively add array2 to array1.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nadd} ((vector1 @t{vector}) (vector2 @t{vector}) &key scalar1 scalar2)
+@anchor{❨168❩}@c
+@methodsubindex{nadd}@c
+Return the addition of scalar2*vector2 to scalar1*vector1.
+@table @strong
+@item Source
+@ref{❨23❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nadd} ((list1 @t{list}) (list2 @t{list}) &key scalar1 scalar2)
+@anchor{❨169❩}@c
+@methodsubindex{nadd}@c
+Return the addition of scalar2*list2 to scalar1*list1.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {napply-rotation} (vector1 vector2 cc ss)
+@anchor{❨326❩}@c
+@genericsubindex{napply-rotation}@c
+Return the plane rotations of vector1 and vector2 by cc and ss.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {napply-rotation} ((vector1 @ref{❨183❩, , @t{data-vector}}) (vector2 @ref{❨183❩, , @t{data-vector}}) cc ss)
+@anchor{❨327❩}@c
+@methodsubindex{napply-rotation}@c
+Return the plane rotations of vector1 and vector2 by cc and ss.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {napply-rotation} :before ((vector1 @ref{❨183❩, , @t{data-vector}}) (vector2 @ref{❨183❩, , @t{data-vector}}) cc ss)
+@anchor{❨328❩}@c
+@methodsubindex{napply-rotation}@c
+Verify the input to napply-rotation.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {ninvert} (matrix)
+@anchor{❨274❩}@c
+@genericsubindex{ninvert}@c
+Return the invert of the matrix with in-place decomposition.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {ninvert} ((matrix @ref{❨314❩, , @t{symmetric-matrix}}))
+@anchor{❨275❩}@c
+@methodsubindex{ninvert}@c
+Return the invert of the symmetric matrix.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {ninvert} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}))
+@anchor{❨276❩}@c
+@methodsubindex{ninvert}@c
+Return the invert of the hermitian matrix.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {ninvert} ((matrix @ref{❨240❩, , @t{square-matrix}}))
+@anchor{❨277❩}@c
+@methodsubindex{ninvert}@c
+Return the invert of the square matrix.
+@table @strong
+@item Source
+@ref{❨27❩, , @t{square-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {ninvert} ((matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨278❩}@c
+@methodsubindex{ninvert}@c
+Return the invert of the dense matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {ninvert} ((array @t{array}))
+@anchor{❨279❩}@c
+@methodsubindex{ninvert}@c
+Return the invert of the array.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {norm} (vector-or-matrix &optional measure)
+@anchor{❨320❩}@c
+@genericsubindex{norm}@c
+Return the norm according to measure.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {norm} ((matrix @ref{❨315❩, , @t{dense-matrix}}) &optional measure)
+@anchor{❨321❩}@c
+@methodsubindex{norm}@c
+Return the norm of the matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {norm} ((vector @ref{❨183❩, , @t{data-vector}}) &optional measure)
+@anchor{❨322❩}@c
+@methodsubindex{norm}@c
+Return the p-norm of the vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {norm} ((data @t{array}) &optional measure)
+@anchor{❨323❩}@c
+@methodsubindex{norm}@c
+Return the norm of the array.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {norm} ((data @t{vector}) &optional measure)
+@anchor{❨324❩}@c
+@methodsubindex{norm}@c
+@table @strong
+@item Source
+@ref{❨23❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {norm} ((data @t{list}) &optional measure)
+@anchor{❨325❩}@c
+@methodsubindex{norm}@c
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {norm-array} (data measure)
+@anchor{❨78❩}@c
+@genericsubindex{norm-array}@c
+Return the norm of the array according to the measure.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨10❩, , @t{unary-operations.lisp}}.
+@item Methods
+@deffn {Method} {norm-array} ((data @t{array}) (measure @t{(eql :infinity)}))
+@anchor{❨79❩}@c
+@methodsubindex{norm-array}@c
+Return the infinity norm of the array.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {norm-array} ((data @t{array}) (measure @t{(eql :frobenius)}))
+@anchor{❨80❩}@c
+@methodsubindex{norm-array}@c
+Return the Frobenius norm of the array.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {norm-array} ((data @t{array}) (measure @t{(eql :max)}))
+@anchor{❨81❩}@c
+@methodsubindex{norm-array}@c
+Return the max norm of the array.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {norm-array} ((data @t{array}) (measure @t{(eql 1)}))
+@anchor{❨82❩}@c
+@methodsubindex{norm-array}@c
+Return the 1 norm of the array.
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {norm-vector} (data measure)
+@anchor{❨59❩}@c
+@genericsubindex{norm-vector}@c
+Return the norm of the vector according to the measure.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨10❩, , @t{unary-operations.lisp}}.
+@item Methods
+@deffn {Method} {norm-vector} ((data @t{vector}) (measure @t{(eql :infinity)}))
+@anchor{❨60❩}@c
+@methodsubindex{norm-vector}@c
+Return the infinity@comma{} or maximum@comma{} norm of vector.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {norm-vector} ((data @t{vector}) (measure @t{integer}))
+@anchor{❨61❩}@c
+@methodsubindex{norm-vector}@c
+Return the p-norm of the vector.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {norm-vector} ((data @t{vector}) (measure @t{(eql 2)}))
+@anchor{❨62❩}@c
+@methodsubindex{norm-vector}@c
+Return the Euclidean norm of the vector.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {norm-vector} ((data @t{vector}) (measure @t{(eql 1)}))
+@anchor{❨63❩}@c
+@methodsubindex{norm-vector}@c
+Return the Taxicab norm of the list.
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {nscale} (scalar vector-or-matrix)
+@anchor{❨266❩}@c
+@genericsubindex{nscale}@c
+Destructively scale each element by the scalar.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {nscale} ((scalar @t{number}) (matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨267❩}@c
+@methodsubindex{nscale}@c
+Scale each element of the dense matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nscale} ((scalar @t{number}) (vector @ref{❨183❩, , @t{data-vector}}))
+@anchor{❨268❩}@c
+@methodsubindex{nscale}@c
+Return the vector destructively scaled by scalar.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nscale} ((scalar @t{number}) (data @t{array}))
+@anchor{❨269❩}@c
+@methodsubindex{nscale}@c
+Scale each element of the array.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nscale} ((scalar @t{number}) (data @t{vector}))
+@anchor{❨270❩}@c
+@methodsubindex{nscale}@c
+Return the vector destructively scaled by scalar.
+@table @strong
+@item Source
+@ref{❨23❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nscale} ((scalar @t{number}) (data @t{list}))
+@anchor{❨271❩}@c
+@methodsubindex{nscale}@c
+Return the list destructively scaled by scalar.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {nsolve} (matrix vector)
+@anchor{❨300❩}@c
+@genericsubindex{nsolve}@c
+Return the solution to the system of equations in-place.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {nsolve} ((matrix @ref{❨314❩, , @t{symmetric-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨301❩}@c
+@methodsubindex{nsolve}@c
+Return the solution to the system of equations.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsolve} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨302❩}@c
+@methodsubindex{nsolve}@c
+Return the solution to the system of equations.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsolve} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨303❩}@c
+@methodsubindex{nsolve}@c
+Return the solution to the system of equations.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsolve} :before ((matrix @ref{❨315❩, , @t{dense-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨304❩}@c
+@methodsubindex{nsolve}@c
+Return the solution to the system of equations.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsolve} ((array @t{array}) (vector @t{vector}))
+@anchor{❨305❩}@c
+@methodsubindex{nsolve}@c
+Return the solution to the system of equations.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {nsubtract} (vector-or-matrix-1 vector-or-matrix-2 &key scalar1 scalar2)
+@anchor{❨352❩}@c
+@genericsubindex{nsubtract}@c
+Destructive vector or matrix subtraction.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {nsubtract} ((matrix1 @ref{❨314❩, , @t{symmetric-matrix}}) (matrix2 @ref{❨314❩, , @t{symmetric-matrix}}) &key scalar1 scalar2)
+@anchor{❨353❩}@c
+@methodsubindex{nsubtract}@c
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsubtract} ((matrix1 @ref{❨314❩, , @t{symmetric-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key scalar1 scalar2)
+@anchor{❨354❩}@c
+@methodsubindex{nsubtract}@c
+Generate an error if a non-symmetric matrix is destructively
+subtracted to a symmetric matrix.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsubtract} ((matrix1 @ref{❨315❩, , @t{dense-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key scalar1 scalar2)
+@anchor{❨355❩}@c
+@methodsubindex{nsubtract}@c
+Return the addition of the 2 matrices.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsubtract} :before ((matrix1 @ref{❨315❩, , @t{dense-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key scalar1 scalar2)
+@anchor{❨356❩}@c
+@methodsubindex{nsubtract}@c
+Audit the input data.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsubtract} ((vector1 @ref{❨273❩, , @t{row-vector}}) (vector2 @ref{❨273❩, , @t{row-vector}}) &key scalar1 scalar2)
+@anchor{❨357❩}@c
+@methodsubindex{nsubtract}@c
+Return the subraction of scalar2*vector2 from scalar1*vector1.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsubtract} ((vector1 @ref{❨196❩, , @t{column-vector}}) (vector2 @ref{❨196❩, , @t{column-vector}}) &key scalar1 scalar2)
+@anchor{❨358❩}@c
+@methodsubindex{nsubtract}@c
+Return the subraction of scalar2*vector2 from scalar1*vector1.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsubtract} :before ((vector1 @ref{❨183❩, , @t{data-vector}}) (vector2 @ref{❨183❩, , @t{data-vector}}) &key scalar1 scalar2)
+@anchor{❨359❩}@c
+@methodsubindex{nsubtract}@c
+Verify that the dimensions are equal.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsubtract} ((array1 @t{array}) (array2 @t{array}) &key scalar1 scalar2)
+@anchor{❨360❩}@c
+@methodsubindex{nsubtract}@c
+Destructively subtract array2 from array1.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsubtract} ((vector1 @t{vector}) (vector2 @t{vector}) &key scalar1 scalar2)
+@anchor{❨361❩}@c
+@methodsubindex{nsubtract}@c
+Return the subraction of scalar2*vector2 from scalar1*vector1.
+@table @strong
+@item Source
+@ref{❨23❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {nsubtract} ((list1 @t{list}) (list2 @t{list}) &key scalar1 scalar2)
+@anchor{❨362❩}@c
+@methodsubindex{nsubtract}@c
+Return the subraction of scalar2*list2 from scalar1*list1.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {ntranspose} (vector-or-matrix)
+@anchor{❨329❩}@c
+@genericsubindex{ntranspose}@c
+Destructively transpose the vector or matrix.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {ntranspose} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}))
+@anchor{❨330❩}@c
+@methodsubindex{ntranspose}@c
+The destructive transpose of a Hermitian matrix is itself.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {ntranspose} ((matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨331❩}@c
+@methodsubindex{ntranspose}@c
+Replace the contents of the dense matrix with the transpose.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {ntranspose} ((vector @ref{❨273❩, , @t{row-vector}}))
+@anchor{❨332❩}@c
+@methodsubindex{ntranspose}@c
+Return a column vector destructively.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {ntranspose} ((vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨333❩}@c
+@methodsubindex{ntranspose}@c
+Return a row vector destructively.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {ntranspose} ((data @t{array}))
+@anchor{❨334❩}@c
+@methodsubindex{ntranspose}@c
+Replace the contents of the array with the transpose.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {ntranspose} ((data @t{vector}))
+@anchor{❨335❩}@c
+@methodsubindex{ntranspose}@c
+Return a row vector destructively.
+@table @strong
+@item Source
+@ref{❨23❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {ntranspose} ((data @t{list}))
+@anchor{❨336❩}@c
+@methodsubindex{ntranspose}@c
+Return a row vector destructively.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {permute} (vector-or-matrix-1 vector-or-matrix-2)
+@anchor{❨243❩}@c
+@genericsubindex{permute}@c
+Permute the vector or matrix.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {permute} ((permutation @ref{❨317❩, , @t{permutation-matrix}}) (matrix @ref{❨363❩, , @t{hermitian-matrix}}))
+@anchor{❨244❩}@c
+@methodsubindex{permute}@c
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}) (permutation @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨245❩}@c
+@methodsubindex{permute}@c
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} ((permutation @ref{❨317❩, , @t{permutation-matrix}}) (matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨246❩}@c
+@methodsubindex{permute}@c
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (permutation @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨247❩}@c
+@methodsubindex{permute}@c
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} ((matrix @ref{❨317❩, , @t{permutation-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨248❩}@c
+@methodsubindex{permute}@c
+Return the permutation of the column vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} :before ((matrix @ref{❨317❩, , @t{permutation-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨249❩}@c
+@methodsubindex{permute}@c
+Verify that the dimensions are compatible.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} ((vector @ref{❨273❩, , @t{row-vector}}) (matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨250❩}@c
+@methodsubindex{permute}@c
+Return the permutation of the row vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} :before ((vector @ref{❨273❩, , @t{row-vector}}) (matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨251❩}@c
+@methodsubindex{permute}@c
+Verify that the dimensions are compatible.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} ((matrix @ref{❨317❩, , @t{permutation-matrix}}) (data @t{array}))
+@anchor{❨252❩}@c
+@methodsubindex{permute}@c
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} ((data @t{array}) (matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨253❩}@c
+@methodsubindex{permute}@c
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} ((matrix @ref{❨317❩, , @t{permutation-matrix}}) (data @t{vector}))
+@anchor{❨254❩}@c
+@methodsubindex{permute}@c
+Return the permutation of the list.
+@table @strong
+@item Source
+@ref{❨23❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} ((data @t{vector}) (matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨255❩}@c
+@methodsubindex{permute}@c
+Return the permutation of the list.
+@table @strong
+@item Source
+@ref{❨23❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} ((matrix @ref{❨317❩, , @t{permutation-matrix}}) (data @t{list}))
+@anchor{❨256❩}@c
+@methodsubindex{permute}@c
+Return the permutation of the list.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {permute} ((data @t{list}) (matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨257❩}@c
+@methodsubindex{permute}@c
+Return the permutation of the list.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {product} (vector-or-matrix-1 vector-or-matrix-2 &optional scalar)
+@anchor{❨364❩}@c
+@genericsubindex{product}@c
+Return the vector-vector@comma{} matrix-vector or matrix-matrix product.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {product} ((matrix1 @ref{❨315❩, , @t{dense-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &optional scalar)
+@anchor{❨365❩}@c
+@methodsubindex{product}@c
+Return the product of the dense matrices.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {product} :before ((matrix1 @ref{❨315❩, , @t{dense-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &optional scalar)
+@anchor{❨366❩}@c
+@methodsubindex{product}@c
+Verify the input.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {product} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}) &optional scalar)
+@anchor{❨367❩}@c
+@methodsubindex{product}@c
+Return a column vector generated by the multiplication of the dense
+matrix with a column vector.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {product} :before ((matrix @ref{❨315❩, , @t{dense-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}) &optional scalar)
+@anchor{❨368❩}@c
+@methodsubindex{product}@c
+Verify the input.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {product} ((vector @ref{❨273❩, , @t{row-vector}}) (matrix @ref{❨315❩, , @t{dense-matrix}}) &optional scalar)
+@anchor{❨369❩}@c
+@methodsubindex{product}@c
+Return a row vector generated by the pre-multiplication of a dense
+matrix by a row vector.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {product} :before ((vector @ref{❨273❩, , @t{row-vector}}) (matrix @ref{❨315❩, , @t{dense-matrix}}) &optional scalar)
+@anchor{❨370❩}@c
+@methodsubindex{product}@c
+Verify the inputs.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {product} ((vector1 @ref{❨273❩, , @t{row-vector}}) (vector2 @ref{❨196❩, , @t{column-vector}}) &optional scalar)
+@anchor{❨371❩}@c
+@methodsubindex{product}@c
+Return the dot product of vector1 and vector2.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {product} :before ((vector1 @ref{❨273❩, , @t{row-vector}}) (vector2 @ref{❨196❩, , @t{column-vector}}) &optional scalar)
+@anchor{❨372❩}@c
+@methodsubindex{product}@c
+Verify that the dimensions are equal.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {product} ((array1 @t{array}) (array2 @t{array}) &optional scalar)
+@anchor{❨373❩}@c
+@methodsubindex{product}@c
+Return the product of the arrays.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {product} ((array @t{array}) (vector @t{vector}) &optional scalar)
+@anchor{❨374❩}@c
+@methodsubindex{product}@c
+Return a vector generated by the multiplication of the array with a
+vector.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {product} ((vector @t{vector}) (array @t{array}) &optional scalar)
+@anchor{❨375❩}@c
+@methodsubindex{product}@c
+Return a vector generated by the pre-multiplication of a array by a
+vector.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {product} ((vector1 @t{vector}) (vector2 @t{vector}) &optional scalar)
+@anchor{❨376❩}@c
+@methodsubindex{product}@c
+Return the dot product of vector1 and vector2.
+@table @strong
+@item Source
+@ref{❨23❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {product} ((list1 @t{list}) (list2 @t{list}) &optional scalar)
+@anchor{❨377❩}@c
+@methodsubindex{product}@c
+Return the dot product of list1 and list2.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {replace-matrix} (matrix1 matrix2 &key start-row1 end-row1 start-column1 end-column1 start-row2 end-row2 start-column2 end-column2)
+@anchor{❨140❩}@c
+@genericsubindex{replace-matrix}@c
+Destructively replace elements of matrix1 with matrix2.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Methods
+@deffn {Method} {replace-matrix} ((matrix1 @ref{❨314❩, , @t{symmetric-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key start-row1 end-row1 start-column1 end-column1 start-row2 end-row2 start-column2 end-column2)
+@anchor{❨141❩}@c
+@methodsubindex{replace-matrix}@c
+Replace the elements of MATRIX1 with MATRIX2.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {replace-matrix} ((matrix1 @ref{❨314❩, , @t{symmetric-matrix}}) (matrix2 @ref{❨314❩, , @t{symmetric-matrix}}) &key start-row1 end-row1 start-column1 end-column1 start-row2 end-row2 start-column2 end-column2)
+@anchor{❨142❩}@c
+@methodsubindex{replace-matrix}@c
+Replace the elements of MATRIX1 with MATRIX2.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {replace-matrix} ((matrix1 @ref{❨363❩, , @t{hermitian-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key start-row1 end-row1 start-column1 end-column1 start-row2 end-row2 start-column2 end-column2)
+@anchor{❨143❩}@c
+@methodsubindex{replace-matrix}@c
+Replace the elements of matrix1 with matrix2.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {replace-matrix} ((matrix1 @ref{❨363❩, , @t{hermitian-matrix}}) (matrix2 @ref{❨363❩, , @t{hermitian-matrix}}) &key start-row1 end-row1 start-column1 end-column1 start-row2 end-row2 start-column2 end-column2)
+@anchor{❨144❩}@c
+@methodsubindex{replace-matrix}@c
+Replace the elements of matrix1 with matrix2.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {replace-matrix} ((matrix1 @ref{❨315❩, , @t{dense-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key start-row1 end-row1 start-column1 end-column1 start-row2 end-row2 start-column2 end-column2)
+@anchor{❨145❩}@c
+@methodsubindex{replace-matrix}@c
+Replace the elements of matrix1 with matrix2.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {replace-vector} (vector1 vector2 &key start1 end1 start2 end2)
+@anchor{❨298❩}@c
+@genericsubindex{replace-vector}@c
+Destructively replace the elements of vector1 with vector2.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {replace-vector} ((vector1 @ref{❨183❩, , @t{data-vector}}) (vector2 @ref{❨183❩, , @t{data-vector}}) &key start1 end1 start2 end2)
+@anchor{❨299❩}@c
+@methodsubindex{replace-vector}@c
+Destructively replace the elements of vector1 with vector2.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {right-permute} (vector-or-array permutation)
+@anchor{❨32❩}@c
+@genericsubindex{right-permute}@c
+Permute the row vector or columns of the array.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨9❩, , @t{permute.lisp}}.
+@item Methods
+@deffn {Method} {right-permute} ((data @t{array}) (permutation @t{vector}))
+@anchor{❨33❩}@c
+@methodsubindex{right-permute}@c
+Permute the columns of the array.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {right-permute} ((data @t{vector}) (permutation @t{vector}))
+@anchor{❨34❩}@c
+@methodsubindex{right-permute}@c
+Permute the row vector to create a column vector.
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {scale} (scalar vector-or-matrix)
+@anchor{❨185❩}@c
+@genericsubindex{scale}@c
+Scale each element by the scalar.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {scale} ((scalar @t{number}) (matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨186❩}@c
+@methodsubindex{scale}@c
+Scale each element of the dense matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {scale} ((scalar @t{number}) (vector @ref{❨183❩, , @t{data-vector}}))
+@anchor{❨187❩}@c
+@methodsubindex{scale}@c
+Return the vector scaled by scalar.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {scale} ((scalar @t{number}) (data @t{array}))
+@anchor{❨188❩}@c
+@methodsubindex{scale}@c
+Scale each element of the array.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {scale} ((scalar @t{number}) (data @t{vector}))
+@anchor{❨189❩}@c
+@methodsubindex{scale}@c
+Return the vector scaled by scalar.
+@table @strong
+@item Source
+@ref{❨23❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {scale} ((scalar @t{number}) (data @t{list}))
+@anchor{❨190❩}@c
+@methodsubindex{scale}@c
+Return the list scaled by scalar.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {scaled-binary-op} (op scalar1 scalar2)
+@anchor{❨50❩}@c
+@genericsubindex{scaled-binary-op}@c
+Compile and return a scaled binary operation.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@item Methods
+@deffn {Method} {scaled-binary-op} ((op @t{(eql @hashchar{}<function ->)}) (scalar1 @t{number}) (scalar2 @t{number}))
+@anchor{❨51❩}@c
+@methodsubindex{scaled-binary-op}@c
+Return the scaled operation.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {scaled-binary-op} ((op @t{(eql @hashchar{}<function +>)}) (scalar1 @t{number}) (scalar2 @t{number}))
+@anchor{❨52❩}@c
+@methodsubindex{scaled-binary-op}@c
+Return the scaled operation.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {scaled-binary-op} ((op @t{(eql @hashchar{}<function ->)}) (scalar1 @t{(eql nil)}) (scalar2 @t{number}))
+@anchor{❨53❩}@c
+@methodsubindex{scaled-binary-op}@c
+Return the scaled operation.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {scaled-binary-op} ((op @t{(eql @hashchar{}<function +>)}) (scalar1 @t{(eql nil)}) (scalar2 @t{number}))
+@anchor{❨54❩}@c
+@methodsubindex{scaled-binary-op}@c
+Return the scaled operation.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {scaled-binary-op} ((op @t{(eql @hashchar{}<function ->)}) (scalar1 @t{number}) (scalar2 @t{(eql nil)}))
+@anchor{❨55❩}@c
+@methodsubindex{scaled-binary-op}@c
+Return the scaled operation.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {scaled-binary-op} ((op @t{(eql @hashchar{}<function +>)}) (scalar1 @t{number}) (scalar2 @t{(eql nil)}))
+@anchor{❨56❩}@c
+@methodsubindex{scaled-binary-op}@c
+Return the scaled operation.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {scaled-binary-op} (op (scalar1 @t{(eql nil)}) (scalar2 @t{(eql nil)}))
+@anchor{❨57❩}@c
+@methodsubindex{scaled-binary-op}@c
+Return the operation.
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {solve} (matrix vector)
+@anchor{❨200❩}@c
+@genericsubindex{solve}@c
+Return the solution to the system of equations.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {solve} ((matrix @ref{❨314❩, , @t{symmetric-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨201❩}@c
+@methodsubindex{solve}@c
+Return the solution to the system of equations.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {solve} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨202❩}@c
+@methodsubindex{solve}@c
+Return the solution to the system of equations.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {solve} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨203❩}@c
+@methodsubindex{solve}@c
+Return the solution to the system of equations.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {solve} :before ((matrix @ref{❨315❩, , @t{dense-matrix}}) (vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨204❩}@c
+@methodsubindex{solve}@c
+Return the solution to the system of equations.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {solve} ((array @t{array}) (vector @t{vector}))
+@anchor{❨205❩}@c
+@methodsubindex{solve}@c
+Return the solution to the system of equations.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {submatrix} (matrix start-row start-column &key end-row end-column)
+@anchor{❨208❩}@c
+@genericsubindex{submatrix}@c
+Return a submatrix of the matrix.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Methods
+@deffn {Method} {submatrix} ((matrix @ref{❨314❩, , @t{symmetric-matrix}}) (start-row @t{integer}) (start-column @t{integer}) &key end-row end-column)
+@anchor{❨209❩}@c
+@methodsubindex{submatrix}@c
+Return a matrix created from the submatrix of matrix.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {submatrix} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}) (start-row @t{integer}) (start-column @t{integer}) &key end-row end-column)
+@anchor{❨210❩}@c
+@methodsubindex{submatrix}@c
+Return a matrix created from the submatrix of matrix.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {submatrix} ((matrix @ref{❨240❩, , @t{square-matrix}}) (start-row @t{integer}) (start-column @t{integer}) &key end-row end-column)
+@anchor{❨211❩}@c
+@methodsubindex{submatrix}@c
+Return a matrix created from the submatrix of matrix.
+@table @strong
+@item Source
+@ref{❨27❩, , @t{square-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {submatrix} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (start-row @t{integer}) (start-column @t{integer}) &key end-row end-column)
+@anchor{❨212❩}@c
+@methodsubindex{submatrix}@c
+Return a dense matrix created from the submatrix of a matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {(setf submatrix)} (matrix start-row start-column &key end-row end-column)
+@anchor{❨213❩}@c
+@genericsubindex{(setf submatrix)}@c
+Set the submatrix of the matrix.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Methods
+@deffn {Method} {(setf submatrix)} ((matrix @ref{❨314❩, , @t{symmetric-matrix}}) (start-row @t{integer}) (start-column @t{integer}) &key end-row end-column)
+@anchor{❨214❩}@c
+@methodsubindex{(setf submatrix)}@c
+Set a submatrix of MATRIX.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {(setf submatrix)} ((matrix @ref{❨314❩, , @t{symmetric-matrix}}) (start-row @t{integer}) (start-column @t{integer}) &key end-row end-column)
+@anchor{❨215❩}@c
+@methodsubindex{(setf submatrix)}@c
+Set a submatrix of the matrix.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {(setf submatrix)} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}) (start-row @t{integer}) (start-column @t{integer}) &key end-row end-column)
+@anchor{❨216❩}@c
+@methodsubindex{(setf submatrix)}@c
+Set a submatrix of the matrix.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {(setf submatrix)} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}) (start-row @t{integer}) (start-column @t{integer}) &key end-row end-column)
+@anchor{❨217❩}@c
+@methodsubindex{(setf submatrix)}@c
+Set a submatrix of the matrix.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {(setf submatrix)} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (start-row @t{integer}) (start-column @t{integer}) &key end-row end-column)
+@anchor{❨218❩}@c
+@methodsubindex{(setf submatrix)}@c
+Set the submatrix of matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {subtract} (vector-or-matrix-1 vector-or-matrix-2 &key scalar1 scalar2)
+@anchor{❨221❩}@c
+@genericsubindex{subtract}@c
+Vector or matrix binary subtraction.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {subtract} ((matrix1 @ref{❨315❩, , @t{dense-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key scalar1 scalar2)
+@anchor{❨222❩}@c
+@methodsubindex{subtract}@c
+Return the addition of the 2 matrices.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {subtract} :before ((matrix1 @ref{❨315❩, , @t{dense-matrix}}) (matrix2 @ref{❨315❩, , @t{dense-matrix}}) &key scalar1 scalar2)
+@anchor{❨223❩}@c
+@methodsubindex{subtract}@c
+Audit the input data.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {subtract} ((vector1 @ref{❨273❩, , @t{row-vector}}) (vector2 @ref{❨273❩, , @t{row-vector}}) &key scalar1 scalar2)
+@anchor{❨224❩}@c
+@methodsubindex{subtract}@c
+Return the subraction of scalar2*vector2 from scalar1*vector1.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {subtract} ((vector1 @ref{❨196❩, , @t{column-vector}}) (vector2 @ref{❨196❩, , @t{column-vector}}) &key scalar1 scalar2)
+@anchor{❨225❩}@c
+@methodsubindex{subtract}@c
+Return the subraction of scalar2*vector2 from scalar1*vector1.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {subtract} :before ((vector1 @ref{❨183❩, , @t{data-vector}}) (vector2 @ref{❨183❩, , @t{data-vector}}) &key scalar1 scalar2)
+@anchor{❨226❩}@c
+@methodsubindex{subtract}@c
+Verify that the dimensions are equal.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {subtract} ((array1 @t{array}) (array2 @t{array}) &key scalar1 scalar2)
+@anchor{❨227❩}@c
+@methodsubindex{subtract}@c
+Return the subtraction of the 2 arrays.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {subtract} ((vector1 @t{vector}) (vector2 @t{vector}) &key scalar1 scalar2)
+@anchor{❨228❩}@c
+@methodsubindex{subtract}@c
+Return the subraction of scalar2*vector2 from scalar1*vector1.
+@table @strong
+@item Source
+@ref{❨23❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {subtract} ((list1 @t{list}) (list2 @t{list}) &key scalar1 scalar2)
+@anchor{❨229❩}@c
+@methodsubindex{subtract}@c
+Return the subraction of scalar2*list2 from scalar1*list1.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {subvector} (vector start &optional end)
+@anchor{❨236❩}@c
+@genericsubindex{subvector}@c
+Return a new vector that is a subvector of the vector.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {subvector} ((vector @ref{❨183❩, , @t{data-vector}}) start &optional end)
+@anchor{❨237❩}@c
+@methodsubindex{subvector}@c
+Return a new data vector that is a subset of vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {(setf subvector)} (vector start &optional end)
+@anchor{❨238❩}@c
+@genericsubindex{(setf subvector)}@c
+Set the subvector of the vector.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {(setf subvector)} ((vector @ref{❨183❩, , @t{data-vector}}) start &optional end)
+@anchor{❨239❩}@c
+@methodsubindex{(setf subvector)}@c
+Set the subvector of the data vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {sump} (vector-or-array p &optional scale sump)
+@anchor{❨42❩}@c
+@genericsubindex{sump}@c
+Return the scaling parameter and the sum of the P powers.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨10❩, , @t{unary-operations.lisp}}.
+@item Methods
+@deffn {Method} {sump} ((data @t{array}) p &optional scale sump)
+@anchor{❨43❩}@c
+@methodsubindex{sump}@c
+Return the scaling parameter and the sum of the P powers of the
+matrix.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {sump} ((data @t{vector}) p &optional scale sump)
+@anchor{❨44❩}@c
+@methodsubindex{sump}@c
+Return the scaling parameter and the sum of the powers of p of the
+vector.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {sump} ((data @t{list}) (p @t{real}) &optional scale sump)
+@anchor{❨45❩}@c
+@methodsubindex{sump}@c
+Return the scaling parameter and the sum of the powers of p of the
+data.
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {sumsq} (vector-or-array &optional scale sumsq)
+@anchor{❨74❩}@c
+@genericsubindex{sumsq}@c
+Return the scaling parameter and the sum of the squares.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨10❩, , @t{unary-operations.lisp}}.
+@item Methods
+@deffn {Method} {sumsq} ((data @t{array}) &optional scale sumsq)
+@anchor{❨75❩}@c
+@methodsubindex{sumsq}@c
+Return the scaling parameter and the sum of the squares of the
+array.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {sumsq} ((data @t{vector}) &optional scale sumsq)
+@anchor{❨76❩}@c
+@methodsubindex{sumsq}@c
+Return the scaling parameter and the sum of the squares of the
+vector.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {sumsq} ((data @t{list}) &optional scale sumsq)
+@anchor{❨77❩}@c
+@methodsubindex{sumsq}@c
+Return the scaling parameter and the sum of the squares of the
+list.
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {transpose} (vector-or-matrix)
+@anchor{❨146❩}@c
+@genericsubindex{transpose}@c
+Transpose the vector or matrix.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨17❩, , @t{fundamental-ops.lisp}}.
+@item Methods
+@deffn {Method} {transpose} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}))
+@anchor{❨147❩}@c
+@methodsubindex{transpose}@c
+The transpose of a Hermitian matrix is itself.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {transpose} ((matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨148❩}@c
+@methodsubindex{transpose}@c
+Return the transpose of the matrix.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {transpose} ((vector @ref{❨273❩, , @t{row-vector}}))
+@anchor{❨149❩}@c
+@methodsubindex{transpose}@c
+Return a column vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {transpose} ((vector @ref{❨196❩, , @t{column-vector}}))
+@anchor{❨150❩}@c
+@methodsubindex{transpose}@c
+Return a row vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {transpose} ((data @t{array}))
+@anchor{❨151❩}@c
+@methodsubindex{transpose}@c
+Return the transpose of the array.
+@table @strong
+@item Source
+@ref{❨24❩, , @t{array.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {transpose} ((data @t{vector}))
+@anchor{❨152❩}@c
+@methodsubindex{transpose}@c
+Return a row vector.
+@table @strong
+@item Source
+@ref{❨23❩, , @t{vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {transpose} ((data @t{list}))
+@anchor{❨153❩}@c
+@methodsubindex{transpose}@c
+Return a row vector.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {transpose} ((matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨154❩}@c
+@methodsubindex{transpose}@c
+Transpose the permutation matrix.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {vector-element-type} (vector)
+@anchor{❨264❩}@c
+@genericsubindex{vector-element-type}@c
+Return the element type of vector.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {vector-element-type} ((vector @ref{❨183❩, , @t{data-vector}}))
+@anchor{❨265❩}@c
+@methodsubindex{vector-element-type}@c
+Return the element type of vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {vector-in-bounds-p} (vector index)
+@anchor{❨230❩}@c
+@genericsubindex{vector-in-bounds-p}@c
+Return true if index does not exceed the dimensions of vector.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {vector-in-bounds-p} ((vector @ref{❨183❩, , @t{data-vector}}) (index @t{integer}))
+@anchor{❨231❩}@c
+@methodsubindex{vector-in-bounds-p}@c
+Return true if index does not exceed the dimensions of vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {vector-length} (vector)
+@anchor{❨296❩}@c
+@genericsubindex{vector-length}@c
+Return the length of the vector.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {vector-length} ((vector @ref{❨183❩, , @t{data-vector}}))
+@anchor{❨297❩}@c
+@methodsubindex{vector-length}@c
+Return the length of the vector.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {vref} (vector index)
+@anchor{❨170❩}@c
+@genericsubindex{vref}@c
+Return the element of vector at index.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {vref} ((vector @ref{❨183❩, , @t{data-vector}}) (index @t{integer}))
+@anchor{❨171❩}@c
+@methodsubindex{vref}@c
+Return the element of vector at index.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {(setf vref)} (vector index)
+@anchor{❨172❩}@c
+@genericsubindex{(setf vref)}@c
+Set the element of vector at index to data.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨18❩, , @t{vector.lisp}}.
+@item Methods
+@deffn {Method} {(setf vref)} ((vector @ref{❨183❩, , @t{data-vector}}) (index @t{integer}))
+@anchor{❨173❩}@c
+@methodsubindex{(setf vref)}@c
+Set the element of vector at index to data.
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+
+@node Public standalone methods, Public classes, Public generic functions, Public Interface
+@subsection Standalone methods
+@deffn {Method} {initialize-instance} :after ((self @ref{❨183❩, , @t{data-vector}}) &rest initargs &key size element-type initial-element initial-contents)
+@anchor{❨436❩}@c
+@methodsubindex{initialize-instance}@c
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-instance} :after ((self @ref{❨191❩, , @t{identity-matrix}}) &rest initargs &key dimensions element-type initial-element initial-contents)
+@anchor{❨441❩}@c
+@methodsubindex{initialize-instance}@c
+Initialize the identity matrix.
+@table @strong
+@item Source
+@ref{❨20❩, , @t{identity-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-instance} :after ((self @ref{❨315❩, , @t{dense-matrix}}) &rest initargs &key dimensions element-type initial-element initial-contents)
+@anchor{❨443❩}@c
+@methodsubindex{initialize-instance}@c
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-instance} :after ((self @ref{❨317❩, , @t{permutation-matrix}}) &rest initargs &key dimensions element-type initial-element initial-contents)
+@anchor{❨452❩}@c
+@methodsubindex{initialize-instance}@c
+Verify that the element-type was not set and that rows equals
+columns.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+
+@node Public classes, , Public standalone methods, Public Interface
+@subsection Classes
+@deftp {Class} {column-vector}
+@anchor{❨196❩}@c
+@classsubindex{column-vector}@c
+A column vector.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@item Direct superclasses
+@ref{❨183❩, , @t{data-vector}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨291❩, , @t{add}}.
+@item
+@ref{❨94❩, , @t{compatible-dimensions-p}}.
+@item
+@ref{❨95❩, , @t{compatible-dimensions-p}}.
+@item
+@ref{❨165❩, , @t{nadd}}.
+@item
+@ref{❨301❩, , @t{nsolve}}.
+@item
+@ref{❨302❩, , @t{nsolve}}.
+@item
+@ref{❨303❩, , @t{nsolve}}.
+@item
+@ref{❨304❩, , @t{nsolve}}.
+@item
+@ref{❨358❩, , @t{nsubtract}}.
+@item
+@ref{❨333❩, , @t{ntranspose}}.
+@item
+@ref{❨248❩, , @t{permute}}.
+@item
+@ref{❨249❩, , @t{permute}}.
+@item
+@ref{❨367❩, , @t{product}}.
+@item
+@ref{❨368❩, , @t{product}}.
+@item
+@ref{❨371❩, , @t{product}}.
+@item
+@ref{❨372❩, , @t{product}}.
+@item
+@ref{❨201❩, , @t{solve}}.
+@item
+@ref{❨202❩, , @t{solve}}.
+@item
+@ref{❨203❩, , @t{solve}}.
+@item
+@ref{❨204❩, , @t{solve}}.
+@item
+@ref{❨225❩, , @t{subtract}}.
+@item
+@ref{❨150❩, , @t{transpose}}.
+@end itemize
+@end table
+@end deftp
+@deftp {Class} {data-vector}
+@anchor{❨183❩}@c
+@classsubindex{data-vector}@c
+A data vector.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@item Direct subclasses
+@itemize @bullet
+@item
+@ref{❨196❩, , @t{column-vector}}.
+@item
+@ref{❨273❩, , @t{row-vector}}.
+@end itemize
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨292❩, , @t{add}}.
+@item
+@ref{❨262❩, , @t{apply-rotation}}.
+@item
+@ref{❨263❩, , @t{apply-rotation}}.
+@item
+@ref{❨389❩, , @t{(setf contents)}}.
+@item
+@ref{❨384❩, , @t{contents}}.
+@item
+@ref{❨220❩, , @t{copy-vector}}.
+@item
+@t{float-equal}.
+@item
+@t{float-equal}.
+@item
+@ref{❨436❩, , @t{initialize-instance}}.
+@item
+@ref{❨312❩, , @t{map-into-vector}}.
+@item
+@ref{❨313❩, , @t{map-into-vector}}.
+@item
+@ref{❨198❩, , @t{map-vector}}.
+@item
+@ref{❨199❩, , @t{map-vector}}.
+@item
+@ref{❨166❩, , @t{nadd}}.
+@item
+@ref{❨327❩, , @t{napply-rotation}}.
+@item
+@ref{❨328❩, , @t{napply-rotation}}.
+@item
+@ref{❨322❩, , @t{norm}}.
+@item
+@ref{❨268❩, , @t{nscale}}.
+@item
+@ref{❨359❩, , @t{nsubtract}}.
+@item
+@t{rational-equal}.
+@item
+@t{rational-equal}.
+@item
+@ref{❨299❩, , @t{replace-vector}}.
+@item
+@ref{❨187❩, , @t{scale}}.
+@item
+@ref{❨226❩, , @t{subtract}}.
+@item
+@ref{❨239❩, , @t{(setf subvector)}}.
+@item
+@ref{❨237❩, , @t{subvector}}.
+@item
+@ref{❨265❩, , @t{vector-element-type}}.
+@item
+@ref{❨231❩, , @t{vector-in-bounds-p}}.
+@item
+@ref{❨297❩, , @t{vector-length}}.
+@item
+@ref{❨173❩, , @t{(setf vref)}}.
+@item
+@ref{❨171❩, , @t{vref}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {contents}
+@anchor{❨184❩}@c
+@slotsubindex{contents}@c
+@table @strong
+@item Type
+@t{(array * (*))}
+@item Initargs
+@t{:contents}
+@item Readers
+@ref{❨384❩, , @t{contents}}.
+@item Writers
+@ref{❨389❩, , @t{(setf contents)}}.
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {dense-matrix}
+@anchor{❨315❩}@c
+@classsubindex{dense-matrix}@c
+Dense matrix object.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@item Direct superclasses
+@ref{❨242❩, , @t{matrix-object}}.
+@item Direct subclasses
+@ref{❨240❩, , @t{square-matrix}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨288❩, , @t{add}}.
+@item
+@ref{❨289❩, , @t{add}}.
+@item
+@ref{❨95❩, , @t{compatible-dimensions-p}}.
+@item
+@ref{❨388❩, , @t{(setf contents)}}.
+@item
+@ref{❨383❩, , @t{contents}}.
+@item
+@ref{❨281❩, , @t{copy-matrix}}.
+@item
+@t{float-equal}.
+@item
+@t{float-equal}.
+@item
+@t{float-equal}.
+@item
+@t{float-equal}.
+@item
+@ref{❨443❩, , @t{initialize-instance}}.
+@item
+@ref{❨407❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨408❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨409❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨410❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨341❩, , @t{invert}}.
+@item
+@ref{❨344❩, , @t{matrix-column-dimension}}.
+@item
+@ref{❨156❩, , @t{matrix-dimensions}}.
+@item
+@ref{❨348❩, , @t{matrix-element-type}}.
+@item
+@ref{❨308❩, , @t{matrix-in-bounds-p}}.
+@item
+@ref{❨233❩, , @t{matrix-row-dimension}}.
+@item
+@ref{❨181❩, , @t{(setf mref)}}.
+@item
+@ref{❨175❩, , @t{mref}}.
+@item
+@ref{❨161❩, , @t{nadd}}.
+@item
+@ref{❨162❩, , @t{nadd}}.
+@item
+@ref{❨163❩, , @t{nadd}}.
+@item
+@ref{❨278❩, , @t{ninvert}}.
+@item
+@ref{❨321❩, , @t{norm}}.
+@item
+@ref{❨267❩, , @t{nscale}}.
+@item
+@ref{❨303❩, , @t{nsolve}}.
+@item
+@ref{❨304❩, , @t{nsolve}}.
+@item
+@ref{❨354❩, , @t{nsubtract}}.
+@item
+@ref{❨355❩, , @t{nsubtract}}.
+@item
+@ref{❨356❩, , @t{nsubtract}}.
+@item
+@ref{❨331❩, , @t{ntranspose}}.
+@item
+@ref{❨246❩, , @t{permute}}.
+@item
+@ref{❨247❩, , @t{permute}}.
+@item
+@ref{❨365❩, , @t{product}}.
+@item
+@ref{❨366❩, , @t{product}}.
+@item
+@ref{❨367❩, , @t{product}}.
+@item
+@ref{❨368❩, , @t{product}}.
+@item
+@ref{❨369❩, , @t{product}}.
+@item
+@ref{❨370❩, , @t{product}}.
+@item
+@t{rational-equal}.
+@item
+@t{rational-equal}.
+@item
+@t{rational-equal}.
+@item
+@t{rational-equal}.
+@item
+@ref{❨141❩, , @t{replace-matrix}}.
+@item
+@ref{❨143❩, , @t{replace-matrix}}.
+@item
+@ref{❨145❩, , @t{replace-matrix}}.
+@item
+@ref{❨186❩, , @t{scale}}.
+@item
+@ref{❨203❩, , @t{solve}}.
+@item
+@ref{❨204❩, , @t{solve}}.
+@item
+@ref{❨214❩, , @t{(setf submatrix)}}.
+@item
+@ref{❨216❩, , @t{(setf submatrix)}}.
+@item
+@ref{❨218❩, , @t{(setf submatrix)}}.
+@item
+@ref{❨212❩, , @t{submatrix}}.
+@item
+@ref{❨222❩, , @t{subtract}}.
+@item
+@ref{❨223❩, , @t{subtract}}.
+@item
+@ref{❨148❩, , @t{transpose}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {contents}
+@anchor{❨316❩}@c
+@slotsubindex{contents}@c
+@table @strong
+@item Type
+@t{(array * (* *))}
+@item Initargs
+@t{:contents}
+@item Readers
+@ref{❨383❩, , @t{contents}}.
+@item Writers
+@ref{❨388❩, , @t{(setf contents)}}.
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {hermitian-matrix}
+@anchor{❨363❩}@c
+@classsubindex{hermitian-matrix}@c
+Hermitian matrix object.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@item Direct superclasses
+@ref{❨240❩, , @t{square-matrix}}.
+@item Direct subclasses
+@ref{❨314❩, , @t{symmetric-matrix}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨402❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨403❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨404❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨405❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨339❩, , @t{invert}}.
+@item
+@ref{❨180❩, , @t{(setf mref)}}.
+@item
+@ref{❨276❩, , @t{ninvert}}.
+@item
+@ref{❨302❩, , @t{nsolve}}.
+@item
+@ref{❨330❩, , @t{ntranspose}}.
+@item
+@ref{❨244❩, , @t{permute}}.
+@item
+@ref{❨245❩, , @t{permute}}.
+@item
+@ref{❨143❩, , @t{replace-matrix}}.
+@item
+@ref{❨144❩, , @t{replace-matrix}}.
+@item
+@ref{❨202❩, , @t{solve}}.
+@item
+@ref{❨216❩, , @t{(setf submatrix)}}.
+@item
+@ref{❨217❩, , @t{(setf submatrix)}}.
+@item
+@ref{❨210❩, , @t{submatrix}}.
+@item
+@ref{❨147❩, , @t{transpose}}.
+@end itemize
+@end table
+@end deftp
+@deftp {Class} {identity-matrix}
+@anchor{❨191❩}@c
+@classsubindex{identity-matrix}@c
+Identity matrix object.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨20❩, , @t{identity-matrix.lisp}}.
+@item Direct superclasses
+@ref{❨242❩, , @t{matrix-object}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨386❩, , @t{contents}}.
+@item
+@ref{❨283❩, , @t{copy-matrix}}.
+@item
+@ref{❨441❩, , @t{initialize-instance}}.
+@item
+@ref{❨346❩, , @t{matrix-column-dimension}}.
+@item
+@ref{❨158❩, , @t{matrix-dimensions}}.
+@item
+@ref{❨350❩, , @t{matrix-element-type}}.
+@item
+@ref{❨310❩, , @t{matrix-in-bounds-p}}.
+@item
+@ref{❨235❩, , @t{matrix-row-dimension}}.
+@item
+@ref{❨177❩, , @t{mref}}.
+@item
+@ref{❨416❩, , @t{size}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {size}
+@anchor{❨192❩}@c
+@slotsubindex{size}@c
+@table @strong
+@item Type
+@t{fixnum}
+@item Initargs
+@t{:size}
+@item Readers
+@itemize @bullet
+@item
+@ref{❨346❩, , @t{matrix-column-dimension}}.
+@item
+@ref{❨235❩, , @t{matrix-row-dimension}}.
+@item
+@ref{❨416❩, , @t{size}}.
+@end itemize
+@item Writers
+@i{This slot is read-only.}
+@end table
+@end defvr
+@defvr {Slot} {contents}
+@anchor{❨193❩}@c
+@slotsubindex{contents}@c
+@table @strong
+@item Type
+@t{(array * (2))}
+@item Initargs
+@t{:contents}
+@item Readers
+@ref{❨386❩, , @t{contents}}.
+@item Writers
+@i{This slot is read-only.}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {matrix-object}
+@anchor{❨242❩}@c
+@classsubindex{matrix-object}@c
+A superclass for all matrices.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Direct subclasses
+@itemize @bullet
+@item
+@ref{❨315❩, , @t{dense-matrix}}.
+@item
+@ref{❨191❩, , @t{identity-matrix}}.
+@item
+@ref{❨317❩, , @t{permutation-matrix}}.
+@end itemize
+@end table
+@end deftp
+@deftp {Class} {permutation-matrix}
+@anchor{❨317❩}@c
+@classsubindex{permutation-matrix}@c
+Permutation matrix object.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@item Direct superclasses
+@ref{❨242❩, , @t{matrix-object}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨390❩, , @t{(setf contents)}}.
+@item
+@ref{❨385❩, , @t{contents}}.
+@item
+@ref{❨282❩, , @t{copy-matrix}}.
+@item
+@ref{❨452❩, , @t{initialize-instance}}.
+@item
+@ref{❨411❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨412❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨413❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨345❩, , @t{matrix-column-dimension}}.
+@item
+@ref{❨157❩, , @t{matrix-dimensions}}.
+@item
+@ref{❨349❩, , @t{matrix-element-type}}.
+@item
+@ref{❨309❩, , @t{matrix-in-bounds-p}}.
+@item
+@ref{❨234❩, , @t{matrix-row-dimension}}.
+@item
+@ref{❨182❩, , @t{(setf mref)}}.
+@item
+@ref{❨176❩, , @t{mref}}.
+@item
+@ref{❨244❩, , @t{permute}}.
+@item
+@ref{❨245❩, , @t{permute}}.
+@item
+@ref{❨246❩, , @t{permute}}.
+@item
+@ref{❨247❩, , @t{permute}}.
+@item
+@ref{❨248❩, , @t{permute}}.
+@item
+@ref{❨249❩, , @t{permute}}.
+@item
+@ref{❨250❩, , @t{permute}}.
+@item
+@ref{❨251❩, , @t{permute}}.
+@item
+@ref{❨252❩, , @t{permute}}.
+@item
+@ref{❨253❩, , @t{permute}}.
+@item
+@ref{❨254❩, , @t{permute}}.
+@item
+@ref{❨255❩, , @t{permute}}.
+@item
+@ref{❨256❩, , @t{permute}}.
+@item
+@ref{❨257❩, , @t{permute}}.
+@item
+@ref{❨154❩, , @t{transpose}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {contents}
+@anchor{❨318❩}@c
+@slotsubindex{contents}@c
+@table @strong
+@item Type
+@t{(array fixnum (*))}
+@item Initargs
+@t{:contents}
+@item Readers
+@ref{❨385❩, , @t{contents}}.
+@item Writers
+@ref{❨390❩, , @t{(setf contents)}}.
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {row-vector}
+@anchor{❨273❩}@c
+@classsubindex{row-vector}@c
+A row vector.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@item Direct superclasses
+@ref{❨183❩, , @t{data-vector}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨290❩, , @t{add}}.
+@item
+@ref{❨164❩, , @t{nadd}}.
+@item
+@ref{❨357❩, , @t{nsubtract}}.
+@item
+@ref{❨332❩, , @t{ntranspose}}.
+@item
+@ref{❨250❩, , @t{permute}}.
+@item
+@ref{❨251❩, , @t{permute}}.
+@item
+@ref{❨369❩, , @t{product}}.
+@item
+@ref{❨370❩, , @t{product}}.
+@item
+@ref{❨371❩, , @t{product}}.
+@item
+@ref{❨372❩, , @t{product}}.
+@item
+@ref{❨224❩, , @t{subtract}}.
+@item
+@ref{❨149❩, , @t{transpose}}.
+@end itemize
+@end table
+@end deftp
+@deftp {Class} {square-matrix}
+@anchor{❨240❩}@c
+@classsubindex{square-matrix}@c
+Square matrix object.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨27❩, , @t{square-matrix.lisp}}.
+@item Direct superclasses
+@ref{❨315❩, , @t{dense-matrix}}.
+@item Direct subclasses
+@ref{❨363❩, , @t{hermitian-matrix}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨94❩, , @t{compatible-dimensions-p}}.
+@item
+@ref{❨406❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨340❩, , @t{invert}}.
+@item
+@ref{❨277❩, , @t{ninvert}}.
+@item
+@ref{❨211❩, , @t{submatrix}}.
+@end itemize
+@end table
+@end deftp
+@deftp {Class} {symmetric-matrix}
+@anchor{❨314❩}@c
+@classsubindex{symmetric-matrix}@c
+Symmetric matrix object.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@item Direct superclasses
+@ref{❨363❩, , @t{hermitian-matrix}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨399❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨400❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨401❩, , @t{initialize-matrix-contents}}.
+@item
+@ref{❨338❩, , @t{invert}}.
+@item
+@ref{❨179❩, , @t{(setf mref)}}.
+@item
+@ref{❨160❩, , @t{nadd}}.
+@item
+@ref{❨161❩, , @t{nadd}}.
+@item
+@ref{❨275❩, , @t{ninvert}}.
+@item
+@ref{❨301❩, , @t{nsolve}}.
+@item
+@ref{❨353❩, , @t{nsubtract}}.
+@item
+@ref{❨354❩, , @t{nsubtract}}.
+@item
+@ref{❨141❩, , @t{replace-matrix}}.
+@item
+@ref{❨142❩, , @t{replace-matrix}}.
+@item
+@ref{❨201❩, , @t{solve}}.
+@item
+@ref{❨214❩, , @t{(setf submatrix)}}.
+@item
+@ref{❨215❩, , @t{(setf submatrix)}}.
+@item
+@ref{❨209❩, , @t{submatrix}}.
+@end itemize
+@end table
+@end deftp
+
+
+@c ---------
+@c Internals
+@c ---------
+@node Internals, , Public Interface, Definitions
+@section Internals
+@menu
+* Private ordinary functions::
+* Private generic functions::
+@end menu
+
+@node Private ordinary functions, Private generic functions, Internals, Internals
+@subsection Ordinary functions
+@deffn {Function} {%abs-vector} (vector)
+@anchor{❨133❩}@c
+@functionsubindex{%abs-vector}@c
+Return a vector containing absolute value of each element.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨10❩, , @t{unary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%array1<-array1-op-array2} (operation array1 array2)
+@anchor{❨120❩}@c
+@functionsubindex{%array1<-array1-op-array2}@c
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%array<-array1-op-array2} (operation array1 array2)
+@anchor{❨122❩}@c
+@functionsubindex{%array<-array1-op-array2}@c
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%default-cg-epsilon} (array vector)
+@anchor{❨123❩}@c
+@functionsubindex{%default-cg-epsilon}@c
+Return a default epsilon for the conjugate gradient method.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨15❩, , @t{conjugate-gradient.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%initialize-cg-residual} (array vector solution)
+@anchor{❨125❩}@c
+@functionsubindex{%initialize-cg-residual}@c
+Return the initial residual vector for the conjugate gradient.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨15❩, , @t{conjugate-gradient.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%initialize-cg-solution} (array)
+@anchor{❨119❩}@c
+@functionsubindex{%initialize-cg-solution}@c
+Return an initial solution vector for the conjugate gradient.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨15❩, , @t{conjugate-gradient.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%initialize-hermitian-matrix-with-seq} (matrix data dimensions element-type)
+@anchor{❨422❩}@c
+@functionsubindex{%initialize-hermitian-matrix-with-seq}@c
+Initialize and validate a Hermitian matrix with a sequence.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%initialize-permutation-matrix-with-seq} (matrix data size)
+@anchor{❨380❩}@c
+@functionsubindex{%initialize-permutation-matrix-with-seq}@c
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%initialize-symmetric-matrix-with-seq} (matrix data dimensions element-type)
+@anchor{❨417❩}@c
+@functionsubindex{%initialize-symmetric-matrix-with-seq}@c
+Initialize and validate a symmetric matrix with a sequence.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%map-data-vector} (result-type function first-vector &rest more-vectors)
+@anchor{❨379❩}@c
+@functionsubindex{%map-data-vector}@c
+Non-validating version of map-vector.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%map-into-data-vector} (result-vector function &rest vectors)
+@anchor{❨421❩}@c
+@functionsubindex{%map-into-data-vector}@c
+Non-validating version of map-into-vector.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%negative-residual} (residual)
+@anchor{❨137❩}@c
+@functionsubindex{%negative-residual}@c
+Return the negative of the residual.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨15❩, , @t{conjugate-gradient.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%product-array-array} (array1 array2 &optional result)
+@anchor{❨129❩}@c
+@functionsubindex{%product-array-array}@c
+Return the result of the product of 2 arrays.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%product-array-vector} (array vector &optional result)
+@anchor{❨138❩}@c
+@functionsubindex{%product-array-vector}@c
+Return the result of the array postmultiplied by the vector.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%product-vector-array} (vector array &optional result)
+@anchor{❨128❩}@c
+@functionsubindex{%product-vector-array}@c
+Return the result of the array premultiplied by the vector.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%replace-hermitian-matrix-off-diagonal} (matrix1 matrix2 row1 column1 row2 column2 numrows numcols)
+@anchor{❨391❩}@c
+@functionsubindex{%replace-hermitian-matrix-off-diagonal}@c
+Destructively replace a subset off the diagonal of matrix1 with
+matrix2.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%replace-hermitian-matrix-on-diagonal} (matrix1 matrix2 row1 column1 row2 column2 numrows numcols)
+@anchor{❨378❩}@c
+@functionsubindex{%replace-hermitian-matrix-on-diagonal}@c
+Destructively replace a subset on the diagonal of matrix1 with
+matrix2.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%replace-symmetric-matrix-off-diagonal} (matrix1 matrix2 row1 column1 row2 column2 numrows numcols)
+@anchor{❨381❩}@c
+@functionsubindex{%replace-symmetric-matrix-off-diagonal}@c
+Destructively replace a subset off the diagonal of matrix1 with
+matrix2.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%replace-symmetric-matrix-on-diagonal} (matrix1 matrix2 row1 column1 row2 column2 numrows numcols)
+@anchor{❨414❩}@c
+@functionsubindex{%replace-symmetric-matrix-on-diagonal}@c
+Destructively replace a subset on the diagonal of matrix1 with
+matrix2.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%scaled-product-array-array} (scalar array1 array2 &optional result)
+@anchor{❨117❩}@c
+@functionsubindex{%scaled-product-array-array}@c
+Return the scaled result of the product of 2 arrays.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%scaled-product-array-vector} (scalar array vector &optional result)
+@anchor{❨135❩}@c
+@functionsubindex{%scaled-product-array-vector}@c
+Return the result of the array postmultiplied by the vector and
+scaled.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%scaled-product-vector-array} (scalar vector array &optional result)
+@anchor{❨127❩}@c
+@functionsubindex{%scaled-product-vector-array}@c
+Return the result of the array premultiplied by the vector and
+scaled.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%setf-hermitian-submatrix-off-diagonal} (matrix data row column numrows numcols)
+@anchor{❨419❩}@c
+@functionsubindex{%setf-hermitian-submatrix-off-diagonal}@c
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%setf-hermitian-submatrix-on-diagonal} (matrix data row numrows)
+@anchor{❨392❩}@c
+@functionsubindex{%setf-hermitian-submatrix-on-diagonal}@c
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%setf-symmetric-submatrix-off-diagonal} (matrix data row column numrows numcols)
+@anchor{❨418❩}@c
+@functionsubindex{%setf-symmetric-submatrix-off-diagonal}@c
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%setf-symmetric-submatrix-on-diagonal} (matrix data row numrows)
+@anchor{❨420❩}@c
+@functionsubindex{%setf-symmetric-submatrix-on-diagonal}@c
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%vector1<-vector1-op-vector2} (operation vector1 vector2)
+@anchor{❨113❩}@c
+@functionsubindex{%vector1<-vector1-op-vector2}@c
+Store the result of the binary operation in vector1.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {%vector<-vector1-op-vector2} (operation vector1 vector2)
+@anchor{❨118❩}@c
+@functionsubindex{%vector<-vector1-op-vector2}@c
+Store the result of the binary operation in a new vector.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨11❩, , @t{binary-operations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {column-pivot} (array pivot-selection-vector column)
+@anchor{❨131❩}@c
+@functionsubindex{column-pivot}@c
+Return the LR pivot of the array.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨13❩, , @t{gauss.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {column-pivot-search} (array column)
+@anchor{❨130❩}@c
+@functionsubindex{column-pivot-search}@c
+Return the row index of the maximum value in the column.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨13❩, , @t{gauss.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {gauss-backsubstitution} (factored solution)
+@anchor{❨136❩}@c
+@functionsubindex{gauss-backsubstitution}@c
+Calculate the solution by backsubstitution.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨13❩, , @t{gauss.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {gauss-factorization} (array)
+@anchor{❨134❩}@c
+@functionsubindex{gauss-factorization}@c
+Return the Gauss factorization of the array.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨13❩, , @t{gauss.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {gauss-update} (factored pivot-selection-vector vector)
+@anchor{❨132❩}@c
+@functionsubindex{gauss-update}@c
+Update the solution vector.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨13❩, , @t{gauss.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {initialize-pivot-selection-vector} (size)
+@anchor{❨116❩}@c
+@functionsubindex{initialize-pivot-selection-vector}@c
+Return a new@comma{} initialized@comma{} pivot vector.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨13❩, , @t{gauss.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {swap-rows} (array i0 jth)
+@anchor{❨126❩}@c
+@functionsubindex{swap-rows}@c
+Interchange the 
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨13❩, , @t{gauss.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {tridiagonal-backsubstitution} (array vector)
+@anchor{❨112❩}@c
+@functionsubindex{tridiagonal-backsubstitution}@c
+Perform backsubstitution to obtain the solution.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨16❩, , @t{tridiagonal.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {tridiagonal-factorization} (array)
+@anchor{❨114❩}@c
+@functionsubindex{tridiagonal-factorization}@c
+Return the factorization of the tridiagonal array.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨16❩, , @t{tridiagonal.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {tridiagonal-update} (array vector)
+@anchor{❨121❩}@c
+@functionsubindex{tridiagonal-update}@c
+Update the solution vector using the factored array.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨16❩, , @t{tridiagonal.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {unit-pivot-value} (pivot-selection-vector row column &optional array-type)
+@anchor{❨124❩}@c
+@functionsubindex{unit-pivot-value}@c
+Return 1.0 if column equals the value at row of the pivot selection
+vector@comma{} otherwise 0.0.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨13❩, , @t{gauss.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {zero-array} (rows columns &optional element-type)
+@anchor{❨115❩}@c
+@functionsubindex{zero-array}@c
+Return an array of zeros.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨8❩, , @t{utility.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {zero-vector} (size &optional element-type)
+@anchor{❨139❩}@c
+@functionsubindex{zero-vector}@c
+Return a vector of zeros.
+@table @strong
+@item Package
+@ref{❨30❩, , @t{linear-algebra-kernel}}.
+@item Source
+@ref{❨8❩, , @t{utility.lisp}}.
+@end table
+@end deffn
+
+@node Private generic functions, , Private ordinary functions, Internals
+@subsection Generic functions
+@deffn {Generic Function} {%norm} (data measure)
+@anchor{❨393❩}@c
+@genericsubindex{%norm}@c
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Methods
+@deffn {Method} {%norm} ((data @t{list}) (measure @t{(eql :infinity)}))
+@anchor{❨394❩}@c
+@methodsubindex{%norm}@c
+Return the infinity@comma{} or maximum@comma{} norm of vector.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {%norm} ((data @t{list}) (measure @t{integer}))
+@anchor{❨395❩}@c
+@methodsubindex{%norm}@c
+Return the p-norm of the vector.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {%norm} ((data @t{list}) (measure @t{(eql 2)}))
+@anchor{❨396❩}@c
+@methodsubindex{%norm}@c
+Return the Euclidean norm of the vector.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {%norm} ((data @t{list}) (measure @t{(eql 1)}))
+@anchor{❨397❩}@c
+@methodsubindex{%norm}@c
+Return the Taxicab norm of the list.
+@table @strong
+@item Source
+@ref{❨22❩, , @t{list.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Reader} {contents} (object)
+@anchor{❨382❩}@c
+@genericsubindex{contents}@c
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Methods
+@deffn {Reader Method} {contents} ((dense-matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨383❩}@c
+@methodsubindex{contents}@c
+automatically generated reader method
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@item Target Slot
+@ref{❨316❩, , @t{contents}}.
+@end table
+@end deffn
+@deffn {Reader Method} {contents} ((data-vector @ref{❨183❩, , @t{data-vector}}))
+@anchor{❨384❩}@c
+@methodsubindex{contents}@c
+automatically generated reader method
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@item Target Slot
+@ref{❨184❩, , @t{contents}}.
+@end table
+@end deffn
+@deffn {Reader Method} {contents} ((permutation-matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨385❩}@c
+@methodsubindex{contents}@c
+automatically generated reader method
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@item Target Slot
+@ref{❨318❩, , @t{contents}}.
+@end table
+@end deffn
+@deffn {Reader Method} {contents} ((identity-matrix @ref{❨191❩, , @t{identity-matrix}}))
+@anchor{❨386❩}@c
+@methodsubindex{contents}@c
+automatically generated reader method
+@table @strong
+@item Source
+@ref{❨20❩, , @t{identity-matrix.lisp}}.
+@item Target Slot
+@ref{❨193❩, , @t{contents}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Writer} {(setf contents)} (object)
+@anchor{❨387❩}@c
+@genericsubindex{(setf contents)}@c
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Methods
+@deffn {Writer Method} {(setf contents)} ((dense-matrix @ref{❨315❩, , @t{dense-matrix}}))
+@anchor{❨388❩}@c
+@methodsubindex{(setf contents)}@c
+automatically generated writer method
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@item Target Slot
+@ref{❨316❩, , @t{contents}}.
+@end table
+@end deffn
+@deffn {Writer Method} {(setf contents)} ((data-vector @ref{❨183❩, , @t{data-vector}}))
+@anchor{❨389❩}@c
+@methodsubindex{(setf contents)}@c
+automatically generated writer method
+@table @strong
+@item Source
+@ref{❨25❩, , @t{data-vector.lisp}}.
+@item Target Slot
+@ref{❨184❩, , @t{contents}}.
+@end table
+@end deffn
+@deffn {Writer Method} {(setf contents)} ((permutation-matrix @ref{❨317❩, , @t{permutation-matrix}}))
+@anchor{❨390❩}@c
+@methodsubindex{(setf contents)}@c
+automatically generated writer method
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@item Target Slot
+@ref{❨318❩, , @t{contents}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {initialize-matrix-contents} (matrix initial-contents initargs)
+@anchor{❨398❩}@c
+@genericsubindex{initialize-matrix-contents}@c
+Initialize the matrix with data.
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Source
+@ref{❨19❩, , @t{matrix.lisp}}.
+@item Methods
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨314❩, , @t{symmetric-matrix}}) (initial-contents @t{array}) initargs)
+@anchor{❨399❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Initialize a symmetric matrix.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨314❩, , @t{symmetric-matrix}}) (initial-contents @t{vector}) initargs)
+@anchor{❨400❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Initialize a symmetric matrix.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨314❩, , @t{symmetric-matrix}}) (initial-contents @t{list}) initargs)
+@anchor{❨401❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Initialize a symmetric matrix.
+@table @strong
+@item Source
+@ref{❨29❩, , @t{symmetric-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}) (initial-contents @t{array}) initargs)
+@anchor{❨402❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Initialize the Hermitian matrix with a 2D array.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}) (initial-contents @t{vector}) initargs)
+@anchor{❨403❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Initialize the Hermitian matrix with a nested sequence.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}) (initial-contents @t{list}) initargs)
+@anchor{❨404❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Initialize the Hermitian matrix with a nested sequence.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨363❩, , @t{hermitian-matrix}}) (initial-element @t{complex}) initargs)
+@anchor{❨405❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+It is an error to initialize a Hermitian matrix with a complex
+element.
+@table @strong
+@item Source
+@ref{❨28❩, , @t{hermitian-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} :before ((matrix @ref{❨240❩, , @t{square-matrix}}) initial-contents initargs)
+@anchor{❨406❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Verify that the number of rows and colums are equal.
+@table @strong
+@item Source
+@ref{❨27❩, , @t{square-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (initial-contents @t{array}) initargs)
+@anchor{❨407❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Verify that the size of the data is valid.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (initial-contents @t{vector}) initargs)
+@anchor{❨408❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Initialize the dense matrix with a nested sequence.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (initial-contents @t{list}) initargs)
+@anchor{❨409❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Initialize the dense matrix with a nested sequence.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨315❩, , @t{dense-matrix}}) (initial-element @t{number}) initargs)
+@anchor{❨410❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Initialize the dense matrix with an initial element.
+@table @strong
+@item Source
+@ref{❨26❩, , @t{dense-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨317❩, , @t{permutation-matrix}}) (initial-contents @t{array}) initargs)
+@anchor{❨411❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Initialize the permutation matrix with a 2D array.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨317❩, , @t{permutation-matrix}}) (initial-contents @t{vector}) initargs)
+@anchor{❨412❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Initialize the permutation matrix with a list.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {initialize-matrix-contents} ((matrix @ref{❨317❩, , @t{permutation-matrix}}) (initial-contents @t{list}) initargs)
+@anchor{❨413❩}@c
+@methodsubindex{initialize-matrix-contents}@c
+Initialize the permutation matrix with a list.
+@table @strong
+@item Source
+@ref{❨21❩, , @t{permutation-matrix.lisp}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Reader} {size} (object)
+@anchor{❨415❩}@c
+@genericsubindex{size}@c
+@table @strong
+@item Package
+@ref{❨31❩, , @t{linear-algebra}}.
+@item Methods
+@deffn {Reader Method} {size} ((identity-matrix @ref{❨191❩, , @t{identity-matrix}}))
+@anchor{❨416❩}@c
+@methodsubindex{size}@c
+automatically generated reader method
+@table @strong
+@item Source
+@ref{❨20❩, , @t{identity-matrix.lisp}}.
+@item Target Slot
+@ref{❨192❩, , @t{size}}.
+@end table
+@end deffn
+@end table
+@end deffn
+
+
+
+@c ====================================================================
+@c Indexes
+@c ====================================================================
+@node Indexes, , Definitions, Top
+@appendix Indexes
+@menu
+* Concept index::
+* Function index::
+* Variable index::
+* Data type index::
+@end menu
+
+
+@c -------------
+@c Concept index
+@c -------------
+@node Concept index, Function index, Indexes, Indexes
+@appendixsec Concepts
+@printindex cp
+
+@page
+
+
+@c --------------
+@c Function index
+@c --------------
+@node Function index, Variable index, Concept index, Indexes
+@appendixsec Functions
+@printindex fn
+
+@page
+
+
+@c --------------
+@c Variable index
+@c --------------
+@node Variable index, Data type index, Function index, Indexes
+@appendixsec Variables
+@printindex vr
+
+@page
+
+
+@c ---------------
+@c Data type index
+@c ---------------
+@node Data type index, , Variable index, Indexes
+@appendixsec Data types
+@printindex tp
+
+@bye
+
+@c linear-algebra.texi ends here
