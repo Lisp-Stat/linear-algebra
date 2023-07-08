@@ -1,4 +1,9 @@
-;;;; Unit Tests for Linear Algebra in Common Lisp
+;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: CL-USER -*-
+;;; Copyright (c) 2011-2014, Odonata Research LLC
+;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; SPDX-License-identifier: MS-PL
+
+;;; Unit Tests for Linear Algebra in Common Lisp
 
 (in-package :cl-user)
 
