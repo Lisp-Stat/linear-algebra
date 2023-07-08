@@ -3,55 +3,53 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :cl-user)
-
-(defpackage :linear-algebra-kernel
-  (:use :common-lisp :floating-point)
+(uiop:define-package #:linear-algebra-kernel
+  (:use #:cl #:floating-point)
   ;; Utility functions
-  (:export :copy-array
-           :common-class-of
-           :common-array-element-type
-           :specific-array-element-type
-           :complex-equal
-           :number-equal)
+  (:export #:copy-array
+           #:common-class-of
+           #:common-array-element-type
+           #:specific-array-element-type
+           #:complex-equal
+           #:number-equal)
   ;; Permutation
-  (:export :right-permute
-           :left-permute)
+  (:export #:right-permute
+           #:left-permute)
   ;; Unary operations
-  (:export :sumsq2 :sumsq3
-           :sumsq :sump
-           :sumsq-row
-           :sumsq-column
-           :norm-vector
-           :norm-array)
+  (:export #:sumsq2 #:sumsq3
+           #:sumsq #:sump
+           #:sumsq-row
+           #:sumsq-column
+           #:norm-vector
+           #:norm-array)
   ;; Binary operations
-  (:export :compatible-dimensions-p
-           :scaled-binary-op
-           :add-vector :nadd-vector
-           :subtract-vector :nsubtract-vector
-           :add-array :nadd-array
-           :subtract-array :nsubtract-array
-           :inner-product-vector
-           :product-vector-array
-           :product-array-vector
-           :product-array-array)
+  (:export #:compatible-dimensions-p
+           #:scaled-binary-op
+           #:add-vector #:nadd-vector
+           #:subtract-vector #:nsubtract-vector
+           #:add-array #:nadd-array
+           #:subtract-array #:nsubtract-array
+           #:inner-product-vector
+           #:product-vector-array
+           #:product-array-vector
+           #:product-array-array)
   ;; Rotations
-  (:export :givens-rotation
-           :jacobi-rotation
-           :householder-reflection)
+  (:export #:givens-rotation
+           #:jacobi-rotation
+           #:householder-reflection)
   ;; Gauss algorithm
-  (:export :gauss-solver
-           :gauss-invert)
+  (:export #:gauss-solver
+           #:gauss-invert)
   ;; Cholesky
-  (:export :symmetric-cholesky-decomposition
-           :hermitian-cholesky-decomposition
-           :root-free-symmetric-cholesky-decomposition
-           :root-free-hermitian-cholesky-decomposition
-           :symmetric-cholesky-solver
-           :hermitian-cholesky-solver
-           :symmetric-cholesky-invert
-           :hermitian-cholesky-invert)
+  (:export #:symmetric-cholesky-decomposition
+           #:hermitian-cholesky-decomposition
+           #:root-free-symmetric-cholesky-decomposition
+           #:root-free-hermitian-cholesky-decomposition
+           #:symmetric-cholesky-solver
+           #:hermitian-cholesky-solver
+           #:symmetric-cholesky-invert
+           #:hermitian-cholesky-invert)
   ;; Conjugate gradient method
-  (:export :conjugate-gradient-solver)
+  (:export #:conjugate-gradient-solver)
   ;; Tridiagonal
-  (:export :tridiagonal-solver))
+  (:export #:tridiagonal-solver))

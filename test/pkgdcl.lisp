@@ -5,10 +5,8 @@
 
 ;;; Unit Tests for Linear Algebra in Common Lisp
 
-(in-package :cl-user)
-
-(defpackage :linear-algebra-test
-  (:use :common-lisp :lisp-unit))
+(uiop:define-package #:linear-algebra-test
+  (:use #:cl #:lisp-unit))
 
 (in-package :linear-algebra-test)
 
