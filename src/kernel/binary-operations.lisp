@@ -5,7 +5,7 @@
 
 ;;;  Linear Algebra Binary Operations Kernel
 
-(in-package :linear-algebra-kernel)
+(in-package #:linear-algebra-kernel)
 
 ;;; Interface
 
@@ -117,8 +117,9 @@ addition."
    for element1 across vector1
    and element2 across vector2
    sum (* element1 element2) into result
-   finally
-   (return (if scalar (* scalar result) result))))
+   finally (return (if scalar
+		       (* scalar result)
+		       result))))
 
 ;;; Binary array/vector operations
 
@@ -140,15 +141,11 @@ addition."
   "Return the result of the array premultiplied by the vector."
   (loop
    with (m-rows n-columns) = (array-dimensions array)
-   with result =
-   (or result (zero-vector n-columns (array-element-type vector)))
-   for column below n-columns do
-   (setf
-    (aref result column)
-    (loop
-     for row below m-rows sum
-     (* (aref vector row) (aref array row column))))
-   ;; Return the result
+   with result = (or result (zero-vector n-columns (array-element-type vector)))
+   for column below n-columns
+   do (setf (aref result column) (loop
+				   for row below m-rows
+				   sum (* (aref vector row) (aref array row column))))
    finally (return result)))
 
 (defun %scaled-product-vector-array
@@ -157,16 +154,12 @@ addition."
 scaled."
   (loop
    with (m-rows n-columns) = (array-dimensions array)
-   with result =
-   (or result (zero-vector n-columns (array-element-type vector)))
-   for column below n-columns do
-   (setf
-    (aref result column)
-    (loop
-     for row below m-rows sum
-     (* (aref vector row) (aref array row column))
-     into unscaled-sum
-     finally (return (* scalar unscaled-sum))))
+   with result = (or result (zero-vector n-columns (array-element-type vector)))
+   for column below n-columns
+   do (setf (aref result column) (loop
+				   for row below m-rows
+				   sum (* (aref vector row) (aref array row column)) into unscaled-sum
+				   finally (return (* scalar unscaled-sum))))
    ;; Return the result
    finally (return result)))
 
@@ -181,14 +174,11 @@ scaled."
   "Return the result of the array postmultiplied by the vector."
   (loop
    with (m-rows n-columns) = (array-dimensions array)
-   with result =
-   (or result (zero-vector m-rows (array-element-type vector)))
-   for row below m-rows do
-   (setf
-    (aref result row)
-    (loop
-     for column below n-columns sum
-     (* (aref array row column) (aref vector column))))
+   with result = (or result (zero-vector m-rows (array-element-type vector)))
+   for row below m-rows
+   do (setf (aref result row) (loop
+				for column below n-columns
+				sum (* (aref array row column) (aref vector column))))
    ;; Return the result
    finally (return result)))
 
@@ -198,16 +188,12 @@ scaled."
 scaled."
   (loop
    with (m-rows n-columns) = (array-dimensions array)
-   with result =
-   (or result (zero-vector m-rows (array-element-type vector)))
-   for row below m-rows do
-   (setf
-    (aref result row)
-    (loop
-     for column below n-columns sum
-     (* (aref array row column) (aref vector column))
-     into unscaled-sum
-     finally (return (* scalar unscaled-sum))))
+   with result =  (or result (zero-vector m-rows (array-element-type vector)))
+   for row below m-rows
+   do (setf (aref result row) (loop
+				for column below n-columns
+				sum (* (aref array row column) (aref vector column))  into unscaled-sum
+				finally (return (* scalar unscaled-sum))))
    ;; Return the result
    finally (return result)))
 
@@ -292,17 +278,13 @@ addition."
   (loop
    with (m-rows l-columns) = (array-dimensions array1)
    with n-columns = (array-dimension array2 1)
-   with result =
-   (or
-    result (zero-array m-rows n-columns (array-element-type array1)))
-   for row below m-rows do
-   (loop
-    for column below n-columns do
-    (setf
-     (aref result row column)
-     (loop
-      for index below l-columns sum
-      (* (aref array1 row index) (aref array2 index column)))))
+   with result = (or result (zero-array m-rows n-columns (array-element-type array1)))
+   for row below m-rows
+   do (loop
+	for column below n-columns
+	do (setf (aref result row column) (loop
+					    for index below l-columns
+					    sum (* (aref array1 row index) (aref array2 index column)))))
    ;; Return the result
    finally (return result)))
 
@@ -312,19 +294,14 @@ addition."
   (loop
    with (m-rows l-columns) = (array-dimensions array1)
    with n-columns = (array-dimension array2 1)
-   with result =
-   (or
-    result (zero-array m-rows n-columns (array-element-type array1)))
-   for row below m-rows do
-   (loop
-    for column below n-columns do
-    (setf
-     (aref result row column)
-     (loop
-      for index below l-columns sum
-      (* (aref array1 row index) (aref array2 index column))
-      into unscaled-sum
-      finally (return (* scalar unscaled-sum)))))
+   with result = (or result (zero-array m-rows n-columns (array-element-type array1)))
+   for row below m-rows
+   do (loop
+	for column below n-columns
+	do (setf (aref result row column) (loop
+					    for index below l-columns
+					    sum (* (aref array1 row index) (aref array2 index column)) into unscaled-sum
+					    finally (return (* scalar unscaled-sum)))))
    ;; Return the result
    finally (return result)))
 
