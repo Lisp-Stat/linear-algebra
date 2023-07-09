@@ -80,10 +80,9 @@
   "Return the Gauss factorization of the array."
   (loop
    with size = (array-dimension array 0)
-   with pivot-selection-vector =
-   (initialize-pivot-selection-vector size)
-   for column below (1- size) do
-   (column-pivot array pivot-selection-vector column)
+   with pivot-selection-vector = (initialize-pivot-selection-vector size)
+   for column below (1- size)
+   do (column-pivot array pivot-selection-vector column)
    finally (return (values array pivot-selection-vector))))
 
 ;;; Algorithm 4.23 : Step 2
@@ -91,23 +90,17 @@
 (defun gauss-update (factored pivot-selection-vector vector)
   "Update the solution vector."
   (loop
-   with update =
-   (make-array
-    (length vector)
-    :element-type (array-element-type vector)
-    :initial-element 0.0)		;FIXME 0.0 assumes the vector is of type single-float
-   initially
-   (setf
-    (aref update 0)
-    (aref vector (svref pivot-selection-vector 0)))
-   for row from 1 below (array-dimension factored 0) do
-   (setf
-    (aref update row)
-    (- (aref vector(svref pivot-selection-vector row))
-       (loop
-        for col from 0 below row sum
-        (* (aref factored row col) (aref update col)))))
-   ;; Return the updated vector
+   with update = (make-array
+		  (length vector)
+		  :element-type (array-element-type vector)
+		  :initial-element (coerce 0.0 (array-element-type vector)))
+   initially (setf (aref update 0) (aref vector (svref pivot-selection-vector 0)))
+   for row from 1 below (array-dimension factored 0)
+   do (setf
+       (aref update row) (- (aref vector(svref pivot-selection-vector row))
+			    (loop
+			      for col from 0 below row
+			      sum (* (aref factored row col) (aref update col)))))
    finally (return update)))
 
 (defun gauss-backsubstitution (factored solution)
@@ -115,18 +108,12 @@
   (loop
    with size = (array-dimension factored 0)
    with end = (1- size)
-   initially
-   (setf
-    (aref solution end)
-    (/ (aref solution end) (aref factored end end)))
-   for row downfrom (1- end) to 0 do
-   (setf
-    (aref solution row)
-    (/ (- (aref solution row)
-          (loop for col from (1+ row) below size sum
-                (* (aref factored row col) (aref solution col))))
-       (aref factored row row)))
-   ;; Return the solution vector
+   initially (setf (aref solution end) (/ (aref solution end) (aref factored end end)))
+   for row downfrom (1- end) to 0
+   do (setf (aref solution row) (/ (- (aref solution row)
+				      (loop for col from (1+ row) below size
+					    sum (* (aref factored row col) (aref solution col))))
+				   (aref factored row row)))
    finally (return solution)))
 
 ;;; Algorithm 4.23, pg. 75
