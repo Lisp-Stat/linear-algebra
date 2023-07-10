@@ -1,12 +1,15 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
+
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
 
-(define-test norm-vector
-  (:tag :vector :norm)
+(defsuite vector-sequence-test (linear-algebra-sequence-test))
+
+(deftest norm-vector (vector-sequence-test)
   ;; Taxicab norm
   (assert-rational-equal
    36 (linear-algebra:norm
@@ -50,23 +53,20 @@
 
 ;;; Vector transpose
 
-(define-test transpose-vector
-  (:tag :vector :transpose)
+(deftest transpose-vector (vector-sequence-test)
   (assert-float-equal
    #(1.0 2.0 3.0 4.0 5.0)
    (linear-algebra:transpose
     #(1.0 2.0 3.0 4.0 5.0))))
 
-(define-test ntranspose-vector
-  (:tag :vector :ntranspose)
+(deftest ntranspose-vector (vector-sequence-test)
   (let ((data (vector 1.0 2.0 3.0 4.0 5.0)))
     (assert-equal
      data (linear-algebra:ntranspose data))))
 
 ;;; Vector permutation
 
-(define-test permute-vector
-  (:tag :vector :permute)
+(deftest permute-vector (vector-sequence-test)
   (let ((vect (vector 1.1 2.2 3.3 4.4 5.5))
         (pmat
          (linear-algebra:make-matrix
@@ -104,8 +104,7 @@
 
 ;;; Vector scale
 
-(define-test scale-vector
-  (:tag :vector :scale)
+(deftest scale-vector (vector-sequence-test)
   (assert-float-equal
    #(2.0 4.0 6.0 8.0 10.0)
    (linear-algebra:scale 2.0 #(1.0 2.0 3.0 4.0 5.0)))
@@ -122,33 +121,7 @@
     #C(2.0 2.0)
     #(#C(1.0 1.0) #C(2.0 2.0) #C(3.0 3.0) #C(4.0 4.0) #C(5.0 5.0)))))
 
-(define-test nscale-vector
-  (:tag :vector :nscale)
-  (let ((list (list 1.0 2.0 3.0 4.0 5.0)))
-    (assert-eq list (linear-algebra:nscale 2.0 list))
-    (assert-float-equal #(2.0 4.0 6.0 8.0 10.0) list))
-  (let ((list (list 1.0 2.0 3.0 4.0 5.0)))
-    (assert-eq list (linear-algebra:nscale #C(1.0 1.0) list))
-    (assert-float-equal
-     #(#C(1.0 1.0) #C(2.0 2.0) #C(3.0 3.0) #C(4.0 4.0) #C(5.0 5.0))
-     list))
-  (let ((list (list #C(1.0 1.0) #C(2.0 2.0) #C(3.0 3.0)
-                    #C(4.0 4.0) #C(5.0 5.0))))
-    (assert-eq list (linear-algebra:nscale 2.0 list))
-    (assert-float-equal
-     #(#C(2.0 2.0) #C(4.0 4.0) #C(6.0 6.0) #C(8.0 8.0) #C(10.0 10.0))
-     list))
-  (let ((list (list #C(1.0 1.0) #C(2.0 2.0) #C(3.0 3.0)
-                    #C(4.0 4.0) #C(5.0 5.0))))
-    (assert-eq list (linear-algebra:nscale #C(2.0 2.0) list))
-    (assert-float-equal
-     #(#C(0.0 4.0) #C(0.0 8.0) #C(0.0 12.0) #C(0.0 16.0) #C(0.0 20.0))
-     list)))
-
-;;; Vector addition
-
-(define-test add-vector
-  (:tag :vector :add)
+(deftest nscale-vector (vector-sequence-test) 
   ;; Real
   (let ((vector1 #(1.1 2.2 3.3 4.4))
         (vector2 #(1.1 2.2 3.3 4.4)))
@@ -178,8 +151,31 @@
 
 ;;; Destructive vector addition
 
-(define-test nadd-vector
-  (:tag :vector :nadd)
+(deftest nadd-vector  (vector-sequence-test) 
+  (let ((list (list 1.0 2.0 3.0 4.0 5.0)))
+    (assert-eq list (linear-algebra:nscale 2.0 list))
+    (assert-float-equal #(2.0 4.0 6.0 8.0 10.0) list))
+  (let ((list (list 1.0 2.0 3.0 4.0 5.0)))
+    (assert-eq list (linear-algebra:nscale #C(1.0 1.0) list))
+    (assert-float-equal
+     #(#C(1.0 1.0) #C(2.0 2.0) #C(3.0 3.0) #C(4.0 4.0) #C(5.0 5.0))
+     list))
+  (let ((list (list #C(1.0 1.0) #C(2.0 2.0) #C(3.0 3.0)
+                    #C(4.0 4.0) #C(5.0 5.0))))
+    (assert-eq list (linear-algebra:nscale 2.0 list))
+    (assert-float-equal
+     #(#C(2.0 2.0) #C(4.0 4.0) #C(6.0 6.0) #C(8.0 8.0) #C(10.0 10.0))
+     list))
+  (let ((list (list #C(1.0 1.0) #C(2.0 2.0) #C(3.0 3.0)
+                    #C(4.0 4.0) #C(5.0 5.0))))
+    (assert-eq list (linear-algebra:nscale #C(2.0 2.0) list))
+    (assert-float-equal
+     #(#C(0.0 4.0) #C(0.0 8.0) #C(0.0 12.0) #C(0.0 16.0) #C(0.0 20.0))
+     list)))
+
+;;; Vector addition
+
+(deftest add-vector (vector-sequence-test) 
   ;; Real
   (let ((vector1 (vector 1.1 2.2 3.3 4.4))
         (vector2 (vector 1.1 2.2 3.3 4.4)))
@@ -211,8 +207,7 @@
 
 ;;; Vector subtraction
 
-(define-test subtract-vector
-  (:tag :vector :subtract)
+(deftest subtract-vector  (vector-sequence-test) 
   ;; Real
   (let ((vector1 #(1.1 2.2 3.3 4.4))
         (vector2 #(1.1 2.2 3.3 4.4)))
@@ -248,8 +243,7 @@
 
 ;;; Destructive vector subtraction
 
-(define-test nsubtract-vector
-  (:tag :vector :nsubtract)
+(deftest nsubtract-vector (vector-sequence-test) 
   ;; Real
   (let ((vector1 (vector 1.1 2.2 3.3 4.4))
         (vector2 (vector 1.1 2.2 3.3 4.4)))
@@ -282,8 +276,7 @@
 
 ;;; Vector dot product
 
-(define-test product-vector
-  (:tag :vector :product)
+(deftest product-vector (vector-sequence-test) 
   ;; Real vectors
   (assert-rational-equal
    55 (linear-algebra:product #(1 2 3 4 5) #(1 2 3 4 5)))

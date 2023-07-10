@@ -1,13 +1,15 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
 
-(define-test sumsq2
+(defsuite kernel-unary-op-test (linear-algebra-kernel-test))
+
+(deftest sumsq2 (kernel-unary-op-test)
   "sqrt |x|^2 + |y|^2"
-  (:tag :kernel :unary :sumsq2)
   ;; Real values
   (dolist (args (cartesian-product '(-3.0 3.0) '(-4.0 4.0)))
     (assert-float-equal
@@ -25,9 +27,8 @@
       (assert-float-equal
        6.024948 (apply #'linear-algebra-kernel:sumsq2 args)))))
 
-(define-test sumsq3
+(deftest sumsq3 (kernel-unary-op-test)
   "sqrt |x|^2 + |y|^2 + |z|^2"
-  (:tag :kernel :unary :sumsq2)
   ;; Real values
   (dolist (args (nary-product '(-2.0 2.0) '(-3.0 3.0) '(-4.0 4.0)))
     (assert-float-equal
@@ -49,8 +50,7 @@
       (assert-float-equal
        10.49333 (apply #'linear-algebra-kernel:sumsq3 args)))))
 
-(define-test unary-sumsq
-  (:tag :kernel :unary :sumsq)
+(deftest unary-sumsq (kernel-unary-op-test)
   ;; Real
   (multiple-value-bind (scale sumsq)
       (linear-algebra-kernel:sumsq
@@ -88,8 +88,7 @@
     (assert-float-equal 4.5 scale)
     (assert-float-equal 8.997532 sumsq)))
 
-(define-test unary-sump
-  (:tag :kernel :unary :sump)
+(deftest unary-sump (kernel-unary-op-test)
   ;; Real
   (let ((data '(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5)))
     (multiple-value-bind (scale sump)
@@ -149,8 +148,7 @@
     (assert-float-equal 4.5 scale)
     (assert-float-equal 6.540154 sump)))
 
-(define-test unary-sumsq-row
-  (:tag :kernel :unary :sumsq)
+(deftest unary-sumsq-row (kernel-unary-op-test)
   (let ((array
          #2A((1.1 1.2 1.3 1.4 1.5)
              (2.1 2.2 2.3 2.4 2.5)
@@ -179,8 +177,7 @@
       (assert-float-equal 3.5 scale)
       (assert-float-equal 2.832653 sumsq))))
 
-(define-test unary-sumsq-column
-  (:tag :kernel :unary :sumsq)
+(deftest unary-sumsq-column (kernel-unary-op-test)
   (let ((array
          #2A((1.1 1.2 1.3 1.4 1.5)
              (2.1 2.2 2.3 2.4 2.5)
@@ -211,8 +208,7 @@
 
 ;;; Norm & supporting functions
 
-(define-test %abs-vector
-  (:tag :kernel :unary :norm)
+(deftest %abs-vector
   (assert-rational-equal
    #(6 5 4 3 2 1 0 1 2 3 4 5)
    (linear-algebra-kernel::%abs-vector
@@ -220,8 +216,7 @@
 
 ;;; Taxicab norm
 
-(define-test unary-norm-1-vector
-  (:tag :kernel :unary :norm)
+(deftest unary-norm-1-vector (kernel-unary-op-test)
   (assert-rational-equal
    36 (linear-algebra-kernel:norm-vector
        #(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5) 1))
@@ -234,8 +229,7 @@
 
 ;;; Euclidean norm
 
-(define-test unary-norm-2-vector
-  (:tag :kernel :unary :norm)
+(deftest unary-norm-2-vector (kernel-unary-op-test)
   (assert-float-equal
    12.083046
    (linear-algebra-kernel:norm-vector
@@ -250,8 +244,7 @@
 
 ;;; P-norm
 
-(define-test unary-norm-p-vector
-  (:tag :kernel :unary :norm)
+(deftest unary-norm-p-vector (kernel-unary-op-test)
   (let ((data #(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5))
         (zdata #(#C(1 0) #C(3 1) #C(2 3) #C(0 4)
                  #C(-2 3) #C(-3 1) #C(-1 0))))
@@ -263,8 +256,7 @@
 
 ;;; Infinity norm
 
-(define-test unary-norm-infinity-vector
-  (:tag :kernel :unary :norm)
+(deftest unary-norm-infinity-vector (kernel-unary-op-test)
   (assert-rational-equal
    6 (linear-algebra-kernel:norm-vector
       #(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5)
@@ -275,8 +267,7 @@
           #C(-2 3) #C(-3 1) #C(-1 0))
         :infinity)))
 
-(define-test unary-norm-array
-  (:tag :kernel :unary :norm)
+(deftest unary-norm-array (kernel-unary-op-test)
   (let ((array
          #2A((1.1 1.2 1.3 1.4)
              (2.1 2.2 2.3 2.4)

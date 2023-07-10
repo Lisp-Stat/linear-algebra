@@ -1,12 +1,14 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
 
-(define-test symmetric-cholesky-decomposition
-  (:tag :kernel :cholesky)
+(defsuite cholesky-kernel-test (linear-algebra-kernel-test))
+
+(deftest symmetric-cholesky-decomposition (cholesky-kernel-test)
   ;; 2x2
   (assert-float-equal
    #2A((1.0488088 1.1441552)
@@ -64,8 +66,7 @@
          ( 54.0  86.0 174.0 134.0)
          ( 42.0  62.0 134.0 106.0)))))))
 
-(define-test hermitian-cholesky-decomposition
-  (:tag :kernel :cholesky)
+(deftest hermitian-cholesky-decomposition (cholesky-kernel-test)
   ;; 2x2
   (let ((*epsilon* (* 9 single-float-epsilon)))
     (assert-float-equal
@@ -90,8 +91,7 @@
          (#C(1.26 2.0) #C(2.23  0.0) #C(2.31 -1.5))
          (#C(1.37 3.0) #C(2.31  1.5) #C(8.15  0.0))))))))
 
-(define-test root-free-symmetric-cholesky-decomposition
-  (:tag :kernel :cholesky)
+(deftest root-free-symmetric-cholesky-decomposition (cholesky-kernel-test)
   ;; 2x2
   (assert-float-equal
    #2A((1.1 1.0909091) (1.0909091 0.8909091))
@@ -120,8 +120,7 @@
      :initial-contents
      '((4 12 -16) (12 37 -43) (-16 -43 98))))))
 
-(define-test root-free-hermitian-cholesky-decomposition
-  (:tag :kernel :cholesky)
+(deftest root-free-hermitian-cholesky-decomposition (cholesky-kernel-test)
   ;; 2x2
   (assert-float-equal
    #2A((#C(2.0 0.0) #C(0.5 -1.0))
@@ -145,8 +144,7 @@
          (#C(1.26 2.0) #C(2.23  0.0) #C(2.31 -1.5))
          (#C(1.37 3.0) #C(2.31  1.5) #C(8.15  0.0))))))))
 
-(define-test symmetric-cholesky-solver
-  (:tag :kernel :cholesky)
+(deftest symmetric-cholesky-solver (cholesky-kernel-test)
   ;; 2x2
   (assert-float-equal
    #(3.2653065 -1.3265308)
@@ -165,8 +163,7 @@
        (1.37 2.31 3.31)))
     (make-array 3 :initial-contents '(2.3 1.2 2.2)))))
 
-(define-test hermitian-cholesky-solver
-  (:tag :kernel :cholesky)
+(deftest hermitian-cholesky-solver (cholesky-kernel-test)
   ;; 2x2
   (assert-float-equal
    #(#C(5.0 2.0) #C(0.0 -4.0))
@@ -192,8 +189,7 @@
          (#C(1.37 3.0) #C(2.31  1.5) #C(8.15  0.0))))
       (make-array 3 :initial-contents '(2.3 1.2 2.2))))))
 
-(define-test symmetric-cholesky-invert
-  (:tag :kernel :cholesky)
+(deftest symmetric-cholesky-invert (cholesky-kernel-test)
   ;; 2x2
   (assert-float-equal
    #2A((2.2448979 -1.2244898) (-1.2244898 1.122449))
@@ -212,8 +208,7 @@
        (1.26 2.23 2.31)
        (1.37 2.31 3.31))))))
 
-(define-test hermitian-cholesky-invert
-  (:tag :kernel :cholesky)
+(deftest hermitian-cholesky-invert (cholesky-kernel-test)
   ;; 2x2
   (assert-float-equal
    #2A((#C( 3.0 -0.0) #C(-1.0  2.0))

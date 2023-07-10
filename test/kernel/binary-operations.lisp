@@ -1,14 +1,16 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
 
+(defsuite kernel-binary-op-test (linear-algebra-kernel-test))
+
 ;;; Scaled binary operations
 
-(define-test scaled-binary-op
-  (:tag :kernel :binary-op :scaled)
+(deftest scaled-binary-op (kernel-binary-op-test)
   ;; No scalars
   (assert-float-equal
    2.2
@@ -64,8 +66,7 @@
 
 ;;; Binary vector operations
 
-(define-test %vector<-vector1-op-vector2
-  (:tag :kernel :binary-op)
+(deftest %vector<-vector1-op-vector2 (kernel-binary-op-test)
   ;; Real addition
   (let ((vector1 #(1.1 2.2 3.3 4.4))
         (vector2 #(1.1 2.2 3.3 4.4)))
@@ -155,8 +156,7 @@
       (lambda (n1 n2) (- (* 2.0 n1) (* 2.0 n2)))
       vector1 vector2))))
 
-(define-test %vector1<-vector1-op-vector2
-  (:tag :kernel :binary-op)
+(deftest %vector1<-vector1-op-vector2 (kernel-binary-op-test)
   ;; Real addition
   (let ((vector1 (vector 1.1 2.2 3.3 4.4))
         (vector2 (vector 1.1 2.2 3.3 4.4)))
@@ -253,8 +253,7 @@
 
 ;;; Vector binary operations unit tests
 
-(define-test binop-add-vector
-  (:tag :kernel :binary-op :add)
+(deftest binop-add-vector (kernel-binary-op-test)
   ;; Real
   (let ((vector1 #(1.1 2.2 3.3 4.4))
         (vector2 #(1.1 2.2 3.3 4.4)))
@@ -296,8 +295,7 @@
 
 ;;; Destructive vector addition
 
-(define-test binop-nadd-vector
-  (:tag :kernel :binary-op :nadd)
+(deftest binop-nadd-vector (kernel-binary-op-test)
   ;; Real
   (let ((vector1 (vector 1.1 2.2 3.3 4.4))
         (vector2 (vector 1.1 2.2 3.3 4.4)))
@@ -341,8 +339,7 @@
 
 ;;; Vector subtraction
 
-(define-test binop-subtract-vector
-  (:tag :kernel :binary-op :subtract)
+(deftest binop-subtract-vector (kernel-binary-op-test)
   ;; Real
   (let ((vector1 #(1.1 2.2 3.3 4.4))
         (vector2 #(1.1 2.2 3.3 4.4)))
@@ -384,8 +381,7 @@
 
 ;;; Destructive vector subtraction
 
-(define-test binop-nsubtract-vector
-  (:tag :kernel :binary-op :nsubtract)
+(deftest binop-nsubtract-vector (kernel-binary-op-test)
   ;; Real
   (let ((vector1 (vector 1.1 2.2 3.3 4.4))
         (vector2 (vector 1.1 2.2 3.3 4.4)))
@@ -430,7 +426,7 @@
 
 ;;; Vector inner product
 
-(define-test binop-inner-product-vector
+(deftest binop-inner-product-vector (kernel-binary-op-test)
   (:tag :kernel :binary-op :inner-product)
   ;; Real vectors
   (assert-rational-equal
@@ -476,8 +472,7 @@
 
 ;;; Binary array/vector operations
 
-(define-test %product-vector-array
-  (:tag :kernel :binary-op :product)
+(deftest %product-vector-array (kernel-binary-op-test)
   ;; Vector - array
   (assert-float-equal
    #(15.0 30.0 45.0)
@@ -489,8 +484,7 @@
         (1.0 2.0 3.0)
         (1.0 2.0 3.0)))))
 
-(define-test %scaled-product-vector-array
-  (:tag :kernel :binary-op :product)
+(deftest %scaled-product-vector-array (kernel-binary-op-test)
   ;; Vector - array
   (assert-float-equal
    #(31.5 63.0 94.5)
@@ -503,8 +497,7 @@
         (1.0 2.0 3.0)
         (1.0 2.0 3.0)))))
 
-(define-test product-vector-array
-  (:tag :kernel :binary-op :product)
+(deftest product-vector-array (kernel-binary-op-test)
   (assert-float-equal
    #(15.0 30.0 45.0)
    (linear-algebra-kernel:product-vector-array
@@ -525,8 +518,7 @@
         (1.0 2.0 3.0))
     2.1)))
 
-(define-test %product-array-vector
-  (:tag :kernel :binary-op :product)
+(deftest %product-array-vector (kernel-binary-op-test)
   ;; Array - vector
   (assert-float-equal
    #(15.0 30.0 45.0)
@@ -536,8 +528,7 @@
         (3.0 3.0 3.0 3.0 3.0))
     #(1.0 2.0 3.0 4.0 5.0))))
 
-(define-test %scaled-product-array-vector
-  (:tag :kernel :binary-op :product)
+(deftest %scaled-product-array-vector (kernel-binary-op-test)
   ;; Array - vector
   (assert-float-equal
    #(31.5 63.0 94.5)
@@ -548,8 +539,7 @@
         (3.0 3.0 3.0 3.0 3.0))
     #(1.0 2.0 3.0 4.0 5.0))))
 
-(define-test product-array-vector
-  (:tag :kernel :binary-op :product)
+(deftest product-array-vector (kernel-binary-op-test)
   ;; Array - vector
   (assert-float-equal
    #(15.0 30.0 45.0)
@@ -569,8 +559,7 @@
 
 ;;; Array addition
 
-(define-test %array<-array1-op-array2
-  (:tag :kernel :binary-op :product)
+(deftest %array<-array1-op-array2 (kernel-binary-op-test)
   (let ((array
          #2A((1.1 1.2 1.3 1.4)
              (2.1 2.2 2.3 2.4)
@@ -670,8 +659,7 @@
       (lambda (n1 n2) (- (* 2.0 n1) (* 3.0 n2)))
       array1 array2))))
 
-(define-test %array1<-array1-op-array2
-  (:tag :kernel :binary-op)
+(deftest %array1<-array1-op-array2 (kernel-binary-op-test)
   ;; No scalar
   (let ((array1
          (make-array
@@ -889,8 +877,7 @@
          (5.1 5.2 5.3 5.4))
      array1)))
 
-(define-test binop-add-array
-  (:tag :kernel :binary-op :add)
+(deftest binop-add-array (kernel-binary-op-test)
   (let ((array
          #2A((1.1 1.2 1.3 1.4)
              (2.1 2.2 2.3 2.4)
@@ -934,8 +921,7 @@
      (linear-algebra-kernel:add-array
       array array 2.0 3.0))))
 
-(define-test binop-nadd-array
-  (:tag :kernel :binary-op :nadd)
+(deftest binop-nadd-array (kernel-binary-op-test)
   ;; No scalar
   (let ((array1
          (make-array
@@ -1041,8 +1027,7 @@
          (25.5 26.0 26.5 27.0))
      array1)))
 
-(define-test binop-subtract-array
-  (:tag :kernel :binary-op :subtract)
+(deftest binop-subtract-array (kernel-binary-op-test)
   (let ((*epsilon* (* 3F0 single-float-epsilon))
         (array1
          #2A(( 2.2  2.4  2.6  2.8)
@@ -1093,8 +1078,7 @@
      (linear-algebra-kernel:subtract-array
       array1 array2 2.0 3.0))))
 
-(define-test binop-nsubtract-array
-  (:tag :kernel :binary-op :nsubtract)
+(deftest binop-nsubtract-array (kernel-binary-op-test)
   ;; No scalar
   (let ((array1
          (make-array
@@ -1202,8 +1186,7 @@
          (5.1 5.2 5.3 5.4))
      array1)))
 
-(define-test %product-array-array
-  (:tag :kernel :binary-op :product)
+(deftest %product-array-array (kernel-binary-op-test)
   ;; Array - Array
   (assert-float-equal
    #2A((15.0 15.0 15.0 15.0)
@@ -1219,8 +1202,7 @@
         (4.0 4.0 4.0 4.0)
         (5.0 5.0 5.0 5.0)))))
 
-(define-test %scaled-product-array-array
-  (:tag :kernel :binary-op :product)
+(deftest %scaled-product-array-array (kernel-binary-op-test)
   ;; Array - Array
   (assert-float-equal
    #2A((31.5 31.5 31.5 31.5)
@@ -1237,8 +1219,7 @@
         (4.0 4.0 4.0 4.0)
         (5.0 5.0 5.0 5.0)))))
 
-(define-test product-array-array
-  (:tag :kernel :binary-op :product)
+(deftest product-array-array (kernel-binary-op-test)
   ;; Array - Array
   (assert-float-equal
    #2A((15.0 15.0 15.0 15.0)

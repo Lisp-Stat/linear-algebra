@@ -1,18 +1,19 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
 
-(define-test initialize-pivot-selection-vector
-  (:tag :kernel :gauss)
+(defsuite gauss-kernel-test (linear-algebra-kernel-test))
+
+(deftest initialize-pivot-selection-vector (gauss-kernel-test)
   (assert-rational-equal
    #(0 1 2 3 4 5)
    (linear-algebra-kernel::initialize-pivot-selection-vector 6)))
 
-(define-test column-pivot-search
-  (:tag :kernel :gauss)
+(deftest column-pivot-search (gauss-kernel-test)
   (assert-eq
    1 (linear-algebra-kernel::column-pivot-search
       #2A((1.1 1.4 1.3 1.2)
@@ -59,8 +60,7 @@
           (1.3 2.3 -3.3 3.2)
           (1.2 2.1  3.2 4.4)) 2)))
 
-(define-test swap-rows
-  (:tag :kernel :gauss)
+(deftest swap-rows (gauss-kernel-test)
   (assert-float-equal
    #2A((1.3 2.3 3.3 3.2)
        (1.4 2.2 2.3 2.1)
@@ -75,8 +75,7 @@
        (1.2 2.1 3.2 4.4)))
     0 2)))
 
-(define-test column-pivot
-  (:tag :kernel :gauss)
+(deftest column-pivot (gauss-kernel-test)
   (let ((psv
          (linear-algebra-kernel::initialize-pivot-selection-vector 4))
         (array
@@ -126,8 +125,7 @@
            (0.9285714 -0.78260816  0.8547211 -1.0736067))
        array2))))
 
-(define-test gauss-factorization
-  (:tag :kernel :gauss)
+(deftest gauss-factorization (gauss-kernel-test)
   (multiple-value-bind (array psv)
       (linear-algebra-kernel::gauss-factorization
        (make-array
@@ -144,8 +142,7 @@
          (0.9285714 -0.78260816  0.8547211 -1.0736067))
      array)))
 
-(define-test gauss-solver
-  (:tag :kernel :gauss)
+(deftest gauss-solver (gauss-kernel-test)n
   (let ((*epsilon* (* 64 single-float-epsilon)))
     ;; 2x2
     (assert-float-equal
@@ -165,8 +162,7 @@
        '((1.15 1.26 1.37) (2.14 2.23 2.31) (3.13 3.22 3.31)))
       (make-array 3 :initial-contents '(2.3 1.2 2.2))))))
 
-(define-test gauss-invert
-  (:tag :kernel :gauss)
+(deftest gauss-invert (gauss-kernel-test)
   (assert-float-equal
    #2A((-22.000029 12.000016) (21.000027 -11.000015))
    (linear-algebra-kernel:gauss-invert

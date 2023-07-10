@@ -1,12 +1,14 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
 
-(define-test make-permutation-matrix
-  (:tag :matrix :permutation-matrix :make-matrix)
+(defsuite permutation-matrix-interface-test (linear-algebra-interface-test))
+
+(deftest make-permutation-matrix (permutation-matrix-interface-test)
   ;; A default permutation matrix
   (let ((matrix
          (linear-algebra:make-matrix
@@ -105,8 +107,7 @@
         (1 0 1)))))
 
 ;;; Test the permutation matrix predicate
- (define-test permutation-matrix-predicate
-   (:tag :matrix :permutation-matrix)
+(deftest permutation-matrix-predicate (permutation-matrix-interface-test)
    (assert-true
     (linear-algebra:permutation-matrix-p
      (linear-algebra:make-matrix
@@ -115,13 +116,11 @@
     (linear-algebra:permutation-matrix-p (make-array '(10 10)))))
 
 ;;; Test the permutation matrix bounds
-(define-test permutation-matrix-in-bounds-p
-  (:tag :matrix :permutation-matrix :matrix-in-bounds-p)
+(deftest permutation-matrix-in-bounds-p (permutation-matrix-interface-test)
   (test-matrix-in-bounds-p 'linear-algebra:permutation-matrix))
 
 ;;; Test the permutation matrix element type
-(define-test permutation-matrix-element-type
-  (:tag :matrix :permutation-matrix :matrix-element-type)
+(deftest permutation-matrix-element-type (permutation-matrix-interface-test)
   (assert-eq
    'fixnum
    (linear-algebra:matrix-element-type
@@ -139,24 +138,20 @@
        'linear-algebra:permutation-matrix)))))
 
 ;;; Test the permutation matrix dimensions
-(define-test permutation-matrix-dimensions
-  (:tag :matrix :permutation-matrix :matrix-dimensions)
+(deftest permutation-matrix-dimensions (permutation-matrix-interface-test)
   (test-matrix-dimensions 'linear-algebra:permutation-matrix 9 9))
 
 ;;; Test the permutation matrix row dimension
-(define-test permutation-matrix-row-dimension
-  (:tag :matrix :permutation-matrix :matrix-row-dimension)
+(deftest permutation-matrix-row-dimension (permutation-matrix-interface-test)
   (test-matrix-row-dimension 'linear-algebra:permutation-matrix 9 9))
 
 ;;; Test the permutation matrix column dimension
-(define-test permutation-matrix-column-dimension
-  (:tag :matrix :permutation-matrix :matrix-column-dimension)
+(deftest permutation-matrix-column-dimension (permutation-matrix-interface-test)
   (test-matrix-column-dimension
    'linear-algebra:permutation-matrix 9 9))
 
 ;;; Reference permutation matrix elements
-(define-test permutation-matrix-mref
-  (:tag :matrix :permutation-matrix :mref)
+(deftest permutation-matrix-mref (permutation-matrix-interface-test)
   (let ((pvec #(2 3 4 0 1))
         (matrix
          (linear-algebra:make-matrix
@@ -180,8 +175,7 @@
              0 (linear-algebra:mref matrix i0 i1)))))))
 
 ;;; Set permutation matrix elements
-(define-test permutation-matrix-setf-mref
-  (:tag :matrix :permutation-matrix :setf-mref)
+(deftest permutation-matrix-setf-mref (permutation-matrix-interface-test)
   (let ((matrix
          (linear-algebra:make-matrix
           5 5
@@ -199,8 +193,7 @@
          i0 i1 (linear-algebra::contents matrix))))))
 
 ;;; Copy the permutation matrix
-(define-test copy-permutation-matrix
-  (:tag :matrix :permutation-matrix :copy-matrix)
+(deftest copy-permutation-matrix (permutation-matrix-interface-test)
   (let ((matrix
          (linear-algebra:make-matrix
           5 5
@@ -221,8 +214,7 @@
      (linear-algebra::contents
       (linear-algebra:copy-matrix matrix)))))
 
-(define-test permutation-matrix-transpose
-  (:tag :matrix :permutation-matrix :transpose)
+(deftest permutation-matrix-transpose (permutation-matrix-interface-test)
   (loop
    for (permutation transpose) in (validated-permutation-transpose)
    do (assert-rational-equal
@@ -237,8 +229,7 @@
 
 ;;; Validate a range for a permutation matrix.
 
-(define-test permutation-matrix-validated-range
-  (:tag :matrix :permutation-matrix :matrix-validate-range)
+(deftest permutation-matrix-validated-range (permutation-matrix-interface-test)
   (test-matrix-validated-range
    'linear-algebra:permutation-matrix 10 10))
 

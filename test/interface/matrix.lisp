@@ -1,14 +1,17 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
 
+(defsuite matrix-interface-test (linear-algebra-interface-test))
+
+
 ;;; Matrix object predicate
 
-(define-test matrixp
-  (:tag :matrix)
+(deftest matrixp (matrix-interface-test)
   (assert-true
    (linear-algebra:matrixp
     (make-instance 'linear-algebra:matrix-object)))

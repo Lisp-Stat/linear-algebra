@@ -1,14 +1,16 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
 
+(defsuite kernel-rotation-test (linear-algebra-kernel-test))
+
 ;;; Givens Rotation
 
-(define-test givens-rotation
-  (:tag :kernel :rotation)
+(deftest givens-rotation (kernel-rotation-test)
   ;; g = 0
   (multiple-value-bind (c s r)
       (linear-algebra-kernel:givens-rotation 0 0)
@@ -72,8 +74,7 @@
 
 ;;; Jacobi Rotation
 
-(define-test jacobi-rotation
-  (:tag :kernel :rotation)
+(deftest jacobi-rotation (kernel-rotation-test)
   ;; Symmetric test
   (multiple-value-bind (a b c s)
       (linear-algebra-kernel:jacobi-rotation 1.1 3.3 5.5)
@@ -92,8 +93,7 @@
 
 ;;; Householder Reflection
 
-(define-test householder-reflection
-  (:tag :kernel :rotation)
+(deftest householder-reflection (kernel-rotation-test)
   (multiple-value-bind (beta tau vector)
       (linear-algebra-kernel:householder-reflection
        #C(1.0 2.0) (vector 1.0 2.0 3.0 4.0 5.0))

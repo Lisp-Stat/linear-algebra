@@ -1,9 +1,12 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
+
+(defsuite symmetric-matrix-core-test (linear-algebra-core-test))
 
 (defun symmetric-matrix (&optional (start 0) (end 10))
   (linear-algebra:make-matrix
@@ -11,8 +14,7 @@
    :matrix-type 'linear-algebra:symmetric-matrix
    :initial-contents (symmetric-array start end)))
 
-(define-test make-symmetric-matrix
-  (:tag :symmetric-matrix :make-matrix)
+(deftest make-symmetric-matrix (symmetric-matrix-core-test)
   ;; A default symmetric matrix
   (let ((matrix
          (linear-algebra:make-matrix
@@ -161,8 +163,7 @@
     (symmetric-array 0 4))))
 
 ;;; Test the symmetric matrix predicate
-(define-test symmetric-matrix-predicate
-  (:tag :symmetric-matrix)
+(deftest symmetric-matrix-predicate  (symmetric-matrix-core-test)
   (assert-true
    (linear-algebra:symmetric-matrix-p
     (linear-algebra:make-matrix
@@ -171,33 +172,27 @@
    (linear-algebra:symmetric-matrix-p (make-array '(10 10)))))
 
 ;;; Test the symmetric matrix bounds
-(define-test symmetric-matrix-in-bounds-p
-  (:tag :symmetric-matrix :matrix-in-bounds-p)
+(deftest symmetric-matrix-in-bounds-p (symmetric-matrix-core-test)
   (test-matrix-in-bounds-p 'linear-algebra:symmetric-matrix))
 
 ;;; Test the symmetric matrix element type
-(define-test symmetric-matrix-element-type
-  (:tag :symmetric-matrix :matrix-element-type)
+(deftest symmetric-matrix-element-type (symmetric-matrix-core-test)
   (test-matrix-element-type 'linear-algebra:symmetric-matrix t nil))
 
 ;;; Test the symmetric matrix dimensions
-(define-test symmetric-matrix-dimensions
-  (:tag :symmetric-matrix :matrix-dimensions)
+(deftest symmetric-matrix-dimensions (symmetric-matrix-core-test)
   (test-matrix-dimensions 'linear-algebra:symmetric-matrix 9 9))
 
 ;;; Test the symmetric matrix row dimension
-(define-test symmetric-matrix-row-dimension
-  (:tag :symmetric-matrix :matrix-row-dimension)
+(deftest symmetric-matrix-row-dimension (symmetric-matrix-core-test)
   (test-matrix-row-dimension 'linear-algebra:symmetric-matrix 9 9))
 
 ;;; Test the symmetric matrix column dimension
-(define-test symmetric-matrix-column-dimension
-  (:tag :symmetric-matrix :matrix-column-dimension)
+(deftest symmetric-matrix-column-dimension (symmetric-matrix-core-test)
   (test-matrix-column-dimension 'linear-algebra:symmetric-matrix 9 9))
 
 ;;; Reference symmetric matrix elements
-(define-test symmetric-matrix-mref
-  (:tag :symmetric-matrix :mref)
+(deftest symmetric-matrix-mref (symmetric-matrix-core-test)
   (let* ((initial-contents
           '((1.1 1.2 1.3 1.4 1.5)
             (1.2 2.2 2.3 2.4 2.5)
@@ -246,8 +241,7 @@
      (linear-algebra:mref matrix coli rowi))))
 
 ;;; Set symmetric matrix elements
-(define-test symmetric-matrix-setf-mref
-  (:tag :symmetric-matrix :setf-mref)
+(deftest symmetric-matrix-setf-mref (symmetric-matrix-core-test)
   (let* ((rows 5) (columns 5)
          (rend (1- rows)) (cend (1- columns))
          (rowi (random-interior-index rows))
@@ -279,8 +273,7 @@
       (assert-float-equal val4 (linear-algebra:mref matrix coli rowi)))))
 
 ;;; Copy the symmetric matrix
-(define-test copy-symmetric-matrix
-  (:tag :symmetric-matrix :copy-matrix)
+(deftest copy-symmetric-matrix (symmetric-matrix-core-test)
   (let ((matrix
          (linear-algebra:make-matrix
           5 5
@@ -300,8 +293,7 @@
      matrix (linear-algebra:copy-matrix matrix))))
 
 ;;; Test the submatrix of a symmetric matrix
-(define-test symmetric-submatrix
-  (:tag :symmetric-matrix :submatrix)
+(deftest symmetric-submatrix (symmetric-matrix-core-test)
   (let ((matrix
          (linear-algebra:make-matrix
           10 10
@@ -367,8 +359,7 @@
      'error (linear-algebra:submatrix matrix 7 7 :end-column 6))))
 
 ;;; Set the submatrix of a symmetric matrix
-(define-test setf-symmetric-submatrix
-  (:tag :symmetric-matrix :setf-submatrix)
+(deftest setf-symmetric-submatrix (symmetric-matrix-core-test)
   ;; Upper left submatrix
   (let ((array-ul
          (make-array
@@ -476,8 +467,7 @@
     (unit-matrix 5 3))))
 
 ;;; Replace all or part of a symmetric matrix
-(define-test symmetric-matrix-replace
-  (:tag :symmetric-matrix :replace-matrix)
+(deftest symmetric-matrix-replace (symmetric-matrix-core-test)
   ;; Replace the entire matrix
   (assert-float-equal
    (symmetric-matrix)
@@ -636,15 +626,13 @@
     :start-column1 1)))
 
 ;;; Validate a range for a symmetric matrix.
-(define-test symmetric-matrix-validated-range
-  (:tag :symmetric-matrix :matrix-validated-range)
+(deftest symmetric-matrix-validated-range (symmetric-matrix-core-test)
   (test-matrix-validated-range
    'linear-algebra:symmetric-matrix 10 10))
 
 ;;; Symmetric matrix fundamental operations
 
-(define-test norm-symmetric-matrix
-  (:tag :symmetric-matrix :norm)
+(deftest norm-symmetric-matrix (symmetric-matrix-core-test)
   (let ((matrix (symmetric-matrix)))
     (assert-float-equal
      94.5 (linear-algebra:norm matrix))
@@ -660,8 +648,7 @@
      'error
      (linear-algebra:norm matrix :unknown))))
 
-(define-test transpose-symmetric-matrix
-  (:tag :symmetric-matrix :transpose)
+(deftest transpose-symmetric-matrix (symmetric-matrix-core-test)
   (let ((matrix (symmetric-matrix))
         (transpose (symmetric-array)))
     (assert-true
@@ -671,15 +658,13 @@
     (assert-float-equal
      transpose (linear-algebra:transpose matrix))))
 
-(define-test ntranspose-symmetric-matrix
-  (:tag :symmetric-matrix :ntranspose)
+(deftest ntranspose-symmetric-matrix (symmetric-matrix-core-test)
   (let ((matrix (symmetric-matrix))
         (transpose (symmetric-array)))
     (assert-eq matrix (linear-algebra:ntranspose matrix))
     (assert-float-equal transpose matrix)))
 
-(define-test permute-symmetric-matrix
-  (:tag :symmetric-matrix :permute)
+(deftest permute-symmetric-matrix (symmetric-matrix-core-test)
   (let ((matrix (symmetric-matrix 0 5))
         (pmat
          (linear-algebra:make-matrix
@@ -705,8 +690,7 @@
          (3.0 3.1 3.2 3.3 4.3))
      (linear-algebra:permute pmat matrix))))
 
-(define-test scale-symmetric-matrix
-  (:tag :symmetric-matrix :scale)
+(deftest scale-symmetric-matrix (symmetric-matrix-core-test)
   (assert-float-equal
    #2A(( 3.3  3.6  3.9  4.2)
        ( 3.6  6.6  6.9  7.2)
@@ -721,8 +705,7 @@
              (1.3 2.3 3.3 3.4)
              (1.4 2.4 3.4 4.4))))))
 
-(define-test nscale-symmetric-matrix
-  (:tag :symmetric-matrix :nscale)
+(deftest nscale-symmetric-matrix (symmetric-matrix-core-test)
   (let ((matrix
          (linear-algebra:make-matrix
           4 4 :matrix-type 'linear-algebra:symmetric-matrix
@@ -742,8 +725,7 @@
 ;;; FIXME : Add tests to cover addition/subtraction that results in a
 ;;; non-symmetric matrix
 
-(define-test add-symmetric-matrix
-  (:tag :symmetric-matrix :add)
+(deftest add-symmetric-matrix (symmetric-matrix-core-test)
   (let ((matrix
          (linear-algebra:make-matrix
           4 4 :matrix-type 'linear-algebra:symmetric-matrix
@@ -781,8 +763,7 @@
          ( 7.0 12.0 17.0 22.0))
      (linear-algebra:add matrix matrix :scalar1 2.0 :scalar2 3.0))))
 
-(define-test nadd-symmetric-matrix
-  (:tag :symmetric-matrix :nadd)
+(deftest nadd-symmetric-matrix (symmetric-matrix-core-test)
   ;; No scalar
   (let ((matrix1
          (linear-algebra:make-matrix
@@ -893,8 +874,7 @@
          ( 7.0 12.0 17.0 22.0))
      matrix1)))
 
-(define-test subtract-symmetric-matrix
-  (:tag :symmetric-matrix :subtract)
+(deftest subtract-symmetric-matrix (symmetric-matrix-core-test)
   (let ((*epsilon* (* 3F0 single-float-epsilon))
         (matrix1
          (linear-algebra:make-matrix
@@ -942,8 +922,7 @@
      (linear-algebra:subtract
       matrix1 matrix2 :scalar1 2.0 :scalar2 3.0))))
 
-(define-test nsubtract-symmetric-matrix
-  (:tag :symmetric-matrix :nsubtract)
+(deftest nsubtract-symmetric-matrix (symmetric-matrix-core-test)
   ;; No scalar
   (let ((matrix1
          (linear-algebra:make-matrix
@@ -1062,8 +1041,7 @@
      matrix1
      :scalar1-&-scalar2)))
 
-(define-test product-symmetric-matrix
-  (:tag :symmetric-matrix :product)
+(deftest product-symmetric-matrix (symmetric-matrix-core-test)
   ;; Row vector - dense matrix
   (assert-true
    (typep
@@ -1215,8 +1193,7 @@
          (1.3 2.3 3.3)))
     2.1)))
 
-(define-test solve-symmetric-matrix
-  (:tag :symmetric-matrix :solve)
+(deftest solve-symmetric-matrix (symmetric-matrix-core-test)
   (let ((vector2 (linear-algebra:column-vector 2.0 1.0))
         (vector3 (linear-algebra:column-vector 2.3 1.2 2.2))
         (matrix2
@@ -1248,8 +1225,7 @@
      matrix3)
     (assert-float-equal #(2.3 1.2 2.2) vector3)))
 
-(define-test nsolve-symmetric-matrix
-  (:tag :symmetric-matrix :nsolve)
+(deftest nsolve-symmetric-matrix (symmetric-matrix-core-test)
   (let ((vector2 (linear-algebra:column-vector 2.0 1.0))
         (vector3 (linear-algebra:column-vector 2.3 1.2 2.2))
         (matrix2
@@ -1281,8 +1257,7 @@
      matrix3)
     (assert-float-equal #(3.5856622 -2.306286 0.79007966) vector3)))
 
-(define-test invert-symmetric-matrix
-  (:tag :symmetric-matrix :invert)
+(deftest invert-symmetric-matrix (symmetric-matrix-core-test)
   ;; 2x2
   (let ((matrix
          (linear-algebra:make-matrix
@@ -1312,8 +1287,7 @@
          (1.37 2.31 3.31))
      matrix)))
 
-(define-test ninvert-symmetric-matrix
-  (:tag :symmetric-matrix :ninvert)
+(deftest ninvert-symmetric-matrix (symmetric-matrix-core-test)
   ;; 2x2
   (let ((matrix
          (linear-algebra:make-matrix

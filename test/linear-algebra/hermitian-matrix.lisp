@@ -1,9 +1,12 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
+
+(defsuite hermitian-matrix-core-test (linear-algebra-core-test))
 
 (defun hermitian-matrix (&optional (start 0) (end 10))
   (linear-algebra:make-matrix
@@ -25,8 +28,7 @@
           (aref init i0 i1) #C(1 -1)
           (aref init i1 i0) #C(1  1)))))))
 
-(define-test make-hermitian-matrix
-  (:tag :hermitian-matrix :make-matrix)
+(deftest make-hermitian-matrix (hermitian-matrix-core-test)
   ;; A default Hermitian matrix
   (let ((matrix
          (linear-algebra:make-matrix
@@ -150,8 +152,7 @@
     (hermitian-array 0 4))))
 
 ;;; Test the hermitian matrix predicate
-(define-test hermitian-matrix-predicate
-  (:tag :hermitian-matrix)
+(deftest hermitian-matrix-predicate (hermitian-matrix-core-test)
   (assert-true
    (linear-algebra:hermitian-matrix-p
     (linear-algebra:make-matrix
@@ -161,14 +162,12 @@
    (linear-algebra:hermitian-matrix-p (make-array '(10 10)))))
 
 ;;; Test the hermitian matrix bounds
-(define-test hermitian-matrix-in-bounds-p
-  (:tag :hermitian-matrix :matrix-in-bounds-p)
+(deftest hermitian-matrix-in-bounds-p (hermitian-matrix-core-test)
   (test-matrix-in-bounds-p
    'linear-algebra:hermitian-matrix (hermitian-array)))
 
 ;;; Test the hermitian matrix element type
-(define-test hermitian-matrix-element-type
-  (:tag :hermitian-matrix :matrix-element-type)
+(deftest hermitian-matrix-element-type (hermitian-matrix-core-test)
   (let ((numeric-types
          '(integer fixnum
            short-float single-float double-float long-float)))
@@ -190,8 +189,7 @@
         (upgraded-array-element-type `(complex ,ntype)))))))
 
 ;;; Test the hermitian matrix dimensions
-(define-test hermitian-matrix-dimensions
-  (:tag :hermitian-matrix :matrix-dimensions)
+(deftest hermitian-matrix-dimensions (hermitian-matrix-core-test)
   (assert-equal
    (list 10 10)
    (linear-algebra:matrix-dimensions
@@ -200,8 +198,7 @@
      :initial-contents (hermitian-array)))))
 
 ;;; Test the hermitian matrix row dimension
-(define-test hermitian-matrix-row-dimension
-  (:tag :hermitian-matrix :matrix-row-dimension)
+(deftest hermitian-matrix-row-dimension (hermitian-matrix-core-test)
   (assert-eq
    10
    (linear-algebra:matrix-row-dimension
@@ -210,8 +207,7 @@
      :initial-contents (hermitian-array)))))
 
 ;;; Test the hermitian matrix column dimension
-(define-test hermitian-matrix-column-dimension
-  (:tag :hermitian-matrix :matrix-column-dimension)
+(deftest hermitian-matrix-column-dimension (hermitian-matrix-core-test)
   (assert-eq
    10
    (linear-algebra:matrix-column-dimension
@@ -220,8 +216,7 @@
      :initial-contents (hermitian-array)))))
 
 ;;; Reference hermitian matrix elements
-(define-test hermitian-matrix-mref
-  (:tag :hermitian-matrix :mref)
+(deftest hermitian-matrix-mref (hermitian-matrix-core-test)
   (let* ((initial-contents
           '((#C(1  0) #C(1  2) #C(1  3) #C(1  4) #C(1 5))
             (#C(1 -2) #C(2  0) #C(2  3) #C(2  4) #C(2 5))
@@ -272,8 +267,7 @@
       (linear-algebra:mref matrix coli rowi)))))
 
 ;;; Set hermitian matrix elements
-(define-test hermitian-matrix-setf-mref
-  (:tag :hermitian-matrix :setf-mref)
+(deftest hermitian-matrix-setf-mref (hermitian-matrix-core-test)
   (let* ((rows 5) (columns 5)
          (rend (1- rows)) (cend (1- columns))
          (rowi (random-interior-index rows))
@@ -311,8 +305,7 @@
        val4 (conjugate (linear-algebra:mref matrix coli rowi))))))
 
 ;;; Copy the Hermitian matrix
-(define-test copy-hermitian-matrix
-  (:tag :hermitian-matrix :copy-matrix)
+(deftest copy-hermitian-matrix (hermitian-matrix-core-test)
   (let ((matrix
          (linear-algebra:make-matrix
           5 5
@@ -333,8 +326,7 @@
      matrix (linear-algebra:copy-matrix matrix))))
 
 ;;; Test the submatrix of a Hermitian matrix
-(define-test hermitian-submatrix
-  (:tag :hermitian-matrix :submatrix)
+(deftest hermitian-submatrix (hermitian-matrix-core-test)
   (let ((matrix
          (linear-algebra:make-matrix
           10 10
@@ -400,8 +392,7 @@
      'error (linear-algebra:submatrix matrix 7 7 :end-column 6))))
 
 ;;; Set the submatrix of a Hermitian matrix
-(define-test setf-hermitian-submatrix
-  (:tag :hermitian-matrix :setf-submatrix)
+(deftest setf-hermitian-submatrix (hermitian-matrix-core-test)
   (macrolet ((setf-submatrix (size submatrix-form data-form)
                (let ((matrix (second submatrix-form)))
                  `(let ((,matrix (unit-hermitian-matrix ,size)))
@@ -525,8 +516,7 @@
     (unit-matrix 5 3))))
 
 ;;; Replace all or part of a Hermitian matrix
-(define-test hermitian-matrix-replace
-  (:tag :hermitian-matrix :replace-matrix)
+(deftest hermitian-matrix-replace (hermitian-matrix-core-test)
   ;; Replace the entire matrix
   (assert-rational-equal
    (hermitian-matrix)
@@ -696,8 +686,7 @@
     :start-column1 1)))
 
 ;;; Validate a range for a hermitian matrix.
-(define-test hermitian-matrix-validated-range
-  (:tag :hermitian-matrix :matrix-validated-range)
+(deftest hermitian-matrix-validated-range (hermitian-matrix-core-test)
   (let ((matrix (unit-hermitian-matrix 10))
         (row1 (random 10))
         (row2 (random 10))
@@ -741,8 +730,7 @@
      (linear-algebra:matrix-validated-range
       matrix 9 9 1 1))))
 
-(define-test norm-hermitian-matrix
-  (:tag :hermitian-matrix :norm)
+(deftest norm-hermitian-matrix (hermitian-matrix-core-test)
   (let ((matrix
          (linear-algebra:make-matrix
           5 5 :matrix-type 'linear-algebra:hermitian-matrix
@@ -766,8 +754,7 @@
      'error
      (linear-algebra:norm matrix :unknown))))
 
-(define-test transpose-hermitian-matrix
-  (:tag :hermitian-matrix :transpose)
+(deftest transpose-hermitian-matrix (hermitian-matrix-core-test)
   (let ((matrix
          (linear-algebra:make-matrix
           4 4 :matrix-type 'linear-algebra:hermitian-matrix
@@ -788,8 +775,7 @@
     (assert-float-equal
      transpose (linear-algebra:transpose matrix))))
 
-(define-test ntranspose-hermitian-matrix
-  (:tag :hermitian-matrix :ntranspose)
+(deftest ntranspose-hermitian-matrix (hermitian-matrix-core-test)
   (let ((matrix
          (linear-algebra:make-matrix
           4 4 :matrix-type 'linear-algebra:hermitian-matrix
@@ -806,8 +792,7 @@
     (assert-eq matrix (linear-algebra:ntranspose matrix))
     (assert-float-equal transpose matrix)))
 
-(define-test permute-hermitian-matrix
-  (:tag :hermitian-matrix :permute)
+(deftest permute-hermitian-matrix (hermitian-matrix-core-test)
   (let ((matrix
          (linear-algebra:make-matrix
           5 5 :matrix-type 'linear-algebra:hermitian-matrix
@@ -849,8 +834,7 @@
          (#C(1 -4) #C(2 -4) #C(3 -4) #C(4  0) #C(4  5)))
      (linear-algebra:permute pmat matrix))))
 
-(define-test scale-hermitian-matrix
-  (:tag :hermitian-matrix :scale)
+(deftest scale-hermitian-matrix (hermitian-matrix-core-test)
   (assert-float-equal
    #2A((#C(3.0   0.0) #C(3.0   6.0) #C(3.0   9.0) #C( 3.0 12.0))
        (#C(3.0  -6.0) #C(6.0   0.0) #C(6.0   9.0) #C( 6.0 12.0))
@@ -866,8 +850,7 @@
        (#C(1.0 -3.0) #C(2.0 -3.0) #C(3.0  0.0) #C(3.0 4.0))
        (#C(1.0 -4.0) #C(2.0 -4.0) #C(3.0 -4.0) #C(4.0 0.0)))))))
 
-(define-test nscale-hermitian-matrix
-  (:tag :hermitian-matrix :nscale)
+(deftest nscale-hermitian-matrix (hermitian-matrix-core-test)
   (let ((matrix
          (linear-algebra:make-matrix
           4 4 :matrix-type 'linear-algebra:hermitian-matrix
@@ -884,8 +867,7 @@
          (#C(3.0 -12.0) #C(6.0 -12.0) #C(9.0 -12.0) #C(12.0  0.0)))
      matrix)))
 
-(define-test add-hermitian-matrix
-  (:tag :hermitian-matrix :add)
+(deftest add-hermitian-matrix (hermitian-matrix-core-test)
   (let ((matrix
          (linear-algebra:make-matrix
           4 4 :matrix-type 'linear-algebra:hermitian-matrix
@@ -923,8 +905,7 @@
          (#C(5.0 -20.0) #C(10.0 -20.0) #C(15.0 -20.0) #C(20.0  0.0)))
      (linear-algebra:add matrix matrix :scalar1 2.0 :scalar2 3.0))))
 
-(define-test nadd-hermitian-matrix
-  (:tag :hermitian-matrix :nadd)
+(deftest nadd-hermitian-matrix (hermitian-matrix-core-test)
   ;; No scalar
   (let ((matrix1
          (linear-algebra:make-matrix
@@ -1035,8 +1016,7 @@
          (#C(5.0 -20.0) #C(10.0 -20.0) #C(15.0 -20.0) #C(20.0  0.0)))
      matrix1)))
 
-(define-test subtract-hermitian-matrix
-  (:tag :hermitian-matrix :subtract)
+(deftest subtract-hermitian-matrix (hermitian-matrix-core-test)
   (let ((*epsilon* (* 3F0 single-float-epsilon))
         (matrix1
          (linear-algebra:make-matrix
@@ -1084,8 +1064,7 @@
      (linear-algebra:subtract
       matrix1 matrix2 :scalar1 2.0 :scalar2 3.0))))
 
-(define-test nsubtract-hermitian-matrix
-  (:tag :hermitian-matrix :nsubtract)
+(deftest nsubtract-hermitian-matrix (hermitian-matrix-core-test)
   ;; No scalar
   (let ((matrix1
          (linear-algebra:make-matrix
@@ -1198,8 +1177,7 @@
          (#C(4.0 -1.0) #C(4.0 -2.0) #C(4.0 -3.0) #C(4.0 0.0)))
      matrix1)))
 
-(define-test product-hermitian-matrix
-  (:tag :hermitian-matrix :product)
+(deftest product-hermitian-matrix (hermitian-matrix-core-test)
   ;; Row vector - Hermitian matrix
   (assert-true
    (typep
@@ -1312,8 +1290,7 @@
    (linear-algebra:product
     (unit-hermitian-matrix 3) (unit-hermitian-matrix 4))))
 
-(define-test solve-hermitian-matrix
-  (:tag :hermitian-matrix :solve)
+(deftest solve-hermitian-matrix (hermitian-matrix-core-test)
   (let ((vector2 (linear-algebra:column-vector 2.0 1.0))
         (vector3 (linear-algebra:column-vector 2.3 1.2 2.2))
         (matrix2
@@ -1354,8 +1331,7 @@
     (assert-float-equal
      #(2.3 1.2 2.2) vector3 (linear-algebra::contents vector3))))
 
-(define-test nsolve-hermitian-matrix
-  (:tag :hermitian-matrix :nsolve)
+(deftest nsolve-hermitian-matrix (hermitian-matrix-core-test)
   (let ((*epsilon* (* 5 single-float-epsilon))
         (vector2 (linear-algebra:column-vector 2.0 1.0))
         (vector3 (linear-algebra:column-vector 2.3 1.2 2.2))
@@ -1399,8 +1375,7 @@
        #C(-0.78414906 -1.2595192))
      vector3)))
 
-(define-test invert-hermitian-matrix
-  (:tag :hermitian-matrix :invert)
+(deftest invert-hermitian-matrix (hermitian-matrix-core-test)
   ;; 2x2
   (let ((matrix
          (linear-algebra:make-matrix
@@ -1436,8 +1411,7 @@
          (#C(1.37 3.0) #C(2.31  1.5) #C(8.15  0.0)))
      matrix)))
 
-(define-test ninvert-hermitian-matrix
-  (:tag :hermitian-matrix :ninvert)
+(deftest ninvert-hermitian-matrix (hermitian-matrix-core-test)
   ;; 2x2
   (let ((matrix
          (linear-algebra:make-matrix

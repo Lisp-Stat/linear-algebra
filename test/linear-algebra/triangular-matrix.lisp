@@ -1,9 +1,12 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
+
+(defsuite triangular-matrix-core-test (linear-algebra-core-test))
 
 (defun upper-triangular-matrix (&optional (start 0) (end 10))
   (linear-algebra:make-matrix
@@ -20,7 +23,7 @@
    :initial-contents (lower-triangular-array start end)))
 
 ;;; Upper triangular matrix construction tests
-(define-test make-upper-triangular-matrix
+(deftest make-upper-triangular-matrix (triangular-matrix-core-test)
   ;; A default upper triangular matrix
   (let ((matrix (linear-algebra:make-matrix
                  10 10
@@ -137,7 +140,7 @@
                  (upper-triangular-array 0 4))))
 
 ;;; Lower triangular matrix construction tests
-(define-test make-lower-triangular-matrix
+(deftest make-lower-triangular-matrix (triangular-matrix-core-test)
   ;; A default lower triangular matrix
   (let ((matrix (linear-algebra:make-matrix
                  10 10
@@ -254,7 +257,7 @@
                  (lower-triangular-array 0 4))))
 
 ;;; Test the upper triangular matrix predicate
-(define-test upper-triangular-matrix-predicate
+(deftest upper-triangular-matrix-predicate (triangular-matrix-core-test)
   (assert-true
    (linear-algebra:upper-triangular-matrix-p
     (linear-algebra:make-matrix
@@ -263,7 +266,7 @@
    (linear-algebra:upper-triangular-matrix-p (make-array '(10 10)))))
 
 ;;; Test the lower triangular matrix predicate
-(define-test lower-triangular-matrix-predicate
+(deftest lower-triangular-matrix-predicate (triangular-matrix-core-test)
   (assert-true
    (linear-algebra:lower-triangular-matrix-p
     (linear-algebra:make-matrix
@@ -272,57 +275,57 @@
    (linear-algebra:lower-triangular-matrix-p (make-array '(10 10)))))
 
 ;;; Test the upper triangular matrix bounds
-(define-test upper-triangular-matrix-in-bounds-p
+(deftest upper-triangular-matrix-in-bounds-p (triangular-matrix-core-test)
   (test-matrix-in-bounds-p
    'linear-algebra:upper-triangular-matrix))
 
 ;;; Test the lower triangular matrix bounds
-(define-test lower-triangular-matrix-in-bounds-p
+(deftest lower-triangular-matrix-in-bounds-p (triangular-matrix-core-test)
   (test-matrix-in-bounds-p
    'linear-algebra:lower-triangular-matrix))
 
 ;;; Test the upper triangular matrix element type
-(define-test upper-triangular-matrix-element-type
+(deftest upper-triangular-matrix-element-type (triangular-matrix-core-test)
   (test-matrix-element-type
    'linear-algebra:upper-triangular-matrix))
 
 ;;; Test the lower triangular matrix element type
-(define-test lower-triangular-matrix-element-type
+(deftest lower-triangular-matrix-element-type (triangular-matrix-core-test)
   (test-matrix-element-type
    'linear-algebra:lower-triangular-matrix))
 
 ;;; Test the upper triangular matrix dimensions
-(define-test upper-triangular-matrix-dimensions
+(deftest upper-triangular-matrix-dimensions (triangular-matrix-core-test)
   (test-matrix-dimensions
    'linear-algebra:upper-triangular-matrix 9 9))
 
 ;;; Test the lower triangular matrix dimensions
-(define-test lower-triangular-matrix-dimensions
+(deftest lower-triangular-matrix-dimensions (triangular-matrix-core-test)
   (test-matrix-dimensions
    'linear-algebra:lower-triangular-matrix 9 9))
 
-;;; Test the upper triangular matrix row dimension
-(define-test upper-triangular-matrix-row-dimension
+;;; Test the upper triangular matrix row dimension 
+(deftest upper-triangular-matrix-row-dimension (triangular-matrix-core-test)
   (test-matrix-row-dimension
    'linear-algebra:upper-triangular-matrix 9 9))
 
 ;;; Test the lower triangular matrix row dimension
-(define-test lower-triangular-matrix-row-dimension
+(deftest lower-triangular-matrix-row-dimension (triangular-matrix-core-test)
   (test-matrix-row-dimension
    'linear-algebra:lower-triangular-matrix 9 9))
 
 ;;; Test the upper triangular matrix column dimension
-(define-test upper-triangular-matrix-column-dimension
+(deftest upper-triangular-matrix-column-dimension (triangular-matrix-core-test)
   (test-matrix-column-dimension
    'linear-algebra:upper-triangular-matrix 9 9))
 
 ;;; Test the lower triangular matrix column dimension
-(define-test lower-triangular-matrix-column-dimension
+(deftest lower-triangular-matrix-column-dimension (triangular-matrix-core-test)
   (test-matrix-column-dimension
    'linear-algebra:lower-triangular-matrix 9 9))
 
 ;;; Reference upper triangular matrix elements
-(define-test upper-triangular-matrix-mref
+(deftest upper-triangular-matrix-mref (triangular-matrix-core-test)
   (let* ((initial-contents
           '((1.1 1.2 1.3 1.4 1.5)
             (0.0 2.2 2.3 2.4 2.5)
@@ -365,7 +368,7 @@
      (linear-algebra:mref matrix coli rowi))))
 
 ;;; Reference lower triangular matrix elements
-(define-test lower-triangular-matrix-mref
+(deftest lower-triangular-matrix-mref (triangular-matrix-core-test)
   (let* ((initial-contents
           '((1.1 0.0 0.0 0.0 0.0)
             (1.2 2.2 0.0 0.0 0.0)
@@ -408,7 +411,7 @@
      (linear-algebra:mref matrix coli rowi))))
 
 ;;; Set upper triangular matrix elements
-(define-test upper-triangular-matrix-setf-mref
+(deftest upper-triangular-matrix-setf-mref (triangular-matrix-core-test)
   (let* ((rows 5) (columns 5)
          (rend (1- rows)) (cend (1- columns))
          (rowi (random-interior-index rows))
@@ -442,7 +445,7 @@
        (setf (linear-algebra:mref matrix coli rowi) 1.0)))))
 
 ;;; Set lower triangular matrix elements
-(define-test lower-triangular-matrix-setf-mref
+(deftest lower-triangular-matrix-setf-mref (triangular-matrix-core-test)
   (let* ((rows 5) (columns 5)
          (rend (1- rows)) (cend (1- columns))
          (rowi (random-interior-index rows))
@@ -476,7 +479,7 @@
        (setf (linear-algebra:mref matrix coli rowi) 1.0)))))
 
 ;;; Copy the upper triangular matrix
-(define-test copy-upper-triangular-matrix
+(deftest copy-upper-triangular-matrix (triangular-matrix-core-test)
   (let ((matrix (linear-algebra:make-matrix
                  5 5 :element-type 'single-float
                  :matrix-type
@@ -496,7 +499,7 @@
      matrix (linear-algebra:copy-matrix matrix))))
 
 ;;; Copy the lower triangular matrix
-(define-test copy-lower-triangular-matrix
+(deftest copy-lower-triangular-matrix (triangular-matrix-core-test)
   (let ((matrix (linear-algebra:make-matrix
                  5 5 :element-type 'single-float
                  :matrix-type
@@ -516,7 +519,7 @@
      matrix (linear-algebra:copy-matrix matrix))))
 
 ;;; Test the submatrix of an upper triangular matrix
-(define-test upper-triangular-submatrix
+(deftest upper-triangular-submatrix (triangular-matrix-core-test)
   (let ((matrix (linear-algebra:make-matrix
                  10 10
                  :matrix-type 'linear-algebra:upper-triangular-matrix
@@ -582,7 +585,7 @@
      'error (linear-algebra:submatrix matrix 7 7 :column-end 6))))
 
 ;;; Test the submatrix of an lower triangular matrix
-(define-test lower-triangular-submatrix
+(deftest lower-triangular-submatrix (triangular-matrix-core-test)
   (let ((matrix (linear-algebra:make-matrix
                  10 10
                  :matrix-type 'linear-algebra:lower-triangular-matrix
@@ -648,7 +651,7 @@
      'error (linear-algebra:submatrix matrix 7 7 :column-end 6))))
 
 ;;; Set the submatrix of an upper triangular matrix
-(define-test setf-upper-triangular-submatrix
+(deftest setf-upper-triangular-submatrix (triangular-matrix-core-test)
   ;; Upper left submatrix
   (let ((array-ul (make-array
                    '(5 5) :initial-contents
@@ -751,7 +754,7 @@
          (unit-matrix 5 3))))
 
 ;;; Set the submatrix of a lower triangular matrix
-(define-test setf-lower-triangular-submatrix
+(deftest setf-lower-triangular-submatrix (triangular-matrix-core-test)
   ;; Upper left submatrix
   (let ((array-ul (make-array
                    '(5 5) :initial-contents
@@ -854,7 +857,7 @@
          (unit-matrix 3 5))))
 
 ;;; Replace all or part of an upper triangular matrix
-(define-test upper-triangular-matrix-replace
+(deftest upper-triangular-matrix-replace (triangular-matrix-core-test)
   ;; Replace the entire matrix
   (assert-float-equal
    (upper-triangular-matrix)
@@ -1009,7 +1012,7 @@
     :column1 1)))
 
 ;;; Replace all or part of a lower triangular matrix
-(define-test lower-triangular-matrix-replace
+(deftest lower-triangular-matrix-replace (triangular-matrix-core-test)
   ;; Replace the entire matrix
   (assert-float-equal
    (lower-triangular-matrix)
@@ -1164,12 +1167,12 @@
     :row1 1)))
 
 ;;; Validate a range for an upper triangular matrix.
-(define-test upper-triangular-matrix-validated-range
+(deftest upper-triangular-matrix-validated-range (triangular-matrix-core-test)
   (test-matrix-validated-range
    'linear-algebra:upper-triangular-matrix 10 10))
 
 ;;; Validate a range for an lower triangular matrix.
-(define-test lower-triangular-matrix-validated-range
+(deftest lower-triangular-matrix-validated-range (triangular-matrix-core-test)
   (test-matrix-validated-range
    'linear-algebra:lower-triangular-matrix 10 10))
 

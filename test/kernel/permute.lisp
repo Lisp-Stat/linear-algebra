@@ -1,14 +1,16 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
 
+(defsuite kernel-permute-test (linear-algebra-kernel-test))
+
 ;;; Right permutation
 
-(define-test right-permute
-  (:tag :kernel :permute)
+(deftest right-permute (kernel-permute-test)
   ;; Vector
   (loop
    for (permutation right-permutation nil nil nil)
@@ -30,8 +32,7 @@
      (array-to-permute) permutation)
     permutation)))
 
-(define-test left-permute
-  (:tag :kernel :permute)
+(deftest left-permute (kernel-permute-test)
   ;; Vector
   (loop
    for (permutation nil left-permutation nil nil)

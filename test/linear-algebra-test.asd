@@ -8,41 +8,53 @@
   :version "0.1.1"
   :author "Thomas M. Hermann <thomas.m.hermann@odonata-research.com>"
   :maintainer "Steve Nunez <steve@symbolics.tech>"
-  :maintainer "Brian Eberman <bseberman@gmail.com>"
+  :maintainer "Brian Eberman <brian@tenfactorgrowth.com>"
   :license :MS-PL
-  :depends-on ("lisp-unit" "linear-algebra")
+  :depends-on ("clunit" "num-utils" "linear-algebra")
   :components
   ((:file "pkgdcl")
    ;; Linear algebra kernel tests
    (:module kernel
     :depends-on ("pkgdcl")
     :components
-    ((:file "utility")
-     (:file "permute")
-     (:file "unary-operations")
-     (:file "binary-operations")
-     (:file "rotation")
-     (:file "gauss")
-     (:file "cholesky")
-     (:file "conjugate-gradient")
-     (:file "tridiagonal")))
+    ((:file "suite")
+     (:file "utility" :depends-on ("suite"))
+     (:file "permute" :depends-on ("suite"))
+     (:file "unary-operations" :depends-on ("suite"))
+     (:file "binary-operations" :depends-on ("suite"))
+     (:file "rotation" :depends-on ("suite"))
+     (:file "gauss" :depends-on ("suite"))
+     (:file "cholesky" :depends-on ("suite"))
+     (:file "conjugate-gradient" :depends-on ("suite"))
+     (:file "tridiagonal" :depends-on ("suite"))
+     ))
    ;; Linear algebra interface
    (:module interface
     :depends-on ("pkgdcl")
     :components
-    ((:file "matrix")
-     (:file "identity-matrix" :depends-on ("matrix"))
-     (:file "permutation-matrix" :depends-on ("matrix"))))
+    ((:file "suite")
+     (:file "matrix" :depends-on ("suite"))
+     (:file "identity-matrix" :depends-on ("suite"))
+     (:file "permutation-matrix" :depends-on ("suite"))
+     ))
    ;; Common lisp sequence tests
    (:module sequence
     :depends-on ("linear-algebra-test")
     :components
-    ((:file "list")
-     (:file "vector")
-     (:file "array")))
-   ;; Linear algebra tests
-   (:file "data-vector" :depends-on ("pkgdcl"))
-   (:file "dense-matrix" :depends-on ("interface"))
-   (:file "square-matrix" :depends-on ("interface"))
-   (:file "hermitian-matrix" :depends-on ("interface"))
-   (:file "symmetric-matrix" :depends-on ("interface"))))
+    ((:file "suite")
+     (:file "vector" :depends-on ("suite"))
+     (:file "array" :depends-on ("suite"))
+     ))
+     ;; Linear algebra tests
+   (
+    :module linear-algebra
+    :depends-on ("pkgdcl")
+    :components
+    ((:file "suite")
+     (:file "data-vector" :depends-on "suite")
+     (:file "dense-matrix" :depends-on ("suite" "interface"))
+     (:file "square-matrix" :depends-on ("suite" "interface"))
+     (:file "hermitian-matrix" :depends-on ("suite" "interface"))
+     (:file "symmetric-matrix" :depends-on ("suite" "interface"))
+     ))
+   ))

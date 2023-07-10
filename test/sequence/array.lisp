@@ -1,12 +1,14 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
 
-(define-test norm-array
-  (:tag :array :norm)
+(defsuite array-sequence-test (linear-algebra-sequence-test))
+
+(deftest norm-array (array-sequence-test)
   (let ((array
          #2A((1.1 1.2 1.3 1.4)
              (2.1 2.2 2.3 2.4)
@@ -22,8 +24,7 @@
     (assert-float-equal
      21.0 (linear-algebra:norm array :infinity))))
 
-(define-test transpose-array
-  (:tag :array :transpose)
+(deftest transpose-array (array-sequence-test)
   (assert-float-equal
    #2A((1.1 2.1 3.1 4.1 5.1)
        (1.2 2.2 3.2 4.2 5.2)
@@ -45,8 +46,7 @@
         (#C(4.1 4.2) #C(4.3 4.4))
         (#C(5.1 5.2) #C(5.3 5.4))))))
 
-(define-test ntranspose-array
-  (:tag :array :ntranspose)
+(deftest ntranspose-array (array-sequence-test)
   (let ((original
          (make-array
           '(4 4) :initial-contents
@@ -72,8 +72,7 @@
     (assert-eq original (linear-algebra:ntranspose original))
     (assert-float-equal transpose original)))
 
-(define-test permute-array
-  (:tag :array :permute)
+(deftest permute-array (array-sequence-test)
   (let ((array
          #2A((1.0 1.1 1.2 1.3 1.4)
              (2.0 2.1 2.2 2.3 2.4)
@@ -105,8 +104,7 @@
          (4.0 4.1 4.2 4.3 4.4))
      (linear-algebra:permute pmat array))))
 
-(define-test scale-array
-  (:tag :array :scale)
+(deftest scale-array (array-sequence-test)
   (assert-float-equal
    #2A(( 3.3  3.6  3.9  4.2)
        ( 6.3  6.6  6.9  7.2)
@@ -121,8 +119,7 @@
         (4.1 4.2 4.3 4.4)
         (5.1 5.2 5.3 5.4)))))
 
-(define-test nscale-array
-  (:tag :array :nscale)
+(deftest nscale-array (array-sequence-test)
   (let ((array
          (make-array
           '(5 4) :initial-contents
@@ -140,8 +137,7 @@
          (15.3 15.6 15.9 16.2))
      array)))
 
-(define-test add-array
-  (:tag :array :add)
+(deftest add-array (array-sequence-test)
   (let ((array
          #2A((1.1 1.2 1.3 1.4)
              (2.1 2.2 2.3 2.4)
@@ -181,8 +177,7 @@
          (25.5 26.0 26.5 27.0))
      (linear-algebra:add array array :scalar1 2.0 :scalar2 3.0))))
 
-(define-test nadd-array
-  (:tag :array :nadd)
+(deftest nadd-array (array-sequence-test)
   ;; No scalar
   (let ((array1
          (make-array
@@ -280,8 +275,7 @@
          (25.5 26.0 26.5 27.0))
      array1)))
 
-(define-test subtract-array
-  (:tag :array :subtract)
+(deftest subtract-array (array-sequence-test)
   (let ((*epsilon* (* 3F0 single-float-epsilon))
         (array1
          #2A(( 2.2  2.4  2.6  2.8)
@@ -328,8 +322,7 @@
          (5.1 5.2 5.3 5.4))
      (linear-algebra:subtract array1 array2 :scalar1 2.0 :scalar2 3.0))))
 
-(define-test nsubtract-array
-  (:tag :array :nsubtract)
+(deftest nsubtract-array (array-sequence-test)
   ;; No scalar
   (let ((array1
          (make-array
@@ -429,8 +422,7 @@
          (5.1 5.2 5.3 5.4))
      array1)))
 
-(define-test product-array
-  (:tag :array :product)
+(deftest product-array (array-sequence-test)
   ;; Vector - array
   (assert-float-equal
    #(15.0 30.0 45.0)
@@ -506,8 +498,7 @@
         (5.0 5.0 5.0 5.0))
     2.1)))
 
-(define-test solve-array
-  (:tag :array :solve)
+(deftest solve-array (array-sequence-test)
   (let ((*epsilon* (* 64 single-float-epsilon))
         (vector2 (make-array 2 :initial-contents '(1.0 2.0)))
         (vector3 (make-array 3 :initial-contents '(2.3 1.2 2.2)))
@@ -534,8 +525,7 @@
      #2A((1.15 1.26 1.37) (2.14 2.23 2.31) (3.13 3.22 3.31))
      array3)))
 
-(define-test nsolve-array
-  (:tag :array :nsolve)
+(deftest nsolve-array (array-sequence-test)
   (let ((*epsilon* (* 64 single-float-epsilon))
         (vector2 (make-array 2 :initial-contents '(1.0 2.0)))
         (vector3 (make-array 3 :initial-contents '(2.3 1.2 2.2)))
@@ -556,8 +546,7 @@
      #(66.36775 -151.8342 85.6118)
      (linear-algebra:nsolve array3 vector3))))
 
-(define-test invert-array
-  (:tag :array :invert)
+(deftest invert-array (array-sequence-test)
   ;; 2x2
   (let ((array
          (make-array
@@ -605,8 +594,7 @@
          (0.41 0.42 0.43 40.0))
      array)))
 
-(define-test ninvert-array
-  (:tag :array :ninvert)
+(deftest ninvert-array (array-sequence-test)
   ;; 2x2
   (let ((array
          (make-array

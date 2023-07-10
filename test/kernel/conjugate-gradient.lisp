@@ -1,12 +1,14 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
 
-(define-test conjugate-gradient-solver
-  (:tag :kernel :conjugate-gradient)
+(defsuie conjugate-gradient-test (linear-algebra-kernel-test))
+
+(deftest conjugate-gradient-solver (conjugate-gradient-test)
   ;; 2x2 from NumAlgoC
   (assert-float-equal
    #(2.0 0.33333334)

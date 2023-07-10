@@ -1,12 +1,15 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
 
-(define-test make-data-vector
-  (:tag :data-vector :make-vector)
+(defsuite data-vector-core-test (linear-algebra-core-test))
+
+
+(deftest make-data-vector (data-vector-core-test)
   ;; A default vector.
   (assert-true
    (typep
@@ -59,8 +62,7 @@
      (make-array 100 :initial-contents data)
      (linear-algebra:make-vector 100 :initial-contents data))))
 
-(define-test column-vector
-  (:tag :data-vector :column-vector)
+(deftest column-vector (data-vector-core-test)
   ;; Column vector
   (assert-true
    (typep
@@ -71,8 +73,7 @@
    (vector 1.0 2.0 3.0 4.0 5.0)
    (linear-algebra:column-vector 1.0 2.0 3.0 4.0 5.0)))
 
-(define-test row-vector
-  (:tag :data-vector :row-vector)
+(deftest row-vector (data-vector-core-test)
   ;; row vector
   (assert-true
    (typep
@@ -83,8 +84,7 @@
    (vector 1.0 2.0 3.0 4.0 5.0)
    (linear-algebra:row-vector 1.0 2.0 3.0 4.0 5.0)))
 
-(define-test column-vector-p
-  (:tag :data-vector :column-vector)
+(deftest column-vector-p (data-vector-core-test)
   (assert-true
    (linear-algebra:column-vector-p
     (linear-algebra:column-vector 1.0 2.0 3.0 4.0 5.0)))
@@ -92,8 +92,7 @@
    (linear-algebra:column-vector-p
     (linear-algebra:row-vector 1 2 3 4 5))))
 
-(define-test row-vector-p
-  (:tag :data-vector :row-vector)
+(deftest row-vector-p (data-vector-core-test)
   (assert-true
    (linear-algebra:row-vector-p
     (linear-algebra:row-vector 1.0 2.0 3.0 4.0 5.0)))
@@ -101,8 +100,7 @@
    (linear-algebra:row-vector-p
     (linear-algebra:column-vector 1 2 3 4 5))))
 
-(define-test data-vector-in-bounds-p
-  (:tag :data-vector :vector-in-bounds-p)
+(deftest data-vector-in-bounds-p (data-vector-core-test)
   ;; Column vector bounds
   (let ((cvec (linear-algebra:column-vector 1 2 3 4 5)))
     (assert-true
@@ -124,8 +122,7 @@
     (assert-false
      (linear-algebra:vector-in-bounds-p rvec 10))))
 
-(define-test data-vector-element-type
-  (:tag :data-vector :vector-element-type)
+(deftest data-vector-element-type (data-vector-core-test)
   ;; Column vector
   (assert-true
    (subtypep
@@ -143,8 +140,7 @@
       :vector-type 'linear-algebra:row-vector))
     'single-float)))
 
-(define-test data-vector-length
-  (:tag :data-vector :vector-length)
+(deftest data-vector-length (data-vector-core-test)
   (assert-eq
    5 (linear-algebra:vector-length
       (linear-algebra:column-vector 1 2 3 4 5)))
@@ -152,8 +148,7 @@
    5 (linear-algebra:vector-length
       (linear-algebra:row-vector 1 2 3 4 5))))
 
-(define-test data-vref
-  (:tag :data-vector :vref)
+(deftest data-vref (data-vector-core-test)
   ;; Reference the element of a vector.
   (let* ((size 1000)
          (index (random-interior-index size))
@@ -196,8 +191,7 @@
     (assert-error
      'error (setf (linear-algebra:vref list index) 42.0))))
 
-(define-test copy-data-vector
-  (:tag :data-vector :copy-vector)
+(deftest copy-data-vector (data-vector-core-test)
   ;; Column vector
   (let* ((vec (linear-algebra:column-vector 1 2 3 4 5))
          (new (linear-algebra:copy-vector vec)))
@@ -217,8 +211,7 @@
          (linear-algebra::contents new)))
     (assert-rational-equal vec new)))
 
-(define-test data-subvector
-  (:tag :data-vector :subvector)
+(deftest data-subvector (data-vector-core-test)
   ;; Get subvectors
   (let* ((data (list 0 1 2 3 4 5 6 7 8 9))
          (vec
@@ -248,8 +241,7 @@
     (assert-rational-equal
      '(0 0 0 0 0 0 0 1 1 1) vec)))
 
-(define-test replace-data-vector
-  (:tag :data-vector :replace-vector)
+(deftest replace-data-vector (data-vector-core-test)
   (flet ((zero-vector () (linear-algebra:make-vector 10)))
     (let ((data
            (linear-algebra:make-vector
@@ -294,8 +286,7 @@
        (linear-algebra:replace-vector
         (zero-vector) data :start1 2 :end2 3)))))
 
-(define-test %map-data-vector
-  (:tag :data-vector :map-vector)
+(deftest %map-data-vector (data-vector-core-test)
   (let ((col-data (linear-algebra:column-vector 1 1 1 1 1))
         (row-data (linear-algebra:row-vector 1 1 1 1 1)))
     (assert-true
@@ -338,8 +329,7 @@
       'linear-algebra:column-vector
       #'+ col-data row-data col-data row-data))))
 
-(define-test map-data-vector
-  (:tag :data-vector :map-vector)
+(deftest map-data-vector (data-vector-core-test)
   (let ((col-data (linear-algebra:column-vector 1 1 1 1 1))
         (row-data (linear-algebra:row-vector 1 1 1 1 1)))
     (assert-error
@@ -354,8 +344,7 @@
       'linear-algebra:column-vector
       #'+ col-data row-data col-data))))
 
-(define-test %map-into-data-vector
-  (:tag :data-vector :map-into-vector)
+(deftest %map-into-data-vector (data-vector-core-test)
   (let ((col-data (linear-algebra:column-vector 1 1 1 1 1))
         (row-data (linear-algebra:row-vector 1 1 1 1 1)))
     (assert-true
@@ -393,8 +382,7 @@
      (linear-algebra::%map-into-data-vector
       col-data #'+ col-data row-data col-data row-data))))
 
-(define-test map-into-data-vector
-  (:tag :data-vector :map-into-vector)
+(deftest map-into-data-vector (data-vector-core-test)
   (let ((col-data (linear-algebra:column-vector 1 1 1 1 1))
         (row-data (linear-algebra:row-vector 1 1 1 1 1)))
     (assert-error
@@ -412,8 +400,7 @@
 
 ;;; Apply rotation
 
-(define-test apply-rotation-data-vector
-  (:tag :data-vector :apply-rotation)
+(deftest apply-rotation-data-vector (data-vector-core-test)
   ;; Float
   (let ((vec1
          (linear-algebra:make-vector
@@ -520,8 +507,7 @@
 
 ;;; Destructively apply rotation
 
-(define-test napply-rotation-data-vector
-  (:tag :data-vector :napply-rotation)
+(deftest napply-rotation-data-vector (data-vector-core-test)
   ;; Float, position 0
   (let ((vec1
          (linear-algebra:make-vector
@@ -677,8 +663,7 @@
 
 ;;; Data vector norm
 
-(define-test norm-data-vector
-  (:tag :data-vector :norm)
+(deftest norm-data-vector (data-vector-core-test)
   (let ((data
          (linear-algebra:column-vector
           -6 -5 -4 -3 -2 -1 0 1 2 3 4 5))
@@ -709,8 +694,7 @@
 
 ;;; Data vector transpose
 
-(define-test transpose-data-vector
-  (:tag :data-vector :transpose)
+(deftest transpose-data-vector (data-vector-core-test)
   (let ((col-data
          (linear-algebra:column-vector
           1.0 2.0 3.0 4.0 5.0))
@@ -730,8 +714,7 @@
     (assert-float-equal
      row-data (linear-algebra:transpose row-data))))
 
-(define-test ntranspose-data-vector
-  (:tag :data-vector :ntranspose)
+(deftest ntranspose-data-vector (data-vector-core-test)
   (let ((col-data
          (linear-algebra:column-vector
           1.0 2.0 3.0 4.0 5.0))
@@ -759,9 +742,8 @@
 
 ;;; Data vector permutation
 
-(define-test permute-data-vector
-  (:tag :data-vector :permute)
-  (let ((rvec
+(deftest permute-data-vector (data-vector-core-test)
+  (let ((rvec 
          (linear-algebra:row-vector
           1.1 2.2 3.3 4.4 5.5))
         (cvec
@@ -796,8 +778,7 @@
 
 ;;; Data vector scale
 
-(define-test scale-data-vector
-  (:tag :data-vector :scale)
+(deftest scale-data-vector (data-vector-core-test)
   (assert-float-equal
    #(2.0 4.0 6.0 8.0 10.0)
    (linear-algebra:scale
@@ -818,8 +799,7 @@
     (linear-algebra:column-vector
      #C(1.0 1.0) #C(2.0 2.0) #C(3.0 3.0) #C(4.0 4.0) #C(5.0 5.0)))))
 
-(define-test nscale-data-vector
-  (:tag :data-vector :nscale)
+(deftest nscale-data-vector (data-vector-core-test)
   (assert-float-equal
    #(2.0 4.0 6.0 8.0 10.0)
    (linear-algebra:nscale
@@ -842,8 +822,7 @@
 
 ;;; Vector addition
 
-(define-test add-data-vector
-  (:tag :data-vector :add)
+(deftest add-data-vector (data-vector-core-test)
   ;; Real
   (let ((vec1 (linear-algebra:column-vector 1.1 2.2 3.3 4.4))
         (vec2 (linear-algebra:column-vector 1.1 2.2 3.3 4.4)))
@@ -916,8 +895,7 @@
 
 ;;; Destructive vector addition
 
-(define-test nadd-data-vector
-  (:tag :data-vector :nadd)
+(deftest nadd-data-vector (data-vector-core-test)
   ;; Real
   (let ((vec1 (linear-algebra:column-vector 1.1 2.2 3.3 4.4))
         (vec2 (linear-algebra:column-vector 1.1 2.2 3.3 4.4)))
@@ -990,8 +968,7 @@
 
 ;;; Vector subtraction
 
-(define-test subtract-data-vector
-  (:tag :data-vector :subtract)
+(deftest subtract-data-vector (data-vector-core-test)
   ;; Real
   (let ((vec1 (linear-algebra:column-vector 1.1 2.2 3.3 4.4))
         (vec2 (linear-algebra:column-vector 1.1 2.2 3.3 4.4)))
@@ -1064,8 +1041,7 @@
 
 ;;; Destructive vector subtraction
 
-(define-test nsubtract-data-vector
-  (:tag :data-vector :nsubtract)
+(deftest nsubtract-data-vector (data-vector-core-test)
   ;; Real
   (let ((vec1 (linear-algebra:column-vector 1.1 2.2 3.3 4.4))
         (vec2 (linear-algebra:column-vector 1.1 2.2 3.3 4.4)))
@@ -1138,8 +1114,7 @@
 
 ;;; Vector data dot product
 
-(define-test product-data-vector
-  (:tag :data-vector :product)
+(deftest product-data-vector (data-vector-core-test)
   ;; Real vectors
   (assert-rational-equal
    55

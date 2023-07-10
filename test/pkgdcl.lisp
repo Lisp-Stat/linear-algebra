@@ -6,9 +6,13 @@
 ;;; Unit Tests for Linear Algebra in Common Lisp
 
 (uiop:define-package #:linear-algebra-test
-  (:use #:cl #:lisp-unit))
+    (:use #:cl #:clunit #:linear-algebra))
+
+
 
 (in-package :linear-algebra-test)
+
+(defsuite linear-algebra-test ())
 
 ;;; Convenience functions
 
@@ -279,3 +283,14 @@ point."
   (float-equal (linear-algebra::contents result1)
                (linear-algebra::contents result2)
                epsilon))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Assertion Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun assert-float-equal (a b)
+  (assert-true (float-equal a b)))
+
+(defun assert-rational-equal (a b)
+  (assert-true (rational-equal a b)))
+
