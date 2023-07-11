@@ -6,7 +6,7 @@
 
 (in-package :linear-algebra-test)
 
-(defsuite matrix-linear-algebra-tests (linear-algebra-core-test))
+(defsuite matrix-linear-algebra-tests (linear-algebra-interface-test))
 
 (deftest make-identity-matrix (matrix-linear-algebra-tests)
   ;; A default identity matrix
@@ -36,15 +36,15 @@
     (assert-float-equal
      1.0 (aref (linear-algebra::contents matrix) 1)))
   ;; Specify the identity matrix initial element
-  (assert-fail
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     10 10
     :matrix-type 'linear-algebra:identity-matrix
     :initial-element 1.0))
   ;; Specify the identity matrix contents - Nested list
-  (assert-fail
-   'error
+  (assert-condition
+      error
    (linear-algebra:make-matrix
     3 3
     :matrix-type 'linear-algebra:identity-matrix
@@ -53,8 +53,8 @@
       (0.0 1.0 0.0)
       (0.0 0.0 1.0))))
   ;; Specify the identity matrix contents - Nested vector
-  (assert-fail
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 3
     :matrix-type 'linear-algebra:identity-matrix
@@ -63,8 +63,8 @@
       #(0.0 1.0 0.0)
       #(0.0 0.0 1.0))))
   ;; Specify the identity matrix contents - 2D array
-  (assert-fail
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 3
     :matrix-type 'linear-algebra:identity-matrix
@@ -73,8 +73,8 @@
         (0.0 1.0 0.0)
         (0.0 0.0 1.0))))
   ;; Specify initial element and initial contents
-  (assert-fail
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 3 :initial-element 1.0
     :matrix-type
@@ -95,17 +95,14 @@
 
 ;;; Test the identity matrix bounds
 (deftest identity-matrix-in-bounds-p (matrix-linear-algebra-tests)
-  (:tag :matrix :identity-matrix :matrix-in-bounds-p)
   (test-matrix-in-bounds-p 'linear-algebra:identity-matrix)) 
 
 ;;; Test the identity matrix element type
 (deftest identity-matrix-element-type (matrix-linear-algebra-tests)
-  (:tag :matrix :identity-matrix :matrix-element-type)
   (test-matrix-element-type 'linear-algebra:identity-matrix))
 
 ;;; Test the identity matrix dimensions
 (deftest identity-matrix-dimensions (matrix-linear-algebra-tests)
-  (:tag :matrix :identity-matrix :matrix-dimensions)
   (test-matrix-dimensions 'linear-algebra:identity-matrix 7 7))
 
 ;;; Test the identity matrix row dimension
@@ -147,8 +144,8 @@
 
 ;;; Set identity matrix elements
 (deftest identity-matrix-setf-mref (matrix-linear-algebra-tests)
-  (assert-fail
-   'error
+  (assert-condition
+   error
    (setf
     (linear-algebra:mref
      (linear-algebra:make-matrix
@@ -177,8 +174,8 @@
 
 ;;; Test the submatrix of a identity matrix
 (deftest identity-submatrix (matrix-linear-algebra-tests)
-  (assert-fail
-   'error
+  (assert-condition
+   error
    (linear-algebra:submatrix
     (linear-algebra:make-matrix
      10 10 :matrix-type
@@ -186,8 +183,8 @@
     5 5)))
 
 (deftest setf-identity-submatrix (matrix-linear-algebra-tests)
-  (assert-fail
-   'error
+  (assert-condition
+   error
    (setf
     (linear-algebra:submatrix
      (linear-algebra:make-matrix
@@ -198,8 +195,8 @@
 
 (deftest identity-matrix-replace (matrix-linear-algebra-tests)
   ;; Replace the entire matrix
-  (assert-fail
-   'error
+  (assert-condition
+   error
    (linear-algebra:replace-matrix
     (linear-algebra:make-matrix
      5 5 :matrix-type 'linear-algebra:identity-matrix)

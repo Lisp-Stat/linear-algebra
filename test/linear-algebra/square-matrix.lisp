@@ -96,8 +96,8 @@
     (assert-true (typep matrix 'linear-algebra:square-matrix))
     (assert-float-equal data matrix))
   ;; Erroneous 2D array input data
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     4 4
     :matrix-type 'linear-algebra:square-matrix
@@ -105,30 +105,30 @@
     #3A(((1.1 1.2) (2.1 2.2))
         ((3.1 3.2) (4.1 4.2))
         ((5.1 5.2) (6.1 6.2)))))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 4
     :matrix-type 'linear-algebra:square-matrix
     :initial-contents
     (coordinate-array 0 0 3 4)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     4 3
     :matrix-type 'linear-algebra:square-matrix
     :initial-contents
     (coordinate-array 0 0 4 3)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 3 :element-type 'single-float
     :matrix-type 'linear-algebra:square-matrix
     :initial-contents
     #2A((1 2 3) (4 5 6) (7 8 9))))
   ;; Specify initial element and initial contents
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     4 4
     :matrix-type 'linear-algebra:square-matrix
@@ -291,23 +291,23 @@
      (linear-algebra:submatrix
       matrix 3 4 :end-row 5 :end-column 5))
     ;; Start row exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 11 5))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 11 5))
     ;; Start column exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 11))
     ;; End row exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 5 :end-row 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 5 :end-row 11))
     ;; End column exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 5 :end-column 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 5 :end-column 11))
     ;; Start row exceeds end row
-    (assert-error
-     'error (linear-algebra:submatrix matrix 7 7 :end-row 6))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 7 7 :end-row 6))
     ;; Start column exceeds end column
-    (assert-error
-     'error (linear-algebra:submatrix matrix 7 7 :end-column 6))))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 7 7 :end-column 6))))
 
 ;;; Set the submatrix of a square matrix
 
@@ -639,8 +639,8 @@
      11.882762 (linear-algebra:norm matrix :frobenius))
     (assert-float-equal
      17.0 (linear-algebra:norm matrix :infinity))
-    (assert-error
-     'error
+    (assert-condition
+     error
      (linear-algebra:norm matrix :unknown))))
 
 (deftest transpose-square-matrix (square-matrix-core-test)
@@ -1087,8 +1087,8 @@
          (1.0 2.0 3.0)
          (1.0 2.0 3.0)))
     2.1))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (linear-algebra:row-vector 1.0 2.0 3.0 4.0 5.0 6.0)
     (linear-algebra:make-matrix
@@ -1122,8 +1122,8 @@
          (3.0 3.0 3.0)))
     (linear-algebra:column-vector 1.0 2.0 3.0)
     2.1))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (linear-algebra:make-matrix
      3 3 :initial-element 1.0
@@ -1171,8 +1171,8 @@
          (2.0 2.0 2.0)
          (3.0 3.0 3.0)))
     2.1))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (unit-matrix 3 3 :matrix-type 'linear-algebra:square-matrix)
     (unit-matrix 4 4 :matrix-type 'linear-algebra:square-matrix))))

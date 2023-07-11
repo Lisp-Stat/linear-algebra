@@ -68,8 +68,8 @@
      #(4 0 1 3 2)
      (linear-algebra::contents matrix)))
   ;; Erroneous 2D array input data
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     4 4
     :matrix-type 'linear-algebra:permutation-matrix
@@ -77,27 +77,27 @@
     #3A(((1.1 1.2) (2.1 2.2))
         ((3.1 3.2) (4.1 4.2))
         ((5.1 5.2) (6.1 6.2)))))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 4
     :matrix-type 'linear-algebra:permutation-matrix
     :initial-contents
     (random-permutation-array 4)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     4 3
     :matrix-type 'linear-algebra:permutation-matrix
     :initial-contents
     (random-permutation-array 4)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 3 :element-type 'single-float
     :matrix-type 'linear-algebra:permutation-matrix))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 3
     :matrix-type 'linear-algebra:permutation-matrix
@@ -128,8 +128,8 @@
      5 5
      :matrix-type 'linear-algebra:permutation-matrix)))
   (dolist (element-type '(single-float double-float))
-    (assert-error
-     'error
+    (assert-condition
+     error
      (linear-algebra:matrix-element-type
       (linear-algebra:make-matrix
        5 5

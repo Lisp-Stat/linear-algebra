@@ -111,40 +111,40 @@
     (assert-true (typep matrix 'linear-algebra:hermitian-matrix))
     (assert-rational-equal data matrix))
   ;; Errors
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     4 4 :matrix-type 'linear-algebra:hermitian-matrix
     :initial-contents #C(1 2)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     4 4 :matrix-type 'linear-algebra:hermitian-matrix
     :initial-contents
     #3A(((#C(1 0) #C(1 2)) (#C(2 1) #C(2 2)))
         ((#C(3 1) #C(3 2)) (#C(4 1) #C(4 2)))
         ((#C(5 1) #C(5 2)) (#C(6 1) #C(6 2))))))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 4 :matrix-type 'linear-algebra:hermitian-matrix
     :initial-contents
     (hermitian-array 0 4)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     4 3 :matrix-type 'linear-algebra:hermitian-matrix
     :initial-contents
     (hermitian-array 0 4)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     5 5 :matrix-type 'linear-algebra:symmetric-matrix
     :initial-contents
     (coordinate-array 0 0 5 5)))
   ;; Specify initial element and initial contents
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     4 4 :matrix-type 'linear-algebra:hermitian-matrix
     :initial-element 1.1
@@ -373,23 +373,23 @@
      (linear-algebra:submatrix submat 1 1 :end-column 8)
      (linear-algebra:submatrix matrix 1 1 :end-column 8))
     ;; Start row exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 11 5))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 11 5))
     ;; Start column exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 11))
     ;; End row exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 5 :end-row 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 5 :end-row 11))
     ;; End column exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 5 :end-column 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 5 :end-column 11))
     ;; Start row exceeds end row
-    (assert-error
-     'error (linear-algebra:submatrix matrix 7 7 :end-row 6))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 7 7 :end-row 6))
     ;; Start column exceeds end column
-    (assert-error
-     'error (linear-algebra:submatrix matrix 7 7 :end-column 6))))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 7 7 :end-column 6))))
 
 ;;; Set the submatrix of a Hermitian matrix
 (deftest setf-hermitian-submatrix (hermitian-matrix-core-test)
@@ -508,8 +508,8 @@
         (linear-algebra:submatrix matrix 3 0)
         (linear-algebra:submatrix submatrix 0 0 :end-column 2)))))
   ;; Non-Hermitian subsets
-  (assert-error
-   'error
+  (assert-condition
+   error
    (setf
     (linear-algebra:submatrix
      (unit-hermitian-matrix 10) 0 1)
@@ -678,8 +678,8 @@
       (unit-hermitian-matrix 5) submatrix
       :start-column1 3 :end-row2 2)))
   ;; Non-Hermitian subsets
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:replace-matrix
     (unit-hermitian-matrix 5)
     (unit-matrix 5 3)
@@ -711,22 +711,22 @@
       matrix
       (min row1 row2) (min col1 col2)
       (max row1 row2) (max col1 col2)))
-    (assert-error
-     'error
+    (assert-condition
+     error
      (linear-algebra:matrix-validated-range matrix 11 col1))
-    (assert-error
-     'error
+    (assert-condition
+     error
      (linear-algebra:matrix-validated-range matrix row1 11))
-    (assert-error
-     'error
+    (assert-condition
+     error
      (linear-algebra:matrix-validated-range
       matrix 9 col1 1))
-    (assert-error
-     'error
+    (assert-condition
+     error
      (linear-algebra:matrix-validated-range
       matrix row1 9 10 1))
-    (assert-error
-     'error
+    (assert-condition
+     error
      (linear-algebra:matrix-validated-range
       matrix 9 9 1 1))))
 
@@ -750,8 +750,8 @@
      22.248597 (linear-algebra:norm matrix :frobenius))
     (assert-float-equal
      27.71826 (linear-algebra:norm matrix :infinity))
-    (assert-error
-     'error
+    (assert-condition
+     error
      (linear-algebra:norm matrix :unknown))))
 
 (deftest transpose-hermitian-matrix (hermitian-matrix-core-test)
@@ -1206,8 +1206,8 @@
          (#C(2.0 -1.0) #C(2.0  0.0) #C(3.0  2.0))
          (#C(3.0 -1.0) #C(3.0 -2.0) #C(3.0  0.0))))
     2.1))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (linear-algebra:row-vector 1.0 2.0 3.0 4.0 5.0 6.0)
     (unit-hermitian-matrix 3)))
@@ -1239,8 +1239,8 @@
          (#C(3.0 -1.0) #C(3.0 -2.0) #C(3.0  0.0))))
     (linear-algebra:column-vector 1.0 2.0 3.0)
     2.1))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (unit-hermitian-matrix 3)
     (linear-algebra:column-vector 1.0 2.0 3.0 4.0 5.0 6.0)))
@@ -1285,8 +1285,8 @@
          (#C(2.0 -1.0) #C(2.0  0.0) #C(3.0  2.0))
          (#C(3.0 -1.0) #C(3.0 -2.0) #C(3.0  0.0))))
     2.1))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (unit-hermitian-matrix 3) (unit-hermitian-matrix 4))))
 

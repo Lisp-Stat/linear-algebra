@@ -104,7 +104,7 @@
     (assert-true (typep matrix 'linear-algebra:upper-triangular-matrix))
     (assert-float-equal data matrix))
   ;; Erroneous 2D array input data
-  (assert-error 'error
+  (assert-condition error
                 (linear-algebra:make-matrix
                  4 4
                  :matrix-type 'linear-algebra:upper-triangular-matrix
@@ -112,26 +112,26 @@
                  #3A(((1.1 1.2) (2.1 2.2))
                      ((3.1 3.2) (4.1 4.2))
                      ((5.1 5.2) (6.1 6.2)))))
-  (assert-error 'error
+  (assert-condition error
                 (linear-algebra:make-matrix
                  3 4
                  :matrix-type 'linear-algebra:upper-triangular-matrix
                  :initial-contents
                  (upper-triangular-array 0 4)))
-  (assert-error 'error
+  (assert-condition error
                 (linear-algebra:make-matrix
                  4 3
                  :matrix-type 'linear-algebra:upper-triangular-matrix
                  :initial-contents
                  (upper-triangular-array 0 4)))
-  (assert-error 'error
+  (assert-condition error
                 (linear-algebra:make-matrix
                  5 5
                  :matrix-type 'linear-algebra:upper-triangular-matrix
                  :initial-contents
                  (coordinate-array 0 0 5 5)))
   ;; Specify initial element and initial contents
-  (assert-error 'error
+  (assert-condition error
                 (linear-algebra:make-matrix
                  4 4
                  :matrix-type 'linear-algebra:upper-triangular-matrix
@@ -221,7 +221,7 @@
     (assert-true (typep matrix 'linear-algebra:lower-triangular-matrix))
     (assert-float-equal data matrix))
   ;; Erroneous 2D array input data
-  (assert-error 'error
+  (assert-condition error
                 (linear-algebra:make-matrix
                  4 4
                  :matrix-type 'linear-algebra:lower-triangular-matrix
@@ -229,26 +229,26 @@
                  #3A(((1.1 1.2) (2.1 2.2))
                      ((3.1 3.2) (4.1 4.2))
                      ((5.1 5.2) (6.1 6.2)))))
-  (assert-error 'error
+  (assert-condition error
                 (linear-algebra:make-matrix
                  3 4
                  :matrix-type 'linear-algebra:lower-triangular-matrix
                  :initial-contents
                  (lower-triangular-array 0 4)))
-  (assert-error 'error
+  (assert-condition error
                 (linear-algebra:make-matrix
                  4 3
                  :matrix-type 'linear-algebra:lower-triangular-matrix
                  :initial-contents
                  (lower-triangular-array 0 4)))
-  (assert-error 'error
+  (assert-condition error
                 (linear-algebra:make-matrix
                  5 5
                  :matrix-type 'linear-algebra:lower-triangular-matrix
                  :initial-contents
                  (coordinate-array 0 0 5 5)))
   ;; Specify initial element and initial contents
-  (assert-error 'error
+  (assert-condition error
                 (linear-algebra:make-matrix
                  4 4
                  :matrix-type 'linear-algebra:lower-triangular-matrix
@@ -440,8 +440,8 @@
       (assert-float-equal val3 (linear-algebra:mref matrix rend cend))
       (assert-float-equal val4 (linear-algebra:mref matrix rowi coli))
       (assert-float-equal 0.0  (linear-algebra:mref matrix coli rowi))
-      (assert-error
-       'error
+      (assert-condition
+       error
        (setf (linear-algebra:mref matrix coli rowi) 1.0)))))
 
 ;;; Set lower triangular matrix elements
@@ -474,8 +474,8 @@
       (assert-float-equal val3 (linear-algebra:mref matrix rend cend))
       (assert-float-equal val4 (linear-algebra:mref matrix rowi coli))
       (assert-float-equal 0.0  (linear-algebra:mref matrix coli rowi))
-      (assert-error
-       'error
+      (assert-condition
+       error
        (setf (linear-algebra:mref matrix coli rowi) 1.0)))))
 
 ;;; Copy the upper triangular matrix
@@ -566,23 +566,23 @@
      (linear-algebra:submatrix submat 1 1 :column-end 8)
      (linear-algebra:submatrix matrix 1 1 :column-end 8))
     ;; Start row exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 11 5))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 11 5))
     ;; Start column exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 11))
     ;; End row exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 5 :row-end 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 5 :row-end 11))
     ;; End column exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 5 :column-end 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 5 :column-end 11))
     ;; Start row exceeds end row
-    (assert-error
-     'error (linear-algebra:submatrix matrix 7 7 :row-end 6))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 7 7 :row-end 6))
     ;; Start column exceeds end column
-    (assert-error
-     'error (linear-algebra:submatrix matrix 7 7 :column-end 6))))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 7 7 :column-end 6))))
 
 ;;; Test the submatrix of an lower triangular matrix
 (deftest lower-triangular-submatrix (triangular-matrix-core-test)
@@ -632,23 +632,23 @@
      (linear-algebra:submatrix submat 1 1 :column-end 8)
      (linear-algebra:submatrix matrix 1 1 :column-end 8))
     ;; Start row exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 11 5))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 11 5))
     ;; Start column exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 11))
     ;; End row exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 5 :row-end 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 5 :row-end 11))
     ;; End column exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 5 :column-end 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 5 :column-end 11))
     ;; Start row exceeds end row
-    (assert-error
-     'error (linear-algebra:submatrix matrix 7 7 :row-end 6))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 7 7 :row-end 6))
     ;; Start column exceeds end column
-    (assert-error
-     'error (linear-algebra:submatrix matrix 7 7 :column-end 6))))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 7 7 :column-end 6))))
 
 ;;; Set the submatrix of an upper triangular matrix
 (deftest setf-upper-triangular-submatrix (triangular-matrix-core-test)
@@ -746,8 +746,8 @@
       (linear-algebra:submatrix matrix 1 2 :row-end 3)
       (unit-matrix 3 3))))
   ;; Non upper-triangular subsets
-  (assert-error
-   'error
+  (assert-condition
+   error
    (setf (linear-algebra:submatrix
           (zero-matrix 5 5 :matrix-type
                        'linear-algebra:upper-triangular-matrix) 0 1)
@@ -849,8 +849,8 @@
       (linear-algebra:submatrix matrix 2 1 :column-end 3)
       (unit-matrix 3 3))))
   ;; Non lower-triangular subsets
-  (assert-error
-   'error
+  (assert-condition
+   error
    (setf (linear-algebra:submatrix
           (zero-matrix 5 5 :matrix-type
                        'linear-algebra:lower-triangular-matrix) 1 0)
@@ -1004,8 +1004,8 @@
       (unit-matrix 10 10)
       :row1 1 :column1 2 :row1-end 3)))
   ;; Non upper triangular subsets
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:replace-matrix
     (zero-matrix 5 5 :matrix-type 'linear-algebra:upper-triangular-matrix)
     (unit-matrix 5 3)
@@ -1159,8 +1159,8 @@
       (unit-matrix 10 10)
       :row1 2 :column1 1 :column1-end 3)))
   ;; Non lower triangular subsets
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:replace-matrix
     (zero-matrix 5 5 :matrix-type 'linear-algebra:lower-triangular-matrix)
     (unit-matrix 5 3)

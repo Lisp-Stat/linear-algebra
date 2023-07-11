@@ -443,8 +443,8 @@
         (1.0 2.0 3.0)
         (1.0 2.0 3.0))
     2.1))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     #(1.0 2.0 3.0 4.0 5.0 6.0)
     (make-array '(5 3) :initial-element 1.0)))
@@ -464,8 +464,8 @@
         (3.0 3.0 3.0 3.0 3.0))
     #(1.0 2.0 3.0 4.0 5.0)
     2.1))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (make-array '(3 5) :initial-element 1.0)
     #(1.0 2.0 3.0 4.0 5.0 6.0)))

@@ -101,8 +101,8 @@
     (assert-true (typep matrix 'linear-algebra:symmetric-matrix))
     (assert-float-equal data matrix))
   ;; Erroneous 2D array input data
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     4 4
     :matrix-type 'linear-algebra:symmetric-matrix
@@ -110,51 +110,51 @@
     #3A(((1.1 1.2) (2.1 2.2))
         ((3.1 3.2) (4.1 4.2))
         ((5.1 5.2) (6.1 6.2)))))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 4
     :matrix-type 'linear-algebra:symmetric-matrix
     :initial-contents
     (symmetric-array 0 4)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     4 3
     :matrix-type 'linear-algebra:symmetric-matrix
     :initial-contents
     (symmetric-array 0 4)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 3 :element-type 'single-float
     :matrix-type 'linear-algebra:symmetric-matrix
     :initial-contents
     '((1.0 2.0 3.0) (4 5 6) (7 8 9))))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 3 :element-type 'single-float
     :matrix-type 'linear-algebra:symmetric-matrix
     :initial-contents
     #(#(1.0 2.0 3.0) #(4 5 6) #(7 8 9))))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     3 3 :element-type 'single-float
     :matrix-type 'linear-algebra:symmetric-matrix
     :initial-contents
     #2A((1.0 2.0 3.0) (4 5 6) (7 8 9))))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     5 5
     :matrix-type 'linear-algebra:symmetric-matrix
     :initial-contents
     (coordinate-array 0 0 5 5)))
   ;; Specify initial element and initial contents
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:make-matrix
     4 4
     :matrix-type 'linear-algebra:symmetric-matrix
@@ -340,23 +340,23 @@
      (linear-algebra:submatrix submat 1 1 :end-column 8)
      (linear-algebra:submatrix matrix 1 1 :end-column 8))
     ;; Start row exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 11 5))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 11 5))
     ;; Start column exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 11))
     ;; End row exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 5 :end-row 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 5 :end-row 11))
     ;; End column exceeds dimensions
-    (assert-error
-     'error (linear-algebra:submatrix matrix 5 5 :end-column 11))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 5 5 :end-column 11))
     ;; Start row exceeds end row
-    (assert-error
-     'error (linear-algebra:submatrix matrix 7 7 :end-row 6))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 7 7 :end-row 6))
     ;; Start column exceeds end column
-    (assert-error
-     'error (linear-algebra:submatrix matrix 7 7 :end-column 6))))
+    (assert-condition
+     error (linear-algebra:submatrix matrix 7 7 :end-column 6))))
 
 ;;; Set the submatrix of a symmetric matrix
 (deftest setf-symmetric-submatrix (symmetric-matrix-core-test)
@@ -458,8 +458,8 @@
       (linear-algebra:submatrix matrix 1 2 :end-row 3)
       (symmetric-matrix))))
   ;; Asymmetric subsets
-  (assert-error
-   'error
+  (assert-condition
+   error
    (setf
     (linear-algebra:submatrix
      (zero-matrix 5 5 :matrix-type 'linear-algebra:symmetric-matrix)
@@ -618,8 +618,8 @@
       (symmetric-matrix)
       :start-row1 1 :start-column1 2 :end-row1 3)))
   ;; Asymmetric subsets
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:replace-matrix
     (zero-matrix 5 5 :matrix-type 'linear-algebra:symmetric-matrix)
     (unit-matrix 5 3)
@@ -644,8 +644,8 @@
      68.94671 (linear-algebra:norm matrix :frobenius))
     (assert-float-equal
      94.5 (linear-algebra:norm matrix :infinity))
-    (assert-error
-     'error
+    (assert-condition
+     error
      (linear-algebra:norm matrix :unknown))))
 
 (deftest transpose-symmetric-matrix (symmetric-matrix-core-test)
@@ -1076,8 +1076,8 @@
            (1.2 2.2 2.3)
            (1.3 2.3 3.3)))
       2.1)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (linear-algebra:row-vector 1.0 2.0 3.0 4.0 5.0 6.0)
     (linear-algebra:make-matrix
@@ -1117,8 +1117,8 @@
            (1.3 2.3 3.3)))
       (linear-algebra:column-vector 1.0 2.0 3.0)
       2.1)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (linear-algebra:make-matrix
      3 3 :initial-element 1.0

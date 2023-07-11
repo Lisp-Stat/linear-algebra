@@ -142,7 +142,7 @@
          (0.9285714 -0.78260816  0.8547211 -1.0736067))
      array)))
 
-(deftest gauss-solver (gauss-kernel-test)n
+(deftest gauss-solver (gauss-kernel-test)
   (let ((*epsilon* (* 64 single-float-epsilon)))
     ;; 2x2
     (assert-float-equal

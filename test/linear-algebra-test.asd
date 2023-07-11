@@ -13,6 +13,9 @@
   :depends-on ("clunit" "num-utils" "linear-algebra")
   :components
   ((:file "pkgdcl")
+   (:file "asserts")
+   (:file "rational")
+   (:file "floating-point")
    ;; Linear algebra kernel tests
    (:module kernel
     :depends-on ("pkgdcl")
@@ -37,24 +40,24 @@
      (:file "identity-matrix" :depends-on ("suite"))
      (:file "permutation-matrix" :depends-on ("suite"))
      ))
-   ;; Common lisp sequence tests
+      ;; Common lisp sequence tests
    (:module sequence
+    :depends-on ("pkgdcl")
     :depends-on ("linear-algebra-test")
     :components
     ((:file "suite")
      (:file "vector" :depends-on ("suite"))
      (:file "array" :depends-on ("suite"))
      ))
-     ;; Linear algebra tests
-   (
-    :module linear-algebra
+   ;; Linear algebra tests
+   (:module linear-algebra
     :depends-on ("pkgdcl")
     :components
     ((:file "suite")
-     (:file "data-vector" :depends-on "suite")
-     (:file "dense-matrix" :depends-on ("suite" "interface"))
-     (:file "square-matrix" :depends-on ("suite" "interface"))
-     (:file "hermitian-matrix" :depends-on ("suite" "interface"))
-     (:file "symmetric-matrix" :depends-on ("suite" "interface"))
+     (:file "data-vector" :depends-on ("suite"))
+     (:file "dense-matrix" :depends-on ("suite"))
+     (:file "square-matrix" :depends-on ("suite"))
+     (:file "hermitian-matrix" :depends-on ("suite"))
+     (:file "symmetric-matrix" :depends-on ("suite"))
      ))
    ))

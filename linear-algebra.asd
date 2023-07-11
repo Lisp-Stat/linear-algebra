@@ -65,8 +65,9 @@
   :description "Unit tests for LINEAR-ALGEBRA."
   :author "Thomas M. Hermann <thomas.m.hermann@odonata-research.com>"
   :maintainer "Steve Nunez <steve@symbolics.tech>"
-  :maintainer "Brian Eberman <bseberman@gmail.com>"
+  :maintainer "Brian Eberman <brian@tenfactorgrowth.com>"
   :licence     :MS-PL
+  :pathname "test/"
   :depends-on ("linear-algebra-test")
   :serial t
   :perform (test-op (o s)

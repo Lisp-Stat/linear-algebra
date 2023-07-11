@@ -186,10 +186,10 @@
   ;; VREF only works for vectors.
   (let ((list (make-list 1000 :initial-element 10.0))
         (index (random 1000)))
-    (assert-error
-     'error (linear-algebra:vref list index))
-    (assert-error
-     'error (setf (linear-algebra:vref list index) 42.0))))
+    (assert-condition
+     error (linear-algebra:vref list index))
+    (assert-condition
+     error (setf (linear-algebra:vref list index) 42.0))))
 
 (deftest copy-data-vector (data-vector-core-test)
   ;; Column vector
@@ -332,10 +332,10 @@
 (deftest map-data-vector (data-vector-core-test)
   (let ((col-data (linear-algebra:column-vector 1 1 1 1 1))
         (row-data (linear-algebra:row-vector 1 1 1 1 1)))
-    (assert-error
-     'error (linear-algebra:map-vector 'vector #'identity col-data))
-    (assert-error
-     'error
+    (assert-condition
+     error (linear-algebra:map-vector 'vector #'identity col-data))
+    (assert-condition
+     error
      (linear-algebra:map-vector
       'linear-algebra:column-vector #'identity col-data #(2 2 2 2 2)))
     (assert-rational-equal
@@ -385,12 +385,12 @@
 (deftest map-into-data-vector (data-vector-core-test)
   (let ((col-data (linear-algebra:column-vector 1 1 1 1 1))
         (row-data (linear-algebra:row-vector 1 1 1 1 1)))
-    (assert-error
-     'error
+    (assert-condition
+     error
      (linear-algebra:map-into-vector
       #(0 0 0 0 0) #'identity col-data))
-    (assert-error
-     'error
+    (assert-condition
+     error
      (linear-algebra:map-vector
       (linear-algebra:column-vector 0 0 0 0 0) #'identity col-data))
     (assert-rational-equal
@@ -771,10 +771,10 @@
     (assert-float-equal
      #(3.3 5.5 1.1 2.2 4.4)
      (linear-algebra:permute pmat cvec))
-    (assert-error
-     'error (linear-algebra:permute rerr pmat))
-    (assert-error
-     'error (linear-algebra:permute pmat cerr))))
+    (assert-condition
+     error (linear-algebra:permute rerr pmat))
+    (assert-condition
+     error (linear-algebra:permute pmat cerr))))
 
 ;;; Data vector scale
 
@@ -882,13 +882,13 @@
      #(#C(4.4 8.8) #C(13.2 17.6))
      (linear-algebra:add vec1 vec2 :scalar1 2.0 :scalar2 2.0)))
   ;; Errors
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:add
     (linear-algebra:column-vector 1.1 2.2 3.3 4.4)
     (linear-algebra:row-vector 1.1 2.2 3.3 4.4)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:add
     (linear-algebra:row-vector 1.1 2.2 3.3 4.4)
     (linear-algebra:column-vector 1.1 2.2 3.3 4.4))))
@@ -955,13 +955,13 @@
      #(#C(22.0 44.0) #C(66.0 88.0))
      (linear-algebra:nadd vec1 vec2 :scalar1 2.0 :scalar2 2.0)))
   ;; Errors
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:nadd
     (linear-algebra:column-vector 1.1 2.2 3.3 4.4)
     (linear-algebra:row-vector 1.1 2.2 3.3 4.4)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:nadd
     (linear-algebra:row-vector 1.1 2.2 3.3 4.4)
     (linear-algebra:column-vector 1.1 2.2 3.3 4.4))))
@@ -1028,13 +1028,13 @@
      #(#C(0.0 0.0) #C(0.0 0.0))
      (linear-algebra:subtract vec1 vec2 :scalar1 2.0 :scalar2 2.0)))
   ;; Errors
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:subtract
     (linear-algebra:column-vector 1.1 2.2 3.3 4.4)
     (linear-algebra:row-vector 1.1 2.2 3.3 4.4)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:subtract
     (linear-algebra:row-vector 1.1 2.2 3.3 4.4)
     (linear-algebra:column-vector 1.1 2.2 3.3 4.4))))
@@ -1101,13 +1101,13 @@
      #(#C(-13.2 -26.4) #C(-39.6 -52.8))
      (linear-algebra:nsubtract vec1 vec2 :scalar1 2.0 :scalar2 2.0)))
   ;; Errors
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:nsubtract
     (linear-algebra:column-vector 1.1 2.2 3.3 4.4)
     (linear-algebra:row-vector 1.1 2.2 3.3 4.4)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:nsubtract
     (linear-algebra:row-vector 1.1 2.2 3.3 4.4)
     (linear-algebra:column-vector 1.1 2.2 3.3 4.4))))
@@ -1156,23 +1156,23 @@
     (linear-algebra:column-vector
      #C(1.0d0 2.0d0) #C(2.0d0 2.0d0) #C(3.0d0 2.0d0))))
   ;; Errors
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (linear-algebra:row-vector 1 2 3)
     (linear-algebra:column-vector 1 2 3 4)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (linear-algebra:column-vector 1 2 3)
     (linear-algebra:column-vector 1 2 3)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (linear-algebra:row-vector 1 2 3)
     (linear-algebra:row-vector 1 2 3)))
-  (assert-error
-   'error
+  (assert-condition
+   error
    (linear-algebra:product
     (linear-algebra:column-vector 1 2 3)
     (linear-algebra:row-vector 1 2 3))))

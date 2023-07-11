@@ -155,22 +155,22 @@
          (assert-eql (min ,col1 ,col2) v2)
          (assert-eql (max ,row1 ,row2) v3)
          (assert-eql (max ,col1 ,col2) v4))
-      (assert-error
-       'error
+      (assert-condition
+       error
        (linear-algebra:matrix-validated-range ,matrix (1+ ,rows) ,col1))
-      (assert-error
-       'error
+      (assert-condition
+       error
        (linear-algebra:matrix-validated-range ,matrix ,row1 (1+ ,columns)))
-      (assert-error
-       'error
+      (assert-condition
+       error
        (linear-algebra:matrix-validated-range
         ,matrix (1- ,rows) ,col1 1))
-      (assert-error
-       'error
+      (assert-condition
+       error
        (linear-algebra:matrix-validated-range
         ,matrix ,row1 (1- ,columns) ,rows 1))
-      (assert-error
-       'error
+      (assert-condition
+       error
        (linear-algebra:matrix-validated-range
         ,matrix
         (1- ,rows) (1- ,columns) 1 1)))))

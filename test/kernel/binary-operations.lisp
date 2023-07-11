@@ -427,7 +427,6 @@
 ;;; Vector inner product
 
 (deftest binop-inner-product-vector (kernel-binary-op-test)
-  (:tag :kernel :binary-op :inner-product)
   ;; Real vectors
   (assert-rational-equal
    55

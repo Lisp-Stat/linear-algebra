@@ -6,7 +6,7 @@
 
 (in-package :linear-algebra-test)
 
-(defsuie conjugate-gradient-test (linear-algebra-kernel-test))
+(defsuite conjugate-gradient-test (linear-algebra-kernel-test))
 
 (deftest conjugate-gradient-solver (conjugate-gradient-test)
   ;; 2x2 from NumAlgoC

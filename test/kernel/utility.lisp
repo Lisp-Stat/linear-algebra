@@ -101,8 +101,8 @@
   (assert-true
    (linear-algebra-kernel:complex-equal #C(1 2) #C(1 2)))
   ;; Error
-  (assert-fail 'error (linear-algebra-kernel:complex-equal 1.0 1.0))
-  (assert-fail 'error (linear-algebra-kernel:complex-equal 1 1)))
+  (assert-condition error (linear-algebra-kernel:complex-equal 1.0 1.0))
+  (assert-condition error (linear-algebra-kernel:complex-equal 1 1)))
 
 (deftest number-equal (kernel-utility-test)
   ;; float
@@ -131,6 +131,6 @@
   (assert-false
    (linear-algebra-kernel:number-equal #C(1 2) #C(1/2 1/2)))
   ;; error
-  (assert-fail 'error (linear-algebra-kernel:number-equal 1 t))
-  (assert-fail 'error (linear-algebra-kernel:number-equal t 1))
-  (assert-fail 'error (linear-algebra-kernel:number-equal t t)))
+  (assert-condition error (linear-algebra-kernel:number-equal 1 t))
+  (assert-condition error (linear-algebra-kernel:number-equal t 1))
+  (assert-condition error (linear-algebra-kernel:number-equal t t)))
