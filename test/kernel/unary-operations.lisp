@@ -208,7 +208,7 @@
 
 ;;; Norm & supporting functions
 
-(deftest %abs-vector
+(deftest %abs-vector-test (kernel-unary-op-test)
   (assert-rational-equal
    #(6 5 4 3 2 1 0 1 2 3 4 5)
    (linear-algebra-kernel::%abs-vector
