@@ -38,9 +38,7 @@
     (dolist (elm data (values scale sumsq))
       (when (plusp (setq abs-val (abs elm)))
         (if (< scale abs-val)
-            (setq
-             sumsq (1+ (* sumsq (expt (/ scale abs-val) 2)))
-             scale abs-val)
+            (setq sumsq (1+ (* sumsq (expt (/ scale abs-val) 2))) scale abs-val)
             (setq sumsq (+ sumsq (expt (/ elm scale) 2))))))))
 
 (defmethod sumsq ((data vector) &optional (scale 1) (sumsq 0))
@@ -49,12 +47,8 @@
     (dotimes (index (length data) (values scale sumsq))
       (when (plusp (setq abs-val (abs (aref data index))))
         (if (< scale abs-val)
-            (setq
-             sumsq (1+ (* sumsq (expt (/ scale abs-val) 2)))
-             scale abs-val)
-            (setq
-             sumsq
-             (+ sumsq (expt (/ (aref data index) scale) 2))))))))
+            (setq sumsq (1+ (* sumsq (expt (/ scale abs-val) 2))) scale abs-val)
+            (setq sumsq (+ sumsq (expt (/ (aref data index) scale) 2))))))))
 
 (defmethod sumsq ((data array) &optional (scale 1) (sumsq 0))
     "Return the scaling parameter and the sum of the squares of the array."
@@ -65,9 +59,7 @@
       (dotimes (column n-columns)
         (when (plusp (setq abs-val (abs (aref data row column))))
           (if (< scale abs-val)
-              (setq
-               sumsq (1+ (* sumsq (expt (/ scale abs-val) 2)))
-               scale abs-val)
+              (setq sumsq (1+ (* sumsq (expt (/ scale abs-val) 2))) scale abs-val)
               (setq sumsq (+ sumsq (expt (/ abs-val scale) 2)))))))))
 
 (defgeneric sump (vector-or-array p &optional scale sump)
@@ -79,9 +71,7 @@
     (dolist (elm data (values scale sump))
       (when (plusp (setq abs-val (abs elm)))
         (if (< scale abs-val)
-            (setq
-             sump (1+ (* sump (expt (/ scale abs-val) p)))
-             scale abs-val)
+            (setq sump (1+ (* sump (expt (/ scale abs-val) p))) scale abs-val)
             (setq sump (+ sump (expt (/ elm scale) p))))))))
 
 (defmethod sump ((data vector) p &optional (scale 1) (sump 0))
@@ -90,12 +80,8 @@
     (dotimes (index (length data) (values scale sump))
       (when (plusp (setq abs-val (abs (aref data index))))
         (if (< scale abs-val)
-            (setq
-             sump (1+ (* sump (expt (/ scale abs-val) p)))
-             scale abs-val)
-            (setq
-             sump
-             (+ sump (expt (/ (aref data index) scale) p))))))))
+            (setq sump (1+ (* sump (expt (/ scale abs-val) p))) scale abs-val)
+            (setq sump (+ sump (expt (/ (aref data index) scale) p))))))))
 
 (defmethod sump ((data array) p &optional (scale 1) (sump 0))
   "Return the scaling parameter and the sum of the P powers of the matrix."
@@ -107,13 +93,8 @@
       (dotimes (column n-columns)
         (when (plusp (setq abs-val (abs (aref data row column))))
           (if (< scale abs-val)
-              (setq
-               sump (1+ (* sump (expt (/ scale abs-val) p)))
-               scale abs-val)
-              (setq
-               sump
-               (+ sump
-                  (expt (/ (aref data row column) scale) p)))))))))
+              (setq sump (1+ (* sump (expt (/ scale abs-val) p))) scale abs-val)
+              (setq sump (+ sump (expt (/ (aref data row column) scale) p)))))))))
 
 (defun sumsq-row (array row &key (scale 1) (sumsq 0) start end)
   "Return the scaling parameter and the sum of the squares of the array row."
@@ -124,9 +105,7 @@
    for column from start below end
    when (plusp (setq abs-val (abs (aref array row column)))) do
    (if (< scale abs-val)
-       (setq
-        sumsq (1+ (* sumsq (expt (/ scale abs-val) 2)))
-        scale abs-val)
+       (setq sumsq (1+ (* sumsq (expt (/ scale abs-val) 2))) scale abs-val)
        (setq sumsq (+ sumsq (expt (/ abs-val scale) 2))))
    finally (return (values scale sumsq))))
 
@@ -139,9 +118,7 @@
    for row from start below end
    when (plusp (setq abs-val (abs (aref array row column)))) do
    (if (< scale abs-val)
-       (setq
-        sumsq (1+ (* sumsq (expt (/ scale abs-val) 2)))
-        scale abs-val)
+       (setq  sumsq (1+ (* sumsq (expt (/ scale abs-val) 2))) scale abs-val)
        (setq sumsq (+ sumsq (expt (/ abs-val scale) 2))))
    finally (return (values scale sumsq))))
 
@@ -155,15 +132,12 @@
 
 (defun %abs-vector (vector)
   "Return a vector containing absolute value of each element."
-  (let ((result
-         (make-array
-          (length vector)
-          :element-type (array-element-type vector))))
+  (let ((result (make-array (length vector) :element-type (array-element-type vector))))
     (dotimes (index (length vector) result)
       (setf (aref result index) (abs (aref vector index))))))
 
 (defmethod norm-vector ((data vector) (measure (eql 1)))
-  "Return the Taxicab norm of the list."
+  "Return the Taxicab norm of the vector."
   (loop for element across data sum (abs element)))
 
 (defmethod norm-vector ((data vector) (measure (eql 2)))
@@ -174,8 +148,7 @@
 
 (defmethod norm-vector ((data vector) (measure integer))
   "Return the p-norm of the vector."
-  (multiple-value-bind (scale sump)
-      (sump (%abs-vector data) measure)
+  (multiple-value-bind (scale sump) (sump (%abs-vector data) measure)
     (* scale (expt sump (/ measure)))))
 
 (defmethod norm-vector ((data vector) (measure (eql :infinity)))
@@ -189,10 +162,10 @@
         (norm 0)
         (sum 0))
     (dotimes (column n-columns norm)
-      (setq sum 0)
+      (setf sum 0)
       (dotimes (row m-rows)
-        (setq sum (+ sum (abs (aref data row column)))))
-      (setq norm (max sum norm)))))
+        (setf sum (+ sum (abs (aref data row column)))))
+      (setf norm (max sum norm)))))
 
 (defmethod norm-array ((data array) (measure (eql :max)))
   "Return the max norm of the array."
@@ -201,7 +174,7 @@
         (norm 0))
     (dotimes (row m-rows norm)
       (dotimes (column n-columns)
-        (setq norm (max norm (abs (aref data row column))))))))
+        (setf norm (max norm (abs (aref data row column))))))))
 
 (defmethod norm-array ((data array) (measure (eql :frobenius)))
   "Return the Frobenius norm of the array."
@@ -216,7 +189,7 @@
         (norm 0)
         (sum 0))
     (dotimes (row m-rows norm)
-      (setq sum 0)
+      (setf sum 0)
       (dotimes (column n-columns)
-        (setq sum (+ sum (abs (aref data row column)))))
-      (setq norm (max sum norm)))))
+        (setf sum (+ sum (abs (aref data row column)))))
+      (setf norm (max sum norm)))))

@@ -7,18 +7,14 @@
 
 (defun givens-rotation (f g)
   "Return c,s,r defined from the Givens rotation."
-  (cond
-    ((zerop g)
-     (values 1 0 f))
-    ((zerop f)
-     (values 0 (signum (conjugate g)) (abs g)))
-    (t
-     (let ((abs-f (abs f))
-           (sqrtfg (sumsq2 f g)))
-       (values
-        (/ abs-f sqrtfg)
-        (/ (* (signum f) (conjugate g)) sqrtfg)
-        (* (signum f) sqrtfg))))))
+  (cond ((zerop g) (values 1 0 f))
+	((zerop f) (values 0 (signum (conjugate g)) (abs g)))
+	(t (let ((abs-f (abs f))
+		 (sqrtfg (sumsq2 f g)))
+	     (values
+              (/ abs-f sqrtfg)
+              (/ (* (signum f) (conjugate g)) sqrtfg)
+              (* (signum f) sqrtfg))))))
 
 (defun jacobi-rotation (x y z)
   "Return a, b, cos(theta) and sin(theta) terms from the Jacobi rotation."
@@ -44,10 +40,8 @@
 
 (defun householder-reflection (alpha vector)
   "Return Beta, Tau and the Householder vector."
-  (let* ((beta
-          (- (float-sign
-              (realpart alpha)
-              (sumsq2 alpha (norm-vector vector 2)))))
+  (let* ((beta (- (float-sign (realpart alpha)
+			      (sumsq2 alpha (norm-vector vector 2)))))
          (tau  (- 1 (/ alpha beta))))
     (values
      beta tau

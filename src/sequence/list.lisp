@@ -5,20 +5,20 @@
 
 ;;; Fundamental List Operations
 
-(in-package :linear-algebra)
+(in-package #:linear-algebra)
 
 (defmethod %norm ((data list) (measure (eql 1)))
   "Return the Taxicab norm of the list."
   (loop for element in data sum (abs element)))
 
 (defmethod %norm ((data list) (measure (eql 2)))
-  "Return the Euclidean norm of the vector."
+  "Return the Euclidean norm of the list."
   (multiple-value-bind (scale sumsq)
       (sumsq (loop for val in data collect (abs val)))
     (* scale (sqrt sumsq))))
 
 (defmethod %norm ((data list) (measure integer))
-  "Return the p-norm of the vector."
+  "Return the p-norm of the list."
   (multiple-value-bind (scale sump)
       (sump (loop for val in data collect (abs val)) measure)
     (* scale (expt sump (/ measure)))))
@@ -47,9 +47,7 @@
        and row = 0 then (1+ row)
        do (setf (nth column permuted) (nth row data))
        finally (return permuted))
-      (error
-       "List(~D) and permutation~A matrix sizes are incompatible."
-       (length data) (matrix-dimensions matrix))))
+      (error "List(~D) and permutation~A matrix sizes are incompatible." (length data) (matrix-dimensions matrix))))
 
 (defmethod permute ((matrix permutation-matrix) (data list))
   "Return the permutation of the list."
@@ -60,9 +58,7 @@
        and row = 0 then (1+ row)
        do (setf (nth row permuted) (nth column data))
        finally (return permuted))
-      (error
-       "Permutation matrix~A and list(~D) sizes are incompatible."
-       (matrix-dimensions matrix) (length data))))
+      (error "Permutation matrix~A and list(~D) sizes are incompatible." (matrix-dimensions matrix) (length data))))
 
 (defmethod scale ((scalar number) (data list))
   "Return the list scaled by scalar."
@@ -80,8 +76,7 @@
        for item1 in list1
        and item2 in list2
        collect (funcall op item1 item2))
-      (error "LIST1(~D) and LIST2(~D) are not of equal length."
-             (length list1) (length list2))))
+      (error "LIST1(~D) and LIST2(~D) are not of equal length." (length list1) (length list2))))
 
 (defmethod nadd ((list1 list) (list2 list) &key scalar1 scalar2)
   "Return the addition of scalar2*list2 to scalar1*list1."
@@ -89,8 +84,7 @@
       (map-into
        list1 (scaled-binary-op #'+ scalar1 scalar2)
        list1 list2)
-      (error "LIST1(~D) and LIST2(~D) are not of equal length."
-             (length list1) (length list2))))
+      (error "LIST1(~D) and LIST2(~D) are not of equal length." (length list1) (length list2))))
 
 (defmethod subtract ((list1 list) (list2 list) &key scalar1 scalar2)
   "Return the subraction of scalar2*list2 from scalar1*list1."
@@ -109,8 +103,7 @@
       (map-into
        list1 (scaled-binary-op #'- scalar1 scalar2)
        list1 list2)
-      (error "LIST1(~D) and LIST2(~D) are not of equal length."
-             (length list1) (length list2))))
+      (error "LIST1(~D) and LIST2(~D) are not of equal length." (length list1) (length list2))))
 
 (defmethod product
     ((list1 list) (list2 list) &optional scalar)
@@ -122,5 +115,4 @@
        sum (* element1 element2) into result
        finally
        (return (if scalar (* scalar result) result)))
-      (error "LIST1(~D) and LIST2(~D) are not of equal length."
-             (length list1) (length list2))))
+      (error "LIST1(~D) and LIST2(~D) are not of equal length." (length list1) (length list2))))

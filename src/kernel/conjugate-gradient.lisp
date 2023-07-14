@@ -28,46 +28,44 @@
 
 (defun %initialize-cg-residual (array vector solution)
   "Return the initial residual vector for the conjugate gradient."
-  (subtract-vector
-   vector (product-array-vector array solution) nil nil))
+  (subtract-vector vector (product-array-vector array solution) nil nil))
 
 (defun %negative-residual (residual)
   "Return the negative of the residual."
   (loop
-   with size = (length residual)
-   with result = (zero-vector size (array-element-type residual))
-   for index below size
-   do (setf (aref result index) (- (aref residual index)))
-   finally (return result)))
+    with size = (length residual)
+    with result = (zero-vector size (array-element-type residual))
+    for index below size
+    do (setf (aref result index) (- (aref residual index)))
+    finally (return result)))
 
 (defun conjugate-gradient-solver (array vector &optional epsilon (limit 25))
   "Linear system solver using the conjugate gradient method."
   (loop
-   with epsilon = (or epsilon (%default-cg-epsilon array vector))
-   with solution = (%initialize-cg-solution array)
-   with residual = (%initialize-cg-residual array vector solution)
-   with -residual = (%negative-residual residual)
-   for iteration below limit
-   ;; Vector Adk
-   as adk = (product-array-vector array residual)
-   then (product-array-vector array residual nil adk)
-   ;; Scalar denominator
-   as denominator = (inner-product-vector residual adk nil)
-   ;; Alpha
-   as alpha =
-   (/ (inner-product-vector residual -residual -1) denominator)
-   ;; Update
-   do
-   (setf
-    solution (nadd-vector solution residual nil alpha)
-    -residual (nadd-vector -residual adk nil alpha))
-   ;; Test convergence
-   until (< (norm-vector -residual :infinity) epsilon) do
-   (setf
-    residual
-    (nsubtract-vector
-     residual -residual
-     (/ (inner-product-vector -residual adk nil) denominator)
-     nil))
-   ;; Return the solution
-   finally (return (values solution iteration))))
+    with epsilon = (or epsilon (%default-cg-epsilon array vector))
+    with solution = (%initialize-cg-solution array)
+    with residual = (%initialize-cg-residual array vector solution)
+    with -residual = (%negative-residual residual)
+    for iteration below limit
+    ;; Vector Adk
+    as adk = (product-array-vector array residual)
+      then (product-array-vector array residual nil adk)
+    ;; Scalar denominator
+    as denominator = (inner-product-vector residual adk nil)
+    ;; Alpha
+    as alpha =
+	     (/ (inner-product-vector residual -residual -1) denominator)
+	     ;; Update
+    do (setf
+	solution (nadd-vector solution residual nil alpha)
+	-residual (nadd-vector -residual adk nil alpha))
+       ;; Test convergence
+    until (< (norm-vector -residual :infinity) epsilon)
+    do (setf
+	residual
+	(nsubtract-vector
+	 residual -residual
+	 (/ (inner-product-vector -residual adk nil) denominator)
+	 nil))
+       ;; Return the solution
+    finally (return (values solution iteration))))

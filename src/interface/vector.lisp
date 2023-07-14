@@ -50,8 +50,7 @@
 
 ;;; Vector iteration operations
 
-(defgeneric map-vector
-    (result-type function first-vector &rest more-vectors)
+(defgeneric map-vector (result-type function first-vector &rest more-vectors)
   (:documentation "Calls function on successive sets of vector objects."))
 
 (defgeneric map-into-vector (result-vector function &rest vectors)

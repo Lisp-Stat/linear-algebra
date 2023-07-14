@@ -9,48 +9,39 @@
 
 ;;; Interface
 
-(defgeneric compatible-dimensions-p
-    (operation vector-or-matrix-1 vector-or-matrix-2)
-  (:documentation
-   "Return true if the vector and matrix dimensions are compatible for the operation."))
+(defgeneric compatible-dimensions-p (operation vector-or-matrix-1 vector-or-matrix-2)
+  (:documentation "Return true if the vector and matrix dimensions are compatible for the operation."))
 
 (defgeneric scaled-binary-op (op scalar1 scalar2)
   (:documentation "Compile and return a scaled binary operation."))
 
 ;;; Scaled binary operations
 
-(defmethod scaled-binary-op
-    (op (scalar1 (eql nil)) (scalar2 (eql nil)))
+(defmethod scaled-binary-op (op (scalar1 (eql nil)) (scalar2 (eql nil)))
   "Return the operation."
   op)
 
-(defmethod scaled-binary-op
-    ((op (eql #'+)) (scalar1 number) (scalar2 (eql nil)))
+(defmethod scaled-binary-op ((op (eql #'+)) (scalar1 number) (scalar2 (eql nil)))
   "Return the scaled operation."
   (lambda (n1 n2) (+ (* scalar1 n1) n2)))
 
-(defmethod scaled-binary-op
-    ((op (eql #'-)) (scalar1 number) (scalar2 (eql nil)))
+(defmethod scaled-binary-op ((op (eql #'-)) (scalar1 number) (scalar2 (eql nil)))
   "Return the scaled operation."
   (lambda (n1 n2) (- (* scalar1 n1) n2)))
 
-(defmethod scaled-binary-op
-    ((op (eql #'+)) (scalar1 (eql nil)) (scalar2 number))
+(defmethod scaled-binary-op ((op (eql #'+)) (scalar1 (eql nil)) (scalar2 number))
   "Return the scaled operation."
   (lambda (n1 n2) (+ n1 (* scalar2 n2))))
 
-(defmethod scaled-binary-op
-    ((op (eql #'-)) (scalar1 (eql nil)) (scalar2 number))
+(defmethod scaled-binary-op ((op (eql #'-)) (scalar1 (eql nil)) (scalar2 number))
   "Return the scaled operation."
   (lambda (n1 n2) (- n1 (* scalar2 n2))))
 
-(defmethod scaled-binary-op
-    ((op (eql #'+)) (scalar1 number) (scalar2 number))
+(defmethod scaled-binary-op ((op (eql #'+)) (scalar1 number) (scalar2 number))
   "Return the scaled operation."
   (lambda (n1 n2) (+ (* scalar1 n1) (* scalar2 n2))))
 
-(defmethod scaled-binary-op
-    ((op (eql #'-)) (scalar1 number) (scalar2 number))
+(defmethod scaled-binary-op ((op (eql #'-)) (scalar1 number) (scalar2 number))
   "Return the scaled operation."
   (lambda (n1 n2) (- (* scalar1 n1) (* scalar2 n2))))
 

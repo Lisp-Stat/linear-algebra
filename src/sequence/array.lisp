@@ -5,14 +5,13 @@
 
 ;;; Fundamental Array Operations
 
-(in-package :linear-algebra)
+(in-package #:linear-algebra)
 
 (defmethod norm ((data array) &optional (measure 1))
   "Return the norm of the array."
   (if (= 2 (array-rank data))
       (norm-array data measure)
-      (error "Array rank(~D) must be 2."
-             (array-rank data))))
+      (error "Array rank(~D) must be 2." (array-rank data))))
 
 (defmethod transpose ((data array))
   "Return the transpose of the array."
@@ -35,8 +34,7 @@
           (do ((column (1+ row) (1+ column)))
               ((>= column n-columns))
             (rotatef (aref data row column) (aref data column row))))
-        (error "Rows(~D) and columns(~D) unequal."
-               m-rows n-columns))))
+        (error "Rows(~D) and columns(~D) unequal." m-rows n-columns))))
 
 (defmethod permute ((data array) (matrix permutation-matrix))
   (if (every #'= (array-dimensions data) (matrix-dimensions matrix))
