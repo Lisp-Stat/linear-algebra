@@ -5,4 +5,5 @@
 ;;; SPDX-License-identifier: MS-PL
 
 (in-package :linear-algebra-test)
-(defsuite linear-algebra-kernel-test (linear-algebra-test))
+
+(defsuite kernel (linear-algebra))

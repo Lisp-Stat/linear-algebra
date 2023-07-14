@@ -4,8 +4,8 @@
 ;;; SPDX-License-identifier: MS-PL
 
 (uiop:define-package #:linear-algebra
-  (:use #:cl #:floating-point #:linear-algebra-kernel)
-
+  (:use #:cl)
+  (:use-reexport #:linear-algebra-kernel)
   ;; Fundamental operations
   (:export #:norm
            #:transpose #:ntranspose

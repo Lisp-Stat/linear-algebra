@@ -10,7 +10,7 @@
 ;;;            Algorithms with C", Springer, 1996
 ;;;            ISBN: 3-540-60530-4
 
-(in-package :linear-algebra-kernel)
+(in-package #:linear-algebra-kernel)
 
 ;;; Algorithm 4.27, Step 1, pg. 80
 ;;; The standard Cholesky decomposition
@@ -236,8 +236,7 @@ decomposition."
    finally (return array^-1)))
 
 (defun hermitian-cholesky-invert (array)
-  "Invert a positive definite matrices using the root-free Cholesky
-decomposition."
+  "Invert a positive definite matrices using the root-free Cholesky decomposition."
   (loop
    with size = (array-dimension array 0)
    with element-type = (specific-array-element-type array)

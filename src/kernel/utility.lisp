@@ -3,9 +3,12 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra-kernel)
+(in-package #:linear-algebra-kernel)
 
 ;;; Initialization
+
+;;; TODO Remove or figure out what to do with epsilon in the functions that use it.
+;; (defparameter *epsilon* 1d-5) ;same as *num=-tolerance*
 
 (defun zero-vector (size &optional element-type)
   "Return a vector of zeros."
@@ -28,8 +31,7 @@
 ;;; Copy each element of the array
 
 (defgeneric copy-array (array)
-  (:documentation
-   "Return an element-wise copy of the original array."))
+  (:documentation "Return an element-wise copy of the original array."))
 
 (defmethod copy-array ((original vector))
   "Return an element-wise copy of the original vector."
@@ -96,6 +98,7 @@
 ;;; Equality predicates
 
 ;;; (COMPLEX-EQUAL number1 number2) => true or false
+#+nil
 (defun complex-equal (complex1 complex2 &optional (epsilon *epsilon*))
   "Return true if both numbers are complex and equal."
   (cond
@@ -110,9 +113,9 @@
     (t (error "Arguments are not complex."))))
 
 ;;; (NUMBER-EQUAL number1 number2) => true or false
+#+nil
 (defun number-equal (number1 number2 &optional (epsilon *epsilon*))
-  "Return true if the numbers are equal using the appropriate
-comparison."
+  "Return true if the numbers are equal using the appropriate comparison."
   (cond
     ((or (floatp number1) (floatp number2))
      (float-equal number1 number2 epsilon))

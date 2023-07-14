@@ -4,7 +4,7 @@
 ;;; SPDX-License-identifier: MS-PL
 
 (defsystem "linear-algebra"
-  :version "0.1.1"
+  :version "0.2.0"
   :license :MS-PL
   :author "Thomas M. Hermann <thomas.m.hermann@odonata-research.com>"
   :maintainer "Steve Nunez <steve@symbolics.tech>"
@@ -18,7 +18,7 @@
   :bug-tracker "https://github.com/Lisp-Stat/linear-algebra/issues"
 
   :pathname "src/"
-  :depends-on ("closer-mop" "floating-point")
+  :depends-on ("closer-mop")
   :components
   ((:file "pkgdcl" :depends-on ("kernel"))
    ;; Linear algebra kernel functions
@@ -51,13 +51,13 @@
     :components
     ((:file "list")
      (:file "vector")
-     (:file "array")))
+     (:file "array"))))
    ;; Linear algebra classes and operations
-   (:file "data-vector" :depends-on ("interface"))
-   (:file "dense-matrix" :depends-on ("data-vector"))
-   (:file "square-matrix" :depends-on ("dense-matrix"))
-   (:file "hermitian-matrix" :depends-on ("square-matrix"))
-   (:file "symmetric-matrix" :depends-on ("square-matrix")))
+   ;; (:file "data-vector" :depends-on ("interface"))
+   ;; (:file "dense-matrix" :depends-on ("data-vector"))
+   ;; (:file "square-matrix" :depends-on ("dense-matrix"))
+   ;; (:file "hermitian-matrix" :depends-on ("square-matrix"))
+   ;; (:file "symmetric-matrix" :depends-on ("square-matrix")))
   :in-order-to ((test-op (test-op "linear-algebra/tests"))))
 
 (defsystem "linear-algebra/tests"
@@ -66,18 +66,13 @@
   :author "Thomas M. Hermann <thomas.m.hermann@odonata-research.com>"
   :maintainer "Steve Nunez <steve@symbolics.tech>"
   :maintainer "Brian Eberman <brian@tenfactorgrowth.com>"
-  :licence     :MS-PL
+  :licence :MS-PL
   :pathname "test/"
   :depends-on ("linear-algebra-test")
   :serial t
   :perform (test-op (o s)
-		    (symbol-call :lisp-unit :run-tests :all :linear-algebra-test)))
-
-
-;; Is this a misuse of *FEATURES*?
-#+ignore
-(defmethod perform :after
-  ((operation load-op) (system (eql (find-system :linear-algebra))))
-  "Update *FEATURES* if the system loads successfully."
-  (pushnew :linear-algebra common-lisp:*features*)
-  (pushnew :linear-algebra common-lisp:*features*))
+		    (let ((*print-pretty* t)) ;work around clunit issue #9
+		      (symbol-call :clunit :run-suite
+				   (find-symbol* :linear-algebra
+						 :linear-algebra-test)
+					   :use-debugger nil))))

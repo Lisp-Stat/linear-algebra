@@ -3,7 +3,7 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra)
+(in-package #:linear-algebra)
 
 ;;; Data vector classes
 
@@ -12,8 +12,7 @@
     :type (array * (*))
     :initarg :contents
     :accessor contents))
-  (:documentation
-   "A data vector."))
+  (:documentation "A data vector."))
 
 (defclass row-vector (data-vector)
   ()
@@ -22,8 +21,7 @@
 
 (defclass column-vector (data-vector)
   ()
-  (:documentation
-   "A column vector."))
+  (:documentation "A column vector."))
 
 (defmethod initialize-instance :after
   ((self data-vector) &rest initargs
@@ -41,9 +39,7 @@
     (initial-contents
      (remf initargs :initial-element)
      (apply #'make-array size initargs))
-    (t (make-array
-        size :element-type element-type
-        :initial-element (coerce 0 element-type))))))
+    (t (make-array size :element-type element-type :initial-element (coerce 0 element-type))))))
 
 ;;; Data vector interface operations
 
@@ -90,8 +86,7 @@
 (defmethod copy-vector ((vector data-vector))
   "Return a copy of the vector."
   (make-instance
-   (class-of vector)
-   :contents (copy-array (contents vector))))
+   (class-of vector) :contents (copy-array (contents vector))))
 
 (defmethod subvector ((vector data-vector) start &optional end)
   "Return a new data vector that is a subset of vector."

@@ -3,12 +3,11 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra)
+(in-package #:linear-algebra)
 
 (defclass square-matrix (dense-matrix)
   ()
-  (:documentation
-   "Square matrix object."))
+  (:documentation "Square matrix object."))
 
 ;;; Square matrix interface operations
 

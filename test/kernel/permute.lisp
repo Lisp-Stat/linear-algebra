@@ -4,55 +4,38 @@
 ;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra-test)
+(in-package #:linear-algebra-test)
 
-(defsuite kernel-permute-test (linear-algebra-kernel-test))
+(defsuite permute (kernel))
 
-;;; Right permutation
+(deftest right-permute (permute)
 
-(deftest right-permute (kernel-permute-test)
   ;; Vector
   (loop
    for (permutation right-permutation nil nil nil)
    in (validated-permutations)
-   do
-   (assert-float-equal
-    right-permutation
-    (linear-algebra-kernel:right-permute
-     (vector-to-permute) permutation)
-    permutation))
+   do (assert-true (num= right-permutation (linear-algebra-kernel:right-permute (vector-to-permute) permutation))))
+
   ;; Array
   (loop
    for (permutation nil nil right-permutation nil)
    in (validated-permutations)
-   do
-   (assert-float-equal
-    right-permutation
-    (linear-algebra-kernel:right-permute
-     (array-to-permute) permutation)
-    permutation)))
+   do (assert-true (num= right-permutation (linear-algebra-kernel:right-permute (array-to-permute) permutation)))))
 
-(deftest left-permute (kernel-permute-test)
+
+(deftest left-permute (permute)
+
   ;; Vector
   (loop
    for (permutation nil left-permutation nil nil)
    in (validated-permutations)
-   do
-   (assert-float-equal
-    left-permutation
-    (linear-algebra-kernel:left-permute
-     permutation (vector-to-permute))
-    permutation))
+   do (assert-true (num= left-permutation (linear-algebra-kernel:left-permute permutation (vector-to-permute)))))
+
   ;; Array
   (loop
    for (permutation nil nil nil left-permutation)
    in (validated-permutations)
-   do
-   (assert-float-equal
-    left-permutation
-    (linear-algebra-kernel:left-permute
-     permutation (array-to-permute))
-    permutation)))
+   do (assert-true (num= left-permutation (linear-algebra-kernel:left-permute permutation (array-to-permute))))))
 
 #| Validated permutations
 

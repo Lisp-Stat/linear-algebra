@@ -3,7 +3,7 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra-kernel)
+(in-package #:linear-algebra-kernel)
 
 (defun givens-rotation (f g)
   "Return c,s,r defined from the Givens rotation."

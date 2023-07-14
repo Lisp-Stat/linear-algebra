@@ -10,7 +10,7 @@
 ;;;            Algorithms with C", Springer, 1996
 ;;;            ISBN: 3-540-60530-4
 
-(in-package :linear-algebra-kernel)
+(in-package #:linear-algebra-kernel)
 
 ;;; Algorithm 4.31, pg 84
 ;;; Conjugate gradient method
@@ -36,12 +36,11 @@
   (loop
    with size = (length residual)
    with result = (zero-vector size (array-element-type residual))
-   for index below size do
-   (setf (aref result index) (- (aref residual index)))
+   for index below size
+   do (setf (aref result index) (- (aref residual index)))
    finally (return result)))
 
-(defun conjugate-gradient-solver
-       (array vector &optional epsilon (limit 25))
+(defun conjugate-gradient-solver (array vector &optional epsilon (limit 25))
   "Linear system solver using the conjugate gradient method."
   (loop
    with epsilon = (or epsilon (%default-cg-epsilon array vector))

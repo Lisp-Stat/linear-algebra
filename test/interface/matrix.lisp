@@ -4,17 +4,15 @@
 ;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra-test)
+(in-package #:linear-algebra-test)
 
-(defsuite matrix-interface-test (linear-algebra-interface-test))
+(defsuite interface (matrix))
 
 
 ;;; Matrix object predicate
 
-(deftest matrixp (matrix-interface-test)
-  (assert-true
-   (linear-algebra:matrixp
-    (make-instance 'linear-algebra:matrix-object)))
+(deftest matrixp (interface)
+  (assert-true (linear-algebra:matrixp (make-instance 'linear-algebra:matrix-object)))
   (assert-false (linear-algebra:matrixp t)))
 
 ;;; Matrix bounds

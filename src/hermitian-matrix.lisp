@@ -3,12 +3,11 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra)
+(in-package #:linear-algebra)
 
 (defclass hermitian-matrix (square-matrix)
   ()
-  (:documentation
-   "Hermitian matrix object."))
+  (:documentation "Hermitian matrix object."))
 
 ;;; Hermitian matrix interface operations
 

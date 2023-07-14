@@ -3,15 +3,14 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra)
+(in-package #:linear-algebra)
 
 (defclass dense-matrix (matrix-object)
   ((contents
     :type     (array * (* *))
     :initarg  :contents
     :accessor contents))
-  (:documentation
-   "Dense matrix object."))
+  (:documentation "Dense matrix object."))
 
 (defmethod initialize-instance :after
   ((self dense-matrix) &rest initargs

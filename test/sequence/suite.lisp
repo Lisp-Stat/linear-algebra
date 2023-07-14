@@ -4,7 +4,7 @@
 ;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra-test)
+(in-package #:linear-algebra-test)
 
-(defsuite linear-algebra-sequence-test (linear-algebra-test))
+(defsuite sequence (linear-algebra))
 

@@ -5,7 +5,7 @@
 
 ;;; Linear Algebra Permutation Kernel
 
-(in-package :linear-algebra-kernel)
+(in-package #:linear-algebra-kernel)
 
 ;;; Right permutation
 

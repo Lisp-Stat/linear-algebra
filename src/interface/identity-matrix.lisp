@@ -3,7 +3,7 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra)
+(in-package #:linear-algebra)
 
 (defclass identity-matrix (matrix-object)
   ((size
@@ -27,6 +27,7 @@
     ((self identity-matrix) &rest initargs
      &key dimensions element-type initial-element initial-contents)
   "Initialize the identity matrix."
+  (declare (ignore initargs))
   (cond
    ((slot-boundp self 'contents))
    ((or initial-element initial-contents)
