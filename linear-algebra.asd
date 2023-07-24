@@ -18,7 +18,7 @@
   :bug-tracker "https://github.com/Lisp-Stat/linear-algebra/issues"
 
   :pathname "src/"
-  :depends-on ("closer-mop")
+  :depends-on ("closer-mop" "num-utils")
   :components
   ((:file "pkgdcl" :depends-on ("kernel"))
    ;; Linear algebra kernel functions
@@ -45,6 +45,14 @@
      (:file "matrix" :depends-on ("fundamental-ops"))
      (:file "identity-matrix" :depends-on ("matrix"))
      (:file "permutation-matrix" :depends-on ("matrix"))))
+   
+   ;; Linear algebra classes and operations
+    (:file "data-vector" :depends-on ("interface"))
+    (:file "dense-matrix" :depends-on ("data-vector"))
+    (:file "square-matrix" :depends-on ("dense-matrix"))
+    (:file "hermitian-matrix" :depends-on ("square-matrix"))
+    (:file "symmetric-matrix" :depends-on ("square-matrix"))
+
    ;; Common Lisp sequences
    (:module sequence
     :depends-on ("interface")
@@ -52,12 +60,6 @@
     ((:file "list")
      (:file "vector")
      (:file "array"))))
-   ;; Linear algebra classes and operations
-   ;; (:file "data-vector" :depends-on ("interface"))
-   ;; (:file "dense-matrix" :depends-on ("data-vector"))
-   ;; (:file "square-matrix" :depends-on ("dense-matrix"))
-   ;; (:file "hermitian-matrix" :depends-on ("square-matrix"))
-   ;; (:file "symmetric-matrix" :depends-on ("square-matrix")))
   :in-order-to ((test-op (test-op "linear-algebra/tests"))))
 
 (defsystem "linear-algebra/tests"

@@ -5,7 +5,8 @@
 
 (uiop:define-package #:linear-algebra-kernel
   (:use #:cl)
-  (:import-from #:num-utils #:num=)
+  (:import-from #:num-utils #:num=
+                *num=-tolerance*)
   ;; Utility functions
   (:export #:copy-array
            #:common-class-of

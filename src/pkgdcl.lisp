@@ -6,6 +6,9 @@
 (uiop:define-package #:linear-algebra
   (:use #:cl)
   (:use-reexport #:linear-algebra-kernel)
+  (:import-from #:num-utils
+                #:num=
+                *num=-tolerance*)
   ;; Fundamental operations
   (:export #:norm
            #:transpose #:ntranspose

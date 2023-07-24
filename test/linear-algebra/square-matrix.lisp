@@ -6,9 +6,9 @@
 
 (in-package :linear-algebra-test)
 
-(defsuite square-matrix-core-test (linear-algebra-core-test))
+(defsuite square-matrix (core))
 
-(deftest make-square-matrix (square-matrix-core-test)
+(deftest make-square-matrix (square-matrix)
   ;; A default square matrix
   (let ((matrix
          (linear-algebra:make-matrix
@@ -16,7 +16,7 @@
           'linear-algebra:square-matrix)))
     (assert-true (linear-algebra:matrixp matrix))
     (assert-true (typep matrix 'linear-algebra:square-matrix))
-    (assert-rational-equal
+    (assert-num=
      (make-array '(10 10) :initial-element 0)
      matrix))
   ;; Specify the square matrix element type
@@ -32,7 +32,7 @@
       (linear-algebra::contents matrix))
      (array-element-type
       (make-array '(10 10) :element-type 'single-float)))
-    (assert-float-equal
+    (assert-num=
      (make-array '(10 10) :initial-element 0.0
                  :element-type 'single-float)
      matrix))
@@ -44,7 +44,7 @@
           :initial-element 1.0)))
     (assert-true (linear-algebra:matrixp matrix))
     (assert-true (typep matrix 'linear-algebra:square-matrix))
-    (assert-float-equal
+    (assert-num=
      (make-array '(10 10) :initial-element 1.0)
      matrix))
   ;; Specify the square matrix contents - Nested list
@@ -60,7 +60,7 @@
            :initial-contents data)))
     (assert-true (linear-algebra:matrixp matrix))
     (assert-true (typep matrix 'linear-algebra:square-matrix))
-    (assert-float-equal
+    (assert-num=
      (make-array '(4 4) :initial-contents data)
      matrix))
   ;; Specify the square matrix contents - Nested vector
@@ -76,7 +76,7 @@
            :initial-contents data)))
     (assert-true (linear-algebra:matrixp matrix))
     (assert-true (typep matrix 'linear-algebra:square-matrix))
-    (assert-float-equal
+    (assert-num=
      (make-array '(4 4) :initial-contents data)
      matrix))
   ;; Specify the square matrix contents - 2D array
@@ -94,7 +94,7 @@
            :initial-contents data)))
     (assert-true (linear-algebra:matrixp matrix))
     (assert-true (typep matrix 'linear-algebra:square-matrix))
-    (assert-float-equal data matrix))
+    (assert-num= data matrix))
   ;; Erroneous 2D array input data
   (assert-condition
    error
@@ -138,7 +138,7 @@
 
 ;;; Test the square matrix predicate
 
-(deftest square-matrix-predicate (square-matrix-core-test)
+(deftest square-matrix-predicate (square-matrix)
   (assert-true
    (linear-algebra:square-matrix-p
     (linear-algebra:make-matrix
@@ -148,32 +148,32 @@
 
 ;;; Test the square matrix bounds
 
-(deftest square-matrix-in-bounds-p (square-matrix-core-test)
+(deftest square-matrix-in-bounds-p (square-matrix)
   (test-matrix-in-bounds-p 'linear-algebra:square-matrix))
 
 ;;; Test the square matrix element type
 
-(deftest square-matrix-element-type (square-matrix-core-test)
+(deftest square-matrix-element-type (square-matrix)
   (test-matrix-element-type 'linear-algebra:square-matrix))
 
 ;;; Test the square matrix dimensions
 
-(deftest square-matrix-dimensions (square-matrix-core-test)
+(deftest square-matrix-dimensions (square-matrix)
   (test-matrix-dimensions 'linear-algebra:square-matrix 9 9))
 
 ;;; Test the square matrix row dimension
 
-(deftest square-matrix-row-dimension (square-matrix-core-test)
+(deftest square-matrix-row-dimension (square-matrix)
   (test-matrix-row-dimension 'linear-algebra:square-matrix 9 9))
 
 ;;; Test the square matrix column dimension
 
-(deftest square-matrix-column-dimension (square-matrix-core-test)
+(deftest square-matrix-column-dimension (square-matrix)
   (test-matrix-column-dimension 'linear-algebra:square-matrix 9 9))
 
 ;;; Reference square matrix elements
 
-(deftest square-matrix-mref (square-matrix-core-test)
+(deftest square-matrix-mref (square-matrix)
   (let* ((initial-contents
           '((1.1 1.2 1.3 1.4 1.5)
             (2.1 2.2 2.3 2.4 2.5)
@@ -196,24 +196,24 @@
            'linear-algebra:square-matrix
            :initial-contents
            initial-contents)))
-    (assert-float-equal
+    (assert-num=
      (aref data 0 0)
      (linear-algebra:mref matrix 0 0))
-    (assert-float-equal
+    (assert-num=
      (aref data 0 cend)
      (linear-algebra:mref matrix 0 cend))
-    (assert-float-equal
+    (assert-num=
      (aref data rend 0)
      (linear-algebra:mref matrix rend 0))
-    (assert-float-equal
+    (assert-num=
      (aref data rend cend)
      (linear-algebra:mref matrix rend cend))
-    (assert-float-equal
+    (assert-num=
      (aref data rowi coli)
      (linear-algebra:mref matrix rowi coli))))
 
 ;;; Set square matrix elements
-(deftest square-matrix-setf-mref (square-matrix-core-test)
+(deftest square-matrix-setf-mref (square-matrix)
   (let* ((rows 5) (columns 5)
          (rend (1- rows)) (cend (1- columns))
          (rowi (random-interior-index rows))
@@ -235,19 +235,19 @@
       (setf (linear-algebra:mref matrix rend 0) val3)
       (setf (linear-algebra:mref matrix rend cend) val4)
       (setf (linear-algebra:mref matrix rowi coli) val5)
-      (assert-float-equal
+      (assert-num=
        val1 (linear-algebra:mref matrix 0 0))
-      (assert-float-equal
+      (assert-num=
        val2 (linear-algebra:mref matrix 0 cend))
-      (assert-float-equal
+      (assert-num=
        val3 (linear-algebra:mref matrix rend 0))
-      (assert-float-equal
+      (assert-num=
        val4 (linear-algebra:mref matrix rend cend))
-      (assert-float-equal
+      (assert-num=
        val5 (linear-algebra:mref matrix rowi coli)))))
 
 ;;; Copy the square matrix
-(deftest copy-square-matrix (square-matrix-core-test)
+(deftest copy-square-matrix (square-matrix)
   (let ((matrix
          (linear-algebra:make-matrix
           5 5
@@ -264,12 +264,12 @@
       (linear-algebra::contents matrix)
       (linear-algebra::contents
        (linear-algebra:copy-matrix matrix))))
-    (assert-float-equal
+    (assert-num=
      matrix (linear-algebra:copy-matrix matrix))))
 
 ;;; Test the submatrix of a square matrix
 
-(deftest square-submatrix (square-matrix-core-test)
+(deftest square-submatrix (square-matrix)
   (let ((matrix
          (linear-algebra:make-matrix
           10 10
@@ -278,15 +278,15 @@
           :initial-contents
           (coordinate-array))))
     ;; The entire matrix
-    (assert-float-equal
+    (assert-num=
      (coordinate-array)
      (linear-algebra:submatrix matrix 0 0))
     ;; Start row and column to the end
-    (assert-float-equal
+    (assert-num=
      (coordinate-array 3 3)
      (linear-algebra:submatrix matrix 3 3))
     ;; End row and column
-    (assert-float-equal
+    (assert-num=
      (coordinate-array 3 4 5 5)
      (linear-algebra:submatrix
       matrix 3 4 :end-row 5 :end-column 5))
@@ -311,7 +311,7 @@
 
 ;;; Set the submatrix of a square matrix
 
-(deftest setf-square-submatrix (square-matrix-core-test)
+(deftest setf-square-submatrix (square-matrix)
   ;; Upper left submatrix
   (let ((array-ul
          (make-array
@@ -321,26 +321,26 @@
             (0 0 0 0 0)
             (0 0 0 0 0)
             (0 0 0 0 0)))))
-    (assert-rational-equal
+    (assert-num=
      array-ul
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 0 0)
       (unit-matrix 2 2)))
-    (assert-rational-equal
+    (assert-num=
      array-ul
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 0 0 :end-row 2 :end-column 2)
       (linear-algebra:submatrix (unit-matrix 5 5) 0 0)))
-    (assert-rational-equal
+    (assert-num=
      array-ul
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 0 0)
       (linear-algebra:submatrix
        (unit-matrix 5 5) 0 0 :end-row 2 :end-column 2)))
-    (assert-rational-equal
+    (assert-num=
      array-ul
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
@@ -356,26 +356,26 @@
             (0 0 0 0 0)
             (0 0 0 0 0)
             (0 0 0 0 0)))))
-    (assert-rational-equal
+    (assert-num=
      array-ur
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 0 3)
       (unit-matrix 2 2)))
-    (assert-rational-equal
+    (assert-num=
      array-ur
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 0 3)
       (linear-algebra:submatrix
        (unit-matrix 5 5) 0 3 :end-row 2 :end-column 5)))
-    (assert-rational-equal
+    (assert-num=
      array-ur
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 0 3 :end-row 2 :end-column 5)
       (unit-matrix 5 5)))
-    (assert-rational-equal
+    (assert-num=
      array-ur
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
@@ -391,26 +391,26 @@
             (0 0 0 0 0)
             (1 1 0 0 0)
             (1 1 0 0 0)))))
-    (assert-rational-equal
+    (assert-num=
      array-ll
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 3 0)
       (unit-matrix 2 2)))
-    (assert-rational-equal
+    (assert-num=
      array-ll
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 3 0)
       (linear-algebra:submatrix
        (unit-matrix 5 5) 0 3 :end-row 2 :end-column 5)))
-    (assert-rational-equal
+    (assert-num=
      array-ll
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 3 0 :end-row 5 :end-column 2)
       (unit-matrix 5 5)))
-    (assert-rational-equal
+    (assert-num=
      array-ll
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
@@ -427,26 +427,26 @@
             (0 0 0 0 0)
             (0 0 0 1 1)
             (0 0 0 1 1)))))
-    (assert-rational-equal
+    (assert-num=
      array-lr
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 3 3)
       (unit-matrix 2 2)))
-    (assert-rational-equal
+    (assert-num=
      array-lr
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 3 3)
       (linear-algebra:submatrix
        (unit-matrix 5 5) 0 3 :end-row 2 :end-column 5)))
-    (assert-rational-equal
+    (assert-num=
      array-lr
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 3 3 :end-row 5 :end-column 5)
       (unit-matrix 5 5)))
-    (assert-rational-equal
+    (assert-num=
      array-lr
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
@@ -463,26 +463,26 @@
             (0 1 1 1 0)
             (0 1 1 1 0)
             (0 0 0 0 0)))))
-    (assert-rational-equal
+    (assert-num=
      array-mid
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 1 1)
       (unit-matrix 3 3)))
-    (assert-rational-equal
+    (assert-num=
      array-mid
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 1 1)
       (linear-algebra:submatrix
        (unit-matrix 5 5) 1 1 :end-row 4 :end-column 4)))
-    (assert-rational-equal
+    (assert-num=
      array-mid
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
       (linear-algebra:submatrix matrix 1 1 :end-row 4 :end-column 4)
       (unit-matrix 5 5)))
-    (assert-rational-equal
+    (assert-num=
      array-mid
      (setf-submatrix
       5 5 'linear-algebra:square-matrix
@@ -491,9 +491,9 @@
        (unit-matrix 5 5) 1 1 :end-row 4 :end-column 4)))))
 
 ;;; Replace all or part of a square matrix
-(deftest square-matrix-replace (square-matrix-core-test)
+(deftest square-matrix-replace (square-matrix)
   ;; Replace the entire matrix
-  (assert-rational-equal
+  (assert-num=
    (unit-matrix 5 5)
    (linear-algebra:replace-matrix
     (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
@@ -508,29 +508,29 @@
             (0 0 0 0 0)
             (0 0 0 0 0)
             (0 0 0 0 0)))))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       (unit-matrix 2 5)))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       (unit-matrix 2 7)))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       (unit-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       :start-row2 3))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       (unit-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       :end-row1 2))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
@@ -546,29 +546,29 @@
             (1 1 1 0 0)
             (1 1 1 0 0)
             (1 1 1 0 0)))))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       (unit-matrix 5 3)))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       (unit-matrix 7 3)))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       (unit-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       :start-column2 2))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       (unit-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       :end-column1 3))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
@@ -584,27 +584,27 @@
             (0 1 1 1 0)
             (0 1 1 1 0)
             (0 0 0 0 0)))))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       (unit-matrix 3 3 :matrix-type 'linear-algebra:square-matrix)
       :start-row1 1 :start-column1 1))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       (unit-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       :start-row1 1 :start-column1 1
       :end-row1 4 :end-column1 4))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       (unit-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
       :start-row1 1 :start-column1 1
       :end-row2 3 :end-column2 3))
-    (assert-rational-equal
+    (assert-num=
      result
      (linear-algebra:replace-matrix
       (zero-matrix 5 5 :matrix-type 'linear-algebra:square-matrix)
@@ -614,13 +614,13 @@
 
 ;;; Validate a range for a square matrix.
 
-(deftest square-matrix-validated-range (square-matrix-core-test)
+(deftest square-matrix-validated-range (square-matrix)
   (test-matrix-validated-range
    'linear-algebra:square-matrix 10 10))
 
 ;;; Square matrix fundamental operations
 
-(deftest norm-square-matrix (square-matrix-core-test)
+(deftest norm-square-matrix (square-matrix)
   (let ((matrix
          (linear-algebra:make-matrix
           4 4 :matrix-type 'linear-algebra:square-matrix
@@ -629,21 +629,21 @@
               (2.1 2.2 2.3 2.4)
               (3.1 3.2 3.3 3.4)
               (4.1 4.2 4.3 4.4)))))
-    (assert-float-equal
+    (assert-num=
      11.6 (linear-algebra:norm matrix))
-    (assert-float-equal
+    (assert-num=
      11.6 (linear-algebra:norm matrix 1))
-    (assert-float-equal
+    (assert-num=
      4.4 (linear-algebra:norm matrix :max))
-    (assert-float-equal
+    (assert-num=
      11.882762 (linear-algebra:norm matrix :frobenius))
-    (assert-float-equal
+    (assert-num=
      17.0 (linear-algebra:norm matrix :infinity))
     (assert-condition
      error
      (linear-algebra:norm matrix :unknown))))
 
-(deftest transpose-square-matrix (square-matrix-core-test)
+(deftest transpose-square-matrix (square-matrix)
   (let ((matrix
          (linear-algebra:make-matrix
           4 4 :matrix-type 'linear-algebra:square-matrix
@@ -661,10 +661,10 @@
      (typep
       (linear-algebra:transpose matrix)
       'linear-algebra:square-matrix))
-    (assert-float-equal
+    (assert-num=
      transpose (linear-algebra:transpose matrix))))
 
-(deftest ntranspose-square-matrix (square-matrix-core-test)
+(deftest ntranspose-square-matrix (square-matrix)
   (let ((matrix
          (linear-algebra:make-matrix
           4 4 :matrix-type 'linear-algebra:square-matrix
@@ -679,9 +679,9 @@
              (1.3 2.3 3.3 4.3)
              (1.4 2.4 3.4 4.4))))
     (assert-eq matrix (linear-algebra:ntranspose matrix))
-    (assert-float-equal transpose matrix)))
+    (assert-num= transpose matrix)))
 
-(deftest permute-square-matrix (square-matrix-core-test)
+(deftest permute-square-matrix (square-matrix)
   (let ((matrix
          (linear-algebra:make-matrix
           5 5 :matrix-type 'linear-algebra:square-matrix
@@ -700,14 +700,14 @@
             (1 0 0 0 0)
             (0 1 0 0 0)
             (0 0 0 1 0)))))
-    (assert-float-equal
+    (assert-num=
      #2A((1.2 1.3 1.0 1.4 1.1)
          (2.2 2.3 2.0 2.4 2.1)
          (3.2 3.3 3.0 3.4 3.1)
          (4.2 4.3 4.0 4.4 4.1)
          (5.2 5.3 5.0 5.4 5.1))
      (linear-algebra:permute matrix pmat))
-    (assert-float-equal
+    (assert-num=
      #2A((3.0 3.1 3.2 3.3 3.4)
          (5.0 5.1 5.2 5.3 5.4)
          (1.0 1.1 1.2 1.3 1.4)
@@ -715,8 +715,8 @@
          (4.0 4.1 4.2 4.3 4.4))
      (linear-algebra:permute pmat matrix))))
 
-(deftest scale-square-matrix (square-matrix-core-test)
-  (assert-float-equal
+(deftest scale-square-matrix (square-matrix)
+  (assert-num=
    #2A(( 3.3  3.6  3.9  4.2)
        ( 6.3  6.6  6.9  7.2)
        ( 9.3  9.6  9.9 10.2)
@@ -730,7 +730,7 @@
              (3.1 3.2 3.3 3.4)
              (4.1 4.2 4.3 4.4))))))
 
-(deftest nscale-square-matrix (square-matrix-core-test)
+(deftest nscale-square-matrix (square-matrix)
   (let ((matrix
          (linear-algebra:make-matrix
           4 4 :matrix-type 'linear-algebra:square-matrix
@@ -740,14 +740,14 @@
               (3.1 3.2 3.3 3.4)
               (4.1 4.2 4.3 4.4)))))
     (assert-eq matrix (linear-algebra:nscale 3.0 matrix))
-    (assert-float-equal
+    (assert-num=
      #2A(( 3.3  3.6  3.9  4.2)
          ( 6.3  6.6  6.9  7.2)
          ( 9.3  9.6  9.9 10.2)
          (12.3 12.6 12.9 13.2))
      matrix)))
 
-(deftest add-square-matrix (square-matrix-core-test)
+(deftest add-square-matrix (square-matrix)
   (let ((matrix
          (linear-algebra:make-matrix
           4 4 :matrix-type 'linear-algebra:square-matrix
@@ -757,35 +757,35 @@
               (3.1 3.2 3.3 3.4)
               (4.1 4.2 4.3 4.4)))))
     ;; No scalar
-    (assert-float-equal
+    (assert-num=
      #2A(( 2.2  2.4  2.6  2.8)
          ( 4.2  4.4  4.6  4.8)
          ( 6.2  6.4  6.6  6.8)
          ( 8.2  8.4  8.6  8.8))
      (linear-algebra:add matrix matrix))
     ;; Scalar1
-    (assert-float-equal
+    (assert-num=
      #2A(( 3.3  3.6  3.9  4.2)
          ( 6.3  6.6  6.9  7.2)
          ( 9.3  9.6  9.9 10.2)
          (12.3 12.6 12.9 13.2))
      (linear-algebra:add matrix matrix :scalar1 2.0))
     ;; Scalar2
-    (assert-float-equal
+    (assert-num=
      #2A(( 3.3  3.6  3.9  4.2)
          ( 6.3  6.6  6.9  7.2)
          ( 9.3  9.6  9.9 10.2)
          (12.3 12.6 12.9 13.2))
      (linear-algebra:add matrix matrix :scalar2 2.0))
     ;; Scalar1 & Scalar2
-    (assert-float-equal
+    (assert-num=
      #2A(( 5.5  6.0  6.5  7.0)
          (10.5 11.0 11.5 12.0)
          (15.5 16.0 16.5 17.0)
          (20.5 21.0 21.5 22.0))
      (linear-algebra:add matrix matrix :scalar1 2.0 :scalar2 3.0))))
 
-(deftest nadd-square-matrix (square-matrix-core-test)
+(deftest nadd-square-matrix (square-matrix)
   ;; No scalar
   (let ((matrix1
          (linear-algebra:make-matrix
@@ -806,7 +806,7 @@
               (3.1 3.2 3.3 3.4)
               (4.1 4.2 4.3 4.4)))))
     (assert-eq matrix1 (linear-algebra:nadd matrix1 matrix2))
-    (assert-float-equal
+    (assert-num=
      #2A((2.2 2.4 2.6 2.8)
          (4.2 4.4 4.6 4.8)
          (6.2 6.4 6.6 6.8)
@@ -833,7 +833,7 @@
               (4.1 4.2 4.3 4.4)))))
     (assert-eq
      matrix1 (linear-algebra:nadd matrix1 matrix2 :scalar1 2.0))
-    (assert-float-equal
+    (assert-num=
      #2A(( 3.3  3.6  3.9  4.2)
          ( 6.3  6.6  6.9  7.2)
          ( 9.3  9.6  9.9 10.2)
@@ -860,7 +860,7 @@
               (4.1 4.2 4.3 4.4)))))
     (assert-eq
      matrix1 (linear-algebra:nadd matrix1 matrix2 :scalar2 2.0))
-    (assert-float-equal
+    (assert-num=
      #2A(( 3.3  3.6  3.9  4.2)
          ( 6.3  6.6  6.9  7.2)
          ( 9.3  9.6  9.9 10.2)
@@ -889,14 +889,14 @@
      matrix1
      (linear-algebra:nadd
       matrix1 matrix2 :scalar1 2.0 :scalar2 3.0))
-    (assert-float-equal
+    (assert-num=
      #2A(( 5.5  6.0  6.5  7.0)
          (10.5 11.0 11.5 12.0)
          (15.5 16.0 16.5 17.0)
          (20.5 21.0 21.5 22.0))
      matrix1)))
 
-(deftest subtract-square-matrix (square-matrix-core-test)
+(deftest subtract-square-matrix (square-matrix)
   (let ((*epsilon* (* 3F0 single-float-epsilon))
         (matrix1
          (linear-algebra:make-matrix
@@ -915,28 +915,28 @@
               (3.1 3.2 3.3 3.4)
               (4.1 4.2 4.3 4.4)))))
     ;; No scalar
-    (assert-float-equal
+    (assert-num=
      #2A((1.1 1.2 1.3 1.4)
          (2.1 2.2 2.3 2.4)
          (3.1 3.2 3.3 3.4)
          (4.1 4.2 4.3 4.4))
      (linear-algebra:subtract matrix1 matrix2))
     ;; Scalar1
-    (assert-float-equal
+    (assert-num=
      #2A(( 3.3  3.6  3.9  4.2)
          ( 6.3  6.6  6.9  7.2)
          ( 9.3  9.6  9.9 10.2)
          (12.3 12.6 12.9 13.2))
      (linear-algebra:subtract matrix1 matrix2 :scalar1 2.0))
     ;; Scalar2
-    (assert-float-equal
+    (assert-num=
      #2A((0.0 0.0 0.0 0.0)
          (0.0 0.0 0.0 0.0)
          (0.0 0.0 0.0 0.0)
          (0.0 0.0 0.0 0.0))
      (linear-algebra:subtract matrix1 matrix2 :scalar2 2.0))
     ;; Scalar1 & Scalar2
-    (assert-float-equal
+    (assert-num=
      #2A((1.1 1.2 1.3 1.4)
          (2.1 2.2 2.3 2.4)
          (3.1 3.2 3.3 3.4)
@@ -944,7 +944,7 @@
      (linear-algebra:subtract
       matrix1 matrix2 :scalar1 2.0 :scalar2 3.0))))
 
-(deftest nsubtract-square-matrix (square-matrix-core-test) 
+(deftest nsubtract-square-matrix (square-matrix) 
   ;; No scalar
   (let ((matrix1
          (linear-algebra:make-matrix
@@ -965,7 +965,7 @@
               (3.1 3.2 3.3 3.4)
               (4.1 4.2 4.3 4.4)))))
     (assert-eq matrix1 (linear-algebra:nsubtract matrix1 matrix2))
-    (assert-float-equal
+    (assert-num=
      #2A((1.1 1.2 1.3 1.4)
          (2.1 2.2 2.3 2.4)
          (3.1 3.2 3.3 3.4)
@@ -992,7 +992,7 @@
     (assert-eq
      matrix1
      (linear-algebra:nsubtract matrix1 matrix2 :scalar1 2.0))
-    (assert-float-equal
+    (assert-num=
      #2A((1.1 1.2 1.3 1.4)
          (2.1 2.2 2.3 2.4)
          (3.1 3.2 3.3 3.4)
@@ -1021,7 +1021,7 @@
     (assert-eq
      matrix1
      (linear-algebra:nsubtract matrix1 matrix2 :scalar2 2.0))
-    (assert-float-equal
+    (assert-num=
      #2A((1.1 1.2 1.3 1.4)
          (2.1 2.2 2.3 2.4)
          (3.1 3.2 3.3 3.4)
@@ -1051,14 +1051,14 @@
      matrix1
      (linear-algebra:nsubtract
       matrix1 matrix2 :scalar1 2.0 :scalar2 3.0))
-    (assert-float-equal
+    (assert-num=
      #2A((1.1 1.2 1.3 1.4)
          (2.1 2.2 2.3 2.4)
          (3.1 3.2 3.3 3.4)
          (4.1 4.2 4.3 4.4))
      matrix1)))
 
-(deftest product-square-matrix (square-matrix-core-test)
+(deftest product-square-matrix (square-matrix)
   ;; Row vector - dense matrix
   (assert-true
    (typep
@@ -1066,7 +1066,7 @@
      (linear-algebra:row-vector 1.0 2.0 3.0)
      (unit-matrix 3 3 :matrix-type 'linear-algebra:square-matrix))
     'linear-algebra:row-vector))
-  (assert-float-equal
+  (assert-num=
    #(6.0 12.0 18.0)
    (linear-algebra:product
     (linear-algebra:row-vector 1.0 2.0 3.0)
@@ -1076,7 +1076,7 @@
      #2A((1.0 2.0 3.0)
          (1.0 2.0 3.0)
          (1.0 2.0 3.0)))))
-  (assert-float-equal
+  (assert-num=
    #(12.599999 25.199999 37.8)
    (linear-algebra:product
     (linear-algebra:row-vector 1.0 2.0 3.0)
@@ -1101,7 +1101,7 @@
      (unit-matrix 3 3 :matrix-type 'linear-algebra:square-matrix)
      (linear-algebra:column-vector 1.0 2.0 3.0))
     'linear-algebra:column-vector))
-  (assert-float-equal
+  (assert-num=
    #(6.0 12.0 18.0)
    (linear-algebra:product
     (linear-algebra:make-matrix
@@ -1111,7 +1111,7 @@
          (2.0 2.0 2.0)
          (3.0 3.0 3.0)))
     (linear-algebra:column-vector 1.0 2.0 3.0)))
-  (assert-float-equal
+  (assert-num=
    #(12.599999 25.199999 37.8)
    (linear-algebra:product
     (linear-algebra:make-matrix
@@ -1136,7 +1136,7 @@
      (unit-matrix 3 3 :matrix-type 'linear-algebra:square-matrix)
      (unit-matrix 3 3 :matrix-type 'linear-algebra:square-matrix))
     'linear-algebra:square-matrix))
-  (assert-float-equal
+  (assert-num=
    #2A(( 6.0  6.0  6.0)
        (12.0 12.0 12.0)
        (18.0 18.0 18.0))
@@ -1153,7 +1153,7 @@
      #2A((1.0 1.0 1.0)
          (2.0 2.0 2.0)
          (3.0 3.0 3.0)))))
-  (assert-float-equal
+  (assert-num=
    #2A((12.599999 12.599999 12.599999)
        (25.199999 25.199999 25.199999)
        (37.8      37.8      37.8))
@@ -1177,7 +1177,7 @@
     (unit-matrix 3 3 :matrix-type 'linear-algebra:square-matrix)
     (unit-matrix 4 4 :matrix-type 'linear-algebra:square-matrix))))
 
-(deftest solve-square-matrix (square-matrix-core-test)
+(deftest solve-square-matrix (square-matrix)
   (let ((*epsilon* (* 64 single-float-epsilon))
         (vector2 (linear-algebra:column-vector 1.0 2.0))
         (vector3 (linear-algebra:column-vector 2.3 1.2 2.2))
@@ -1191,21 +1191,21 @@
           :initial-contents
           '((1.15 1.26 1.37) (2.14 2.23 2.31) (3.13 3.22 3.31)))))
     ;; 2x2
-    (assert-float-equal
+    (assert-num=
      #(2.0 -1.0) (linear-algebra:solve matrix2 vector2))
-    (assert-float-equal #(1.0 2.0) vector2)
-    (assert-float-equal #2A((1.1 1.2) (2.1 2.2)) matrix2)
+    (assert-num= #(1.0 2.0) vector2)
+    (assert-num= #2A((1.1 1.2) (2.1 2.2)) matrix2)
     ;; 3x3
     ;; Maxima : #(66.36628 -151.8314 85.6105)
-    (assert-float-equal
+    (assert-num=
      #(66.36775 -151.8342 85.6118)
      (linear-algebra:solve matrix3 vector3))
-    (assert-float-equal #(2.3 1.2 2.2) vector3)
-    (assert-float-equal
+    (assert-num= #(2.3 1.2 2.2) vector3)
+    (assert-num=
      #2A((1.15 1.26 1.37) (2.14 2.23 2.31) (3.13 3.22 3.31))
      matrix3)))
 
-(deftest nsolve-square-matrix (square-matrix-core-test)
+(deftest nsolve-square-matrix (square-matrix)
   (let ((*epsilon* (* 64 single-float-epsilon))
         (vector2 (linear-algebra:column-vector 1.0 2.0))
         (vector3 (linear-algebra:column-vector 2.3 1.2 2.2))
@@ -1219,25 +1219,25 @@
           :initial-contents
           '((1.15 1.26 1.37) (2.14 2.23 2.31) (3.13 3.22 3.31)))))
     ;; 2x2
-    (assert-float-equal
+    (assert-num=
      #(2.0 -1.0) (linear-algebra:nsolve matrix2 vector2))
     ;; 3x3
     ;; Maxima : #(66.36628 -151.8314 85.6105)
-    (assert-float-equal
+    (assert-num=
      #(66.36775 -151.8342 85.6118)
      (linear-algebra:nsolve matrix3 vector3))))
 
-(deftest invert-square-matrix (square-matrix-core-test)
+(deftest invert-square-matrix (square-matrix)
   ;; 2x2
   (let ((matrix
          (linear-algebra:make-matrix
           2 2 :matrix-type 'linear-algebra:square-matrix
           :initial-contents
           '((1.1 1.2) (2.1 2.2)))))
-    (assert-float-equal
+    (assert-num=
      #2A((-22.000029 12.000016) (21.000027 -11.000015))
      (linear-algebra:invert matrix))
-    (assert-float-equal #2A((1.1 1.2) (2.1 2.2)) matrix))
+    (assert-num= #2A((1.1 1.2) (2.1 2.2)) matrix))
   ;; 3x3
   (let ((matrix
          (linear-algebra:make-matrix
@@ -1246,12 +1246,12 @@
           '((1.1 0.12 0.13)
             (0.21 2.2 0.23)
             (0.31 0.32 3.3)))))
-    (assert-float-equal
+    (assert-num=
      #2A((0.9272161 -0.04572601 -0.03333973)
          (-0.08021406 0.4631565 -0.029120658)
          (-0.07932379 -0.04061667 0.30898604))
      (linear-algebra:invert matrix))
-    (assert-float-equal
+    (assert-num=
      #2A((1.1 0.12 0.13)
          (0.21 2.2 0.23)
          (0.31 0.32 3.3))
@@ -1265,30 +1265,30 @@
             (0.21 20.0 0.23 0.24)
             (0.31 0.32 30.0 0.34)
             (0.41 0.42 0.43 40.0)))))
-    (assert-float-equal
+    (assert-num=
      #2A((0.10003952 -5.862483e-4 -4.2409348e-4 -3.4301603e-4)
          (-0.0010267387 0.050018318 -3.748202e-4 -2.9333035e-4)
          (-0.001011414 -5.216503e-4 0.033345684 -2.7676846e-4)
          (-0.0010037516 -5.135755e-4 -3.5018355e-4 0.02500957))
      (linear-algebra:invert matrix))
-    (assert-float-equal
+    (assert-num=
      #2A((10.0 0.12 0.13 0.14)
          (0.21 20.0 0.23 0.24)
          (0.31 0.32 30.0 0.34)
          (0.41 0.42 0.43 40.0))
      matrix)))
 
-(deftest ninvert-square-matrix (square-matrix-core-test)
+(deftest ninvert-square-matrix (square-matrix)
   ;; 2x2
   (let ((matrix
          (linear-algebra:make-matrix
           2 2 :matrix-type 'linear-algebra:square-matrix
           :initial-contents
           '((1.1 1.2) (2.1 2.2)))))
-    (assert-float-equal
+    (assert-num=
      #2A((-22.000029 12.000016) (21.000027 -11.000015))
      (linear-algebra:ninvert matrix))
-    (assert-float-equal
+    (assert-num=
      #2A((2.1 2.2) (0.52380956 0.047618986)) matrix))
   ;; 3x3
   (let ((matrix
@@ -1298,12 +1298,12 @@
           '((1.1 0.12 0.13)
             (0.21 2.2 0.23)
             (0.31 0.32 3.3)))))
-    (assert-float-equal
+    (assert-num=
      #2A((0.9272161 -0.04572601 -0.03333973)
          (-0.08021406 0.4631565 -0.029120658)
          (-0.07932379 -0.04061667 0.30898604))
      (linear-algebra:ninvert matrix))
-    (assert-float-equal
+    (assert-num=
      #2A((1.1        0.12       0.13)
          (0.19090909 2.177091   0.20518182)
          (0.28181818 0.13145148 3.2363923))
@@ -1317,13 +1317,13 @@
             (0.21 20.0 0.23 0.24)
             (0.31 0.32 30.0 0.34)
             (0.41 0.42 0.43 40.0)))))
-    (assert-float-equal
+    (assert-num=
      #2A((0.10003952 -5.862483e-4 -4.2409348e-4 -3.4301603e-4)
          (-0.0010267387 0.050018318 -3.748202e-4 -2.9333035e-4)
          (-0.001011414 -5.216503e-4 0.033345684 -2.7676846e-4)
          (-0.0010037516 -5.135755e-4 -3.5018355e-4 0.02500957))
      (linear-algebra:ninvert matrix))
-    (assert-float-equal
+    (assert-num=
      #2A((10.0    0.12         0.13         0.14)
          ( 0.021 19.99748      0.22727      0.23706)
          ( 0.031  0.015815994 29.992375     0.33191067)

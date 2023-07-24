@@ -15,6 +15,7 @@
   ((:file "pkgdcl")
    (:file "suite")
    (:file "utilities")
+   (:file "asserts")
    ;; Linear algebra kernel tests
    (:module kernel
     :depends-on ("pkgdcl")
@@ -46,15 +47,15 @@
      (:file "vector" :depends-on ("suite"))
      (:file "array" :depends-on ("suite"))))
    ;; Linear algebra tests
-   #+nil
    (:module linear-algebra
     :depends-on ("pkgdcl")
     :components
     ((:file "suite")
      (:file "data-vector" :depends-on ("suite"))
-     ;; (:file "dense-matrix" :depends-on ("suite"))
-     ;; (:file "square-matrix" :depends-on ("suite"))
-     ;; (:file "hermitian-matrix" :depends-on ("suite"))
-     ;; (:file "symmetric-matrix" :depends-on ("suite"))
+     (:file "dense-matrix" :depends-on ("suite"))
+     (:file "square-matrix" :depends-on ("suite"))
+     (:file "hermitian-matrix" :depends-on ("suite"))
+     (:file "symmetric-matrix" :depends-on ("suite"))
      ))
    ))
+

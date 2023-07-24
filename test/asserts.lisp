@@ -27,59 +27,65 @@
 
 |#
 ;;; SPDX-License-identifier: MS-PL
+(in-package #:num-utils.num=)
+
+(defmethod num= ((a linear-algebra:data-vector) (b linear-algebra:data-vector)
+                 &optional (tolerance *num=-tolerance*))
+  (and
+       (equal (linear-algebra::vector-element-type a) (linear-algebra::vector-element-type b))
+       (num= (linear-algebra::contents a) (linear-algebra::contents b) tolerance)))
+
+(defmethod num= ((a linear-algebra:data-vector) (b vector)
+                 &optional (tolerance *num=-tolerance*))
+  (num= (linear-algebra::contents a) b tolerance))
+
+(defmethod num= ((a vector) (b linear-algebra:data-vector)
+                 &optional (tolerance *num=-tolerance*))
+  (num= b a tolerance))
+
+(defmethod num= ((a linear-algebra:data-vector) (b cons)
+                 &optional (tolerance *num=-tolerance*))
+  (num= (linear-algebra::contents a)
+        (linear-algebra:make-vector (length b) :initial-contents b)
+        tolerance))
 
 
-(in-package :linear-algebra-test)
+(defmethod num= ((a cons) (b linear-algebra:data-vector)
+                 &optional (tolerance *num=-tolerance*))
+  (num= b a tolerance))
+
+(defmethod num= ((a linear-algebra:dense-matrix) (b simple-array)
+                 &optional (tolerance *num=-tolerance*))
+  (num= (linear-algebra::contents a) b tolerance))
+
+(defmethod num= ((a simple-array) (b linear-algebra:dense-matrix)
+                 &optional (tolerance *num=-tolerance*))
+  (num= b a tolerance))
+
+(defmethod num= ((a linear-algebra:dense-matrix) (b linear-algebra:dense-matrix)
+                 &optional (tolerance *num=-tolerance*))
+  (num= (linear-algebra::contents a)
+        (linear-algebra::contents b)
+        tolerance))
 
 
-(defgeneric assert-passes? (type test expected actual)
-  (:documentation "Return the result of the assertion.")
-  (:method (type test expected actual)
-    (ecase type
-      ((equal-result failure-result)
-       (and
-        (<= (length expected) (length actual))
-        ;; by putting expected in the second position we open up the ability
-        ;; to use many more functions as tests (eg: typep)
-        (every test actual expected)))
-      (signal-result
-       ;; These are lists of booleans
-       (logically-equal (first expected) (first actual)))
-      (error-result
-       (or
-        ;; todo: whats with eql?
-        (eql (car actual) (car expected))
-        (typep (car actual) (car expected))))
-      (macro-result
-       (%form-equal (first expected) (first actual)))
-      (output-result
-       (string=
-        (string-trim '(#\newline #\return #\space) (car actual))
-        (string-trim '(#\newline #\return #\space) (car expected)))))))
+(in-package :clunit)
 
-(defmacro expand-extras (extras)
-  "Expand extra forms."
-  `(lambda ()
-     (list ,@(mapcan (lambda (form) (list `',form form)) extras))))
+(defmacro assert-num= (value expression &body forms)
+  "Evaluates EXPRESSION  as an assertion,  an assertion passes  if (EQ
+VALUE EXPRESSION) values non nil. FORMS  and their values are printed if
+the test fails."
+  (with-gensyms (result)
+    (assertion-expander :result            result
+                        :test              `(gen-test-form #'num-utils:num=
+                                                           (multiple-value-list ,value)
+                                                           ,result)
+                        :result-expression `(multiple-value-list ,expression)
+                        :report-expression `(eq ,value ,expression)
+                        :expected          value
+                        :forms             forms)))
 
-(defun internal-assert
-    (type form code-thunk expected-thunk extras test &key full-form)
-  "Perform the assertion and record the results."
-  (let* ((actual (multiple-value-list (funcall code-thunk)))
-         (expected (multiple-value-list (funcall expected-thunk)))
-         (result (assert-passes? type test expected actual)))
-    ;; Return the actual-values
-    (apply #'values actual)))
 
-(defmacro expand-assert (type form body expected extras
-                         &key (test '#'eql)
-                         full-form)
-  "Expand the assertion to the internal format."
-  `(internal-assert ,type ',form
-    (lambda () ,body)
-    (lambda () ,expected)
-    (expand-extras ,extras)
-    ,test
-    :full-form (or ,full-form
-                '(,type ,expected ,form))))
+(export '(assert-num=))
+
 
