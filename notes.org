@@ -1,0 +1,4 @@
+* Dependencies
+  "floating-point" -- merge similar functions from num-utils into
+  floating-point, or vica versa (merge floating-point into num-utils).
+  I think I prefer the former.

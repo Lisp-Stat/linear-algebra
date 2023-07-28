@@ -3,15 +3,14 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra)
+(in-package #:linear-algebra)
 
 (defclass dense-matrix (matrix-object)
   ((contents
     :type     (array * (* *))
     :initarg  :contents
     :accessor contents))
-  (:documentation
-   "Dense matrix object."))
+  (:documentation "Dense matrix object."))
 
 (defmethod initialize-instance :after
   ((self dense-matrix) &rest initargs
@@ -20,8 +19,7 @@
   (cond
    ((slot-boundp self 'contents))
    ((and initial-element initial-contents)
-    (error
-     "Cannot specify both :INITIAL-ELEMENT and :INITIAL-CONTENTS"))
+    (error "Cannot specify both :INITIAL-ELEMENT and :INITIAL-CONTENTS"))
    (initial-contents
     (initialize-matrix-contents self initial-contents initargs))
    (initial-element
@@ -32,8 +30,7 @@
 (defmethod initialize-matrix-contents
     ((matrix dense-matrix) (initial-element number) initargs)
   "Initialize the dense matrix with an initial element."
-  (setf
-   (contents matrix)
+  (setf (contents matrix)
    (make-array
     (getf initargs :dimensions)
     :element-type (getf initargs :element-type)
@@ -42,8 +39,7 @@
 (defmethod initialize-matrix-contents
     ((matrix dense-matrix) (initial-contents list) initargs)
   "Initialize the dense matrix with a nested sequence."
-  (setf
-   (contents matrix)
+  (setf (contents matrix)
    (make-array
     (getf initargs :dimensions)
     :element-type (getf initargs :element-type)
@@ -52,8 +48,7 @@
 (defmethod initialize-matrix-contents
     ((matrix dense-matrix) (initial-contents vector) initargs)
   "Initialize the dense matrix with a nested sequence."
-  (setf
-   (contents matrix)
+  (setf (contents matrix)
    (make-array
     (getf initargs :dimensions)
     :element-type (getf initargs :element-type)
@@ -66,19 +61,14 @@
   (unless (= 2 (array-rank initial-contents))
     (error "Initial contents must be rank 2."))
   ;; Consistent number of dimensions
-  (unless
-      (equal
+  (unless (equal
        (array-dimensions initial-contents)
        (getf initargs :dimensions))
-    (error
-     "Initial contents dimensions do not equal matrix dimensions."))
+    (error "Initial contents dimensions do not equal matrix dimensions."))
   ;; Consistent element types
-  (unless
-      (subtypep
-       (array-element-type initial-contents)
+  (unless (subtypep (array-element-type initial-contents)
        (upgraded-array-element-type (getf initargs :element-type)))
-    (error
-     ":INITIAL-CONTENTS are not compatible with ~A"
+    (error ":INITIAL-CONTENTS are not compatible with ~A"
      (getf initargs :element-type)))
   ;; Copy the data
   (setf (contents matrix) (copy-array initial-contents)))
@@ -89,8 +79,7 @@
   "Return true if object is a dense matrix."
   (typep object 'dense-matrix))
 
-(defmethod matrix-in-bounds-p
-    ((matrix dense-matrix) (row integer) (column integer))
+(defmethod matrix-in-bounds-p ((matrix dense-matrix) (row integer) (column integer))
   "Return true if row and column do not exceed the dimensions of matrix."
   (array-in-bounds-p (contents matrix) row column))
 
@@ -127,10 +116,10 @@
    :contents
    (copy-array (contents matrix))))
 
-(defmethod submatrix
-    ((matrix dense-matrix)
-     (start-row integer) (start-column integer)
-     &key end-row end-column)
+(defmethod submatrix ((matrix dense-matrix) (start-row integer) (start-column integer)
+		      &key
+			end-row
+			end-column)
   "Return a dense matrix created from the submatrix of a matrix."
   (multiple-value-bind (start-row start-column end-row end-column)
       (matrix-validated-range
@@ -138,35 +127,23 @@
     (let* ((m-rows (- end-row start-row))
            (n-columns (- end-column start-column))
            (original (contents matrix))
-           (contents
-            (make-array
-             (list m-rows n-columns)
-             :element-type (matrix-element-type matrix))))
-      (make-instance
-       'dense-matrix
-       :contents
-       (dotimes (row m-rows contents)
+           (contents (make-array (list m-rows n-columns) :element-type (matrix-element-type matrix))))
+      (make-instance 'dense-matrix :contents (dotimes (row m-rows contents)
          (dotimes (column n-columns)
-           (setf
-            (aref contents row column)
+           (setf (aref contents row column)
             (aref original
                   (+ start-row row)
                   (+ start-column column)))))))))
 
-(defmethod (setf submatrix)
-    ((data dense-matrix) (matrix dense-matrix)
-     (start-row integer) (start-column integer)
-     &key end-row end-column)
+(defmethod (setf submatrix) ((data dense-matrix) (matrix dense-matrix) (start-row integer) (start-column integer)
+			     &key
+			       end-row
+			       end-column)
   "Set the submatrix of matrix."
   (multiple-value-bind (start-row start-column end-row end-column)
-      (matrix-validated-range
-       matrix start-row start-column end-row end-column)
-    (let ((m-rows
-           (min (- end-row start-row)
-                (matrix-row-dimension data)))
-          (n-columns
-           (min (- end-column start-column)
-                (matrix-column-dimension data)))
+      (matrix-validated-range matrix start-row start-column end-row end-column)
+    (let ((m-rows (min (- end-row start-row) (matrix-row-dimension data)))
+          (n-columns (min (- end-column start-column) (matrix-column-dimension data)))
           (mat (contents matrix))
           (dat (contents data)))
       (do ((row0 0   (1+ row0))
@@ -177,24 +154,19 @@
             ((>= column0 n-columns))
           (setf (aref mat row1 column1) (aref dat row0 column0)))))))
 
-(defmethod replace-matrix
-    ((matrix1 dense-matrix) (matrix2 dense-matrix) &key
+(defmethod replace-matrix ((matrix1 dense-matrix) (matrix2 dense-matrix) &key
      (start-row1 0) end-row1
      (start-column1 0) end-column1
      (start-row2 0) end-row2
      (start-column2 0) end-column2)
   "Replace the elements of matrix1 with matrix2."
   (multiple-value-bind (start-row1 start-column1 end-row1 end-column1)
-      (matrix-validated-range
-       matrix1 start-row1 start-column1 end-row1 end-column1)
+      (matrix-validated-range  matrix1 start-row1 start-column1 end-row1 end-column1)
     (multiple-value-bind (start-row2 start-column2 end-row2 end-column2)
-        (matrix-validated-range
-         matrix2 start-row2 start-column2 end-row2 end-column2)
-      (let ((m-rows
-             (min (- end-row1 start-row1)
+        (matrix-validated-range matrix2 start-row2 start-column2 end-row2 end-column2)
+      (let ((m-rows (min (- end-row1 start-row1)
                   (- end-row2 start-row2)))
-            (n-columns
-             (min (- end-column1 start-column1)
+            (n-columns (min (- end-column1 start-column1)
                   (- end-column2 start-column2)))
             (contents1 (contents matrix1))
             (contents2 (contents matrix2)))
@@ -247,29 +219,22 @@
              (aref contents row column) (aref contents column row))))
         (error "Rows and columns unequal."))))
 
-(defmethod permute
-    ((matrix dense-matrix) (permutation permutation-matrix))
-  (if (every
-       #'= (matrix-dimensions matrix) (matrix-dimensions permutation))
+(defmethod permute ((matrix dense-matrix) (permutation permutation-matrix))
+  (if (every #'= (matrix-dimensions matrix) (matrix-dimensions permutation))
       (make-instance
        (class-of matrix)
        :contents
        (right-permute (contents matrix) (contents permutation)))
-      (error
-       "Dense matrix~A and permutation matrix~A sizes incompatible."
-       (matrix-dimensions matrix)
-       (matrix-dimensions permutation))))
+      (error "Dense matrix~A and permutation matrix~A sizes incompatible."
+       (matrix-dimensions matrix) (matrix-dimensions permutation))))
 
-(defmethod permute
-    ((permutation permutation-matrix) (matrix dense-matrix))
-  (if (every
-       #'= (matrix-dimensions permutation) (matrix-dimensions matrix))
+(defmethod permute ((permutation permutation-matrix) (matrix dense-matrix))
+  (if (every #'= (matrix-dimensions permutation) (matrix-dimensions matrix))
       (make-instance
        (class-of matrix)
        :contents
        (left-permute (contents permutation) (contents matrix)))
-      (error
-       "Permutation matrix~A and dense matrix~A sizes incompatible."
+      (error "Permutation matrix~A and dense matrix~A sizes incompatible."
        (matrix-dimensions matrix)
        (matrix-dimensions permutation))))
 
@@ -277,8 +242,7 @@
   "Scale each element of the dense matrix."
   (make-instance
    (class-of matrix)
-   :contents
-   (scale scalar (contents matrix))))
+   :contents (scale scalar (contents matrix))))
 
 (defmethod nscale ((scalar number) (matrix dense-matrix))
   "Scale each element of the dense matrix."
@@ -286,115 +250,83 @@
   matrix)
 
 (defmethod add :before
-  ((matrix1 dense-matrix) (matrix2 dense-matrix)
-   &key scalar1 scalar2)
+  ((matrix1 dense-matrix) (matrix2 dense-matrix) &key scalar1 scalar2)
   "Audit the input data."
   (declare (ignore scalar1 scalar2))
   (unless (equal (matrix-dimensions matrix1)
                  (matrix-dimensions matrix2))
     (error "The matrix dimensions are not compatible.")))
 
-(defmethod add
-    ((matrix1 dense-matrix) (matrix2 dense-matrix)
-     &key scalar1 scalar2)
+(defmethod add ((matrix1 dense-matrix) (matrix2 dense-matrix) &key scalar1 scalar2)
   "Return the addition of the 2 matrices."
   (make-instance
    (common-class-of matrix1 matrix2)
-   :contents
-   (add-array
-    (contents matrix1) (contents matrix2) scalar1 scalar2)))
+   :contents (add-array (contents matrix1) (contents matrix2) scalar1 scalar2)))
 
-(defmethod nadd :before
-  ((matrix1 dense-matrix) (matrix2 dense-matrix)
-   &key scalar1 scalar2)
+(defmethod nadd :before ((matrix1 dense-matrix) (matrix2 dense-matrix)  &key scalar1 scalar2)
   "Audit the input data."
   (declare (ignore scalar1 scalar2))
   (unless (equal (matrix-dimensions matrix1)
                  (matrix-dimensions matrix2))
     (error "The matrix dimensions are not compatible.")))
 
-(defmethod nadd
-    ((matrix1 dense-matrix) (matrix2 dense-matrix)
-     &key scalar1 scalar2)
+(defmethod nadd ((matrix1 dense-matrix) (matrix2 dense-matrix) &key scalar1 scalar2)
   "Return the addition of the 2 matrices."
-  (nadd-array
-   (contents matrix1) (contents matrix2) scalar1 scalar2)
+  (nadd-array (contents matrix1) (contents matrix2) scalar1 scalar2)
   matrix1)
 
-(defmethod subtract :before
-  ((matrix1 dense-matrix) (matrix2 dense-matrix)
-   &key scalar1 scalar2)
+(defmethod subtract :before ((matrix1 dense-matrix) (matrix2 dense-matrix) &key scalar1 scalar2)
   "Audit the input data."
   (declare (ignore scalar1 scalar2))
   (unless (equal (matrix-dimensions matrix1)
                  (matrix-dimensions matrix2))
     (error "The matrix dimensions are not compatible.")))
 
-(defmethod subtract
-    ((matrix1 dense-matrix) (matrix2 dense-matrix)
-     &key scalar1 scalar2)
+(defmethod subtract ((matrix1 dense-matrix) (matrix2 dense-matrix) &key scalar1 scalar2)
   "Return the addition of the 2 matrices."
   (make-instance
    (common-class-of matrix1 matrix2)
-   :contents
-   (subtract-array
-    (contents matrix1) (contents matrix2) scalar1 scalar2)))
+   :contents (subtract-array (contents matrix1) (contents matrix2) scalar1 scalar2)))
 
-(defmethod nsubtract :before
-  ((matrix1 dense-matrix) (matrix2 dense-matrix)
-   &key scalar1 scalar2)
+(defmethod nsubtract :before ((matrix1 dense-matrix) (matrix2 dense-matrix) &key scalar1 scalar2)
   "Audit the input data."
   (declare (ignore scalar1 scalar2))
-  (unless
-      (equal
-       (matrix-dimensions matrix1)
-       (matrix-dimensions matrix2))
+  (unless (equal (matrix-dimensions matrix1) (matrix-dimensions matrix2))
     (error "The matrix dimensions are not compatible.")))
 
-(defmethod nsubtract
-    ((matrix1 dense-matrix) (matrix2 dense-matrix)
-     &key scalar1 scalar2)
+(defmethod nsubtract ((matrix1 dense-matrix) (matrix2 dense-matrix) &key scalar1 scalar2)
   "Return the addition of the 2 matrices."
-  (nsubtract-array
-   (contents matrix1) (contents matrix2) scalar1 scalar2)
+  (nsubtract-array (contents matrix1) (contents matrix2) scalar1 scalar2)
   matrix1)
 
-(defmethod product :before
-  ((vector row-vector) (matrix dense-matrix) &optional scalar)
+(defmethod product :before ((vector row-vector) (matrix dense-matrix) &optional scalar)
   "Verify the inputs."
   (declare (ignore scalar))
   (unless (= (vector-length vector) (matrix-row-dimension matrix))
     (error "Row vector(~D) is incompatible with matrix~A."
            (vector-length vector) (matrix-dimensions matrix))))
 
-(defmethod product
-    ((vector row-vector) (matrix dense-matrix) &optional scalar)
-  "Return a row vector generated by the pre-multiplication of a dense
-matrix by a row vector."
+(defmethod product ((vector row-vector) (matrix dense-matrix) &optional scalar)
+  "Return a row vector generated by the pre-multiplication of a dense matrix by a row vector."
   (make-instance
    (class-of vector)
-   :contents
-   (product-vector-array (contents vector) (contents matrix) scalar)))
+   :contents (product-vector-array (contents vector) (contents matrix) scalar)))
 
-(defmethod product :before
-  ((matrix dense-matrix) (vector column-vector) &optional scalar)
+(defmethod product :before ((matrix dense-matrix) (vector column-vector) &optional scalar)
   "Verify the input."
   (declare (ignore scalar))
   (unless (= (vector-length vector) (matrix-column-dimension matrix))
     (error "Column vector(~D) is incompatible with matrix~A."
            (vector-length vector) (matrix-dimensions matrix))))
 
-(defmethod product
-    ((matrix dense-matrix) (vector column-vector) &optional scalar)
+(defmethod product ((matrix dense-matrix) (vector column-vector) &optional scalar)
   "Return a column vector generated by the multiplication of the dense
 matrix with a column vector."
   (make-instance
    (class-of vector)
-   :contents
-   (product-array-vector (contents matrix) (contents vector) scalar)))
+   :contents (product-array-vector (contents matrix) (contents vector) scalar)))
 
-(defmethod product :before
-  ((matrix1 dense-matrix) (matrix2 dense-matrix) &optional scalar)
+(defmethod product :before ((matrix1 dense-matrix) (matrix2 dense-matrix) &optional scalar)
   "Verify the input."
   (declare (ignore scalar))
   (unless (= (matrix-column-dimension matrix1)
@@ -402,26 +334,19 @@ matrix with a column vector."
     (error "The matrix dimensions, ~A and ~A, are not compatible."
            (matrix-dimensions matrix1) (matrix-dimensions matrix2))))
 
-(defmethod product
-    ((matrix1 dense-matrix) (matrix2 dense-matrix) &optional scalar)
+(defmethod product ((matrix1 dense-matrix) (matrix2 dense-matrix) &optional scalar)
   "Return the product of the dense matrices."
   (make-instance
    (common-class-of matrix1 matrix2)
-   :contents
-   (product-array-array
-    (contents matrix1) (contents matrix2) scalar)))
+   :contents (product-array-array (contents matrix1) (contents matrix2) scalar)))
 
-(defmethod compatible-dimensions-p
-    ((operation (eql :solve))
-     (matrix dense-matrix)
-     (vector column-vector))
+(defmethod compatible-dimensions-p ((operation (eql :solve)) (matrix dense-matrix) (vector column-vector))
   "Return true if the array dimensions are compatible for product."
   (= (matrix-row-dimension matrix)
      (matrix-column-dimension matrix)
      (vector-length vector)))
 
-(defmethod solve :before
-  ((matrix dense-matrix) (vector column-vector))
+(defmethod solve :before ((matrix dense-matrix) (vector column-vector))
   "Return the solution to the system of equations."
   (unless (compatible-dimensions-p :solve matrix vector)
     (error "Matrix~A is incompatible with column vector(~D)."
@@ -431,12 +356,9 @@ matrix with a column vector."
   "Return the solution to the system of equations."
   (make-instance
    'column-vector
-   :contents
-   (gauss-solver
-    (copy-array (contents matrix)) (copy-array (contents vector)))))
+   :contents (gauss-solver (copy-array (contents matrix)) (copy-array (contents vector)))))
 
-(defmethod nsolve :before
-  ((matrix dense-matrix) (vector column-vector))
+(defmethod nsolve :before ((matrix dense-matrix) (vector column-vector))
   "Return the solution to the system of equations."
   (unless (compatible-dimensions-p :solve matrix vector)
     (error "Matrix~A is incompatible with column vector(~D)."
@@ -444,10 +366,7 @@ matrix with a column vector."
 
 (defmethod nsolve ((matrix dense-matrix) (vector column-vector))
   "Return the solution to the system of equations."
-  (setf
-   (contents vector)
-   (gauss-solver (contents matrix) (contents vector)))
-  ;; Return the solution vector
+  (setf (contents vector) (gauss-solver (contents matrix) (contents vector)))
   vector)
 
 (defmethod invert ((matrix dense-matrix))
@@ -456,8 +375,7 @@ matrix with a column vector."
          (matrix-column-dimension matrix))
       (make-instance
        (class-of matrix)
-       :contents
-       (gauss-invert (copy-array (contents matrix))))
+       :contents (gauss-invert (copy-array (contents matrix))))
       (error "The number of rows does not equal columns.")))
 
 (defmethod ninvert ((matrix dense-matrix))
@@ -466,6 +384,5 @@ matrix with a column vector."
          (matrix-column-dimension matrix))
       (make-instance
        (class-of matrix)
-       :contents
-       (gauss-invert (contents matrix)))
+       :contents (gauss-invert (contents matrix)))
       (error "The number of rows does not equal columns.")))

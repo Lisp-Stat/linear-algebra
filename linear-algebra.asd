@@ -4,7 +4,7 @@
 ;;; SPDX-License-identifier: MS-PL
 
 (defsystem "linear-algebra"
-  :version "0.1.1"
+  :version "0.2.0"
   :license :MS-PL
   :author "Thomas M. Hermann <thomas.m.hermann@odonata-research.com>"
   :maintainer "Steve Nunez <steve@symbolics.tech>"
@@ -16,11 +16,22 @@
   :homepage    "https://lisp-stat.dev/docs/manuals/lla"
   :source-control (:git "https://github.com/Lisp-Stat/linear-algebra.git")
   :bug-tracker "https://github.com/Lisp-Stat/linear-algebra/issues"
-
   :pathname "src/"
-  :depends-on ("closer-mop" "floating-point")
+  :depends-on ("closer-mop")
   :components
   ((:file "pkgdcl" :depends-on ("kernel"))
+
+   ;; Interface
+   (:module interface
+    :pathname "interface/"
+    :depends-on ("kernel")
+    :components
+    ((:file "fundamental-ops")
+     (:file "vector" :depends-on ("fundamental-ops"))
+     (:file "matrix" :depends-on ("fundamental-ops"))
+     (:file "identity-matrix" :depends-on ("matrix"))
+     (:file "permutation-matrix" :depends-on ("matrix"))))
+
    ;; Linear algebra kernel functions
    (:module kernel
     :pathname "kernel/"
@@ -35,16 +46,7 @@
      (:file "cholesky" :depends-on ("unary-operations"))
      (:file "conjugate-gradient" :depends-on ("binary-operations"))
      (:file "tridiagonal" :depends-on ("pkgdcl"))))
-   ;; Interface
-   (:module interface
-    :pathname "interface/"
-    :depends-on ("kernel")
-    :components
-    ((:file "fundamental-ops")
-     (:file "vector" :depends-on ("fundamental-ops"))
-     (:file "matrix" :depends-on ("fundamental-ops"))
-     (:file "identity-matrix" :depends-on ("matrix"))
-     (:file "permutation-matrix" :depends-on ("matrix"))))
+
    ;; Common Lisp sequences
    (:module sequence
     :depends-on ("interface")
@@ -52,12 +54,14 @@
     ((:file "list")
      (:file "vector")
      (:file "array")))
+
    ;; Linear algebra classes and operations
    (:file "data-vector" :depends-on ("interface"))
    (:file "dense-matrix" :depends-on ("data-vector"))
    (:file "square-matrix" :depends-on ("dense-matrix"))
    (:file "hermitian-matrix" :depends-on ("square-matrix"))
-   (:file "symmetric-matrix" :depends-on ("square-matrix")))
+   (:file "symmetric-matrix" :depends-on ("square-matrix"))
+   (:file "triangular-matrix" :depends-on ("square-matrix")))
   :in-order-to ((test-op (test-op "linear-algebra/tests"))))
 
 (defsystem "linear-algebra/tests"
@@ -65,18 +69,14 @@
   :description "Unit tests for LINEAR-ALGEBRA."
   :author "Thomas M. Hermann <thomas.m.hermann@odonata-research.com>"
   :maintainer "Steve Nunez <steve@symbolics.tech>"
-  :maintainer "Brian Eberman <bseberman@gmail.com>"
-  :licence     :MS-PL
+  :maintainer "Brian Eberman <brian@tenfactorgrowth.com>"
+  :licence :MS-PL
+  :pathname "test/"
   :depends-on ("linear-algebra-test")
   :serial t
   :perform (test-op (o s)
-		    (symbol-call :lisp-unit :run-tests :all :linear-algebra-test)))
-
-
-;; Is this a misuse of *FEATURES*?
-#+ignore
-(defmethod perform :after
-  ((operation load-op) (system (eql (find-system :linear-algebra))))
-  "Update *FEATURES* if the system loads successfully."
-  (pushnew :linear-algebra common-lisp:*features*)
-  (pushnew :linear-algebra common-lisp:*features*))
+		    (let ((*print-pretty* t)) ;work around clunit issue #9
+		      (symbol-call :clunit :run-suite
+				   (find-symbol* :linear-algebra
+						 :linear-algebra-test)
+					   :use-debugger nil))))

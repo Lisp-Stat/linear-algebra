@@ -3,12 +3,11 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra)
+(in-package #:linear-algebra)
 
 (defclass hermitian-matrix (square-matrix)
   ()
-  (:documentation
-   "Hermitian matrix object."))
+  (:documentation "Hermitian matrix object."))
 
 ;;; Hermitian matrix interface operations
 
@@ -30,7 +29,7 @@
       (if (zerop (imagpart (aref contents i0 i0)))
           (dotimes (i1 i0)
             (unless
-                (complex-equal
+                (num=
                  (aref contents i0 i1)
                  (conjugate (aref contents i1 i0)))
               (error "The data is not Hermitian.")))
@@ -77,7 +76,7 @@ element."
              (aref initial-contents i0 i0))))
           (dotimes (i1 i0)
             (unless
-                (complex-equal
+                (num=
                  (setf
                   (aref contents i0 i1)
                   (aref initial-contents i0 i1))

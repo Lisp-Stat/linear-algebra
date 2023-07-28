@@ -3,7 +3,7 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra)
+(in-package #:linear-algebra)
 
 ;;; Data vector classes
 
@@ -12,18 +12,15 @@
     :type (array * (*))
     :initarg :contents
     :accessor contents))
-  (:documentation
-   "A data vector."))
+  (:documentation "A data vector."))
 
 (defclass row-vector (data-vector)
   ()
-  (:documentation
-   "A row vector."))
+  (:documentation "A row vector."))
 
 (defclass column-vector (data-vector)
   ()
-  (:documentation
-   "A column vector."))
+  (:documentation "A column vector."))
 
 (defmethod initialize-instance :after
   ((self data-vector) &rest initargs

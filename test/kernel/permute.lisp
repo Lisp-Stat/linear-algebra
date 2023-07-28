@@ -1,66 +1,46 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra-test)
+(in-package #:linear-algebra-test)
 
-;;; Right permutation
+(defsuite permute (kernel))
 
-(define-test right-permute
-  (:tag :kernel :permute)
+(deftest right-permute (permute)
+
   ;; Vector
   (loop
-   for (permutation right-permutation nil nil nil)
-   in (validated-permutations)
-   do
-   (assert-float-equal
-    right-permutation
-    (linear-algebra-kernel:right-permute
-     (vector-to-permute) permutation)
-    permutation))
+    for (permutation right-permutation nil nil nil) in (validated-permutations)
+    do (assert-num= right-permutation (linear-algebra-kernel:right-permute (vector-to-permute) permutation)))
+
   ;; Array
   (loop
-   for (permutation nil nil right-permutation nil)
-   in (validated-permutations)
-   do
-   (assert-float-equal
-    right-permutation
-    (linear-algebra-kernel:right-permute
-     (array-to-permute) permutation)
-    permutation)))
+    for (permutation nil nil right-permutation nil) in (validated-permutations)
+    do (assert-num= right-permutation (linear-algebra-kernel:right-permute (array-to-permute) permutation))))
 
-(define-test left-permute
-  (:tag :kernel :permute)
+
+(deftest left-permute (permute)
+
   ;; Vector
   (loop
-   for (permutation nil left-permutation nil nil)
-   in (validated-permutations)
-   do
-   (assert-float-equal
-    left-permutation
-    (linear-algebra-kernel:left-permute
-     permutation (vector-to-permute))
-    permutation))
+    for (permutation nil left-permutation nil nil) in (validated-permutations)
+    do (assert-num= left-permutation (linear-algebra-kernel:left-permute permutation (vector-to-permute))))
+
   ;; Array
   (loop
-   for (permutation nil nil nil left-permutation)
-   in (validated-permutations)
-   do
-   (assert-float-equal
-    left-permutation
-    (linear-algebra-kernel:left-permute
-     permutation (array-to-permute))
-    permutation)))
+    for (permutation nil nil nil left-permutation) in (validated-permutations)
+    do (assert-num= left-permutation (linear-algebra-kernel:left-permute permutation (array-to-permute)))))
 
 #| Validated permutations
 
-  Order of valid permutation data.
-  1. Permutation vector
-  2. Right permutation of the vector-to-permute
-  3. Left permutation of the vector-to-permute
-  4. Right permutation of the array-to-permute
-  5. Left permutation of the array-to-permute
+Order of valid permutation data.
+1. Permutation vector
+2. Right permutation of the vector-to-permute
+3. Left permutation of the vector-to-permute
+4. Right permutation of the array-to-permute
+5. Left permutation of the array-to-permute
 
 |#
 
@@ -70,13 +50,11 @@
 
 (defun array-to-permute ()
   "Return a new instance of the array to permute."
-  (make-array
-   '(5 5) :initial-contents
-   '((1.0 1.1 1.2 1.3 1.4)
-     (2.0 2.1 2.2 2.3 2.4)
-     (3.0 3.1 3.2 3.3 3.4)
-     (4.0 4.1 4.2 4.3 4.4)
-     (5.0 5.1 5.2 5.3 5.4))))
+  (make-array '(5 5) :initial-contents '((1.0 1.1 1.2 1.3 1.4)
+					 (2.0 2.1 2.2 2.3 2.4)
+					 (3.0 3.1 3.2 3.3 3.4)
+					 (4.0 4.1 4.2 4.3 4.4)
+					 (5.0 5.1 5.2 5.3 5.4))))
 
 (defun validated-permutations ()
   "Return a list of permutation vectors and validated permutations."

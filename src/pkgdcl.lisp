@@ -4,8 +4,9 @@
 ;;; SPDX-License-identifier: MS-PL
 
 (uiop:define-package #:linear-algebra
-  (:use #:cl #:floating-point #:linear-algebra-kernel)
-
+  (:use #:cl)
+  (:import-from #:num-utils #:num=)
+  (:use-reexport #:linear-algebra-kernel)
   ;; Fundamental operations
   (:export #:norm
            #:transpose #:ntranspose
@@ -46,27 +47,24 @@
            #:submatrix
            #:replace-matrix
            #:matrix-validated-range)
-  ;; Identity matrix
   (:export #:identity-matrix
            #:identity-matrix-p)
-  ;; Permutation matrix
   (:export #:permutation-matrix
            #:permutation-matrix-p)
-  ;; Data vector exports
   (:export #:data-vector
            #:row-vector
            #:row-vector-p
            #:column-vector
            #:column-vector-p)
-  ;; Dense matrix
   (:export #:dense-matrix
            #:dense-matrix-p)
-  ;; Square matrix
   (:export #:square-matrix
            #:square-matrix-p)
-  ;; Hermitian matrix
   (:export #:hermitian-matrix
            #:hermitian-matrix-p)
-  ;; Symmetric matrix
+  (:export #:upper-triangular-matrix
+           #:upper-triangular-matrix-p
+	   #:lower-triangular-matrix
+           #:lower-triangular-matrix-p)
   (:export #:symmetric-matrix
            #:symmetric-matrix-p))

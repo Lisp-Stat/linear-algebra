@@ -3,52 +3,38 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra)
+(in-package #:linear-algebra)
 
 (defclass permutation-matrix (matrix-object)
   ((contents
     :type     (array fixnum (*))
     :initarg  :contents
     :accessor contents))
-  (:documentation
-   "Permutation matrix object."))
+  (:documentation "Permutation matrix object."))
 
 (defun permutation-matrix-p (object)
   "Return true if object is a permutation-matrix."
   (typep object 'permutation-matrix))
 
 (defmethod initialize-instance :after
-  ((self permutation-matrix) &rest initargs
-   &key dimensions element-type initial-element initial-contents)
-  "Verify that the element-type was not set and that rows equals
-columns."
-  (cond
-   ((slot-boundp self 'contents))
-   ((not (eq 'number element-type))
-    (error
-     "Cannot specify the element type of a permutation matrix."))
-   ((not (apply #'= dimensions))
-    (error "Number of rows must equal the number of columns."))
-   (initial-element
-    (error
-     "Cannot specify the initial element of a permutation matrix."))
-   (initial-contents
-    (initialize-matrix-contents self initial-contents initargs))
-   (t
-    (loop
-     with rows = (first dimensions)
-     with contents =
-     (setf (contents self) (make-array rows :element-type 'fixnum))
-     for index below rows do
-     (setf (aref contents index) index)))))
+    ((self permutation-matrix) &rest initargs
+     &key dimensions element-type initial-element initial-contents)
+  "Verify that the element-type was not set and that rows equals columns."
+  (cond ((slot-boundp self 'contents))
+	((not (eq 'number element-type)) (error "Cannot specify the element type of a permutation matrix."))
+	((not (apply #'= dimensions)) (error "Number of rows must equal the number of columns."))
+	(initial-element (error "Cannot specify the initial element of a permutation matrix."))
+	(initial-contents (initialize-matrix-contents self initial-contents initargs))
+	(t (loop
+	     with rows = (first dimensions)
+	     with contents = (setf (contents self) (make-array rows :element-type 'fixnum))
+	     for index below rows do
+	       (setf (aref contents index) index)))))
 
 ;;; FIXME : Use the LOOP.
 (defun %initialize-permutation-matrix-with-seq (matrix data size)
   (if (= size (length data))
-      (let ((contents
-             (setf
-              (contents matrix)
-              (make-array size :element-type 'fixnum))))
+      (let ((contents (setf (contents matrix) (make-array size :element-type 'fixnum))))
         ;; Fill contents, there should be no duplicates.
         (dotimes (row size)
           (let ((data-row (elt data row)))
@@ -60,10 +46,8 @@ columns."
                 (error "Rows unequal in length."))))
         ;; FIXME : Find a better way to identify duplicates.
         ;; If duplicates, not a permutation matrix.
-        (unless
-            (= size (length (remove-duplicates contents :test #'=)))
+        (unless (= size (length (remove-duplicates contents :test #'=)))
           (error "Invalid permutation in data."))
-        ;; Return the matrix
         matrix)
       (error "Invalid number of rows of data.")))
 
@@ -84,39 +68,32 @@ columns."
   "Initialize the permutation matrix with a 2D array."
   (let ((rows (first (getf initargs :dimensions)))
         (columns (second (getf initargs :dimensions))))
-    (cond
-     ((not (= rows (array-dimension initial-contents 0)))
-      (error "Invalid number of rows of data."))
-     ((not (= columns (array-dimension initial-contents 1)))
-      (error "Invalid number of columns of data."))
-     (t
-      (let ((row -1))
-        (map-into
-         (setf (contents matrix) (make-array rows :element-type 'fixnum))
-         (lambda ()
-           (incf row)
-           (do ((column 0 (1+ column)))
-               ((cond
-                 ((>= column columns)
-                  (error "Invalid permutation data."))
-                 ((= 1 (aref initial-contents row column))))
-                column))))
-        ;; FIXME : Find a better way to identify duplicates.
-        (unless
-            (=
-             rows
-             (length (remove-duplicates (contents matrix) :test #'=)))
-          (error "Invalid permutation in data."))
-        ;; Return the permutation matrix
-        matrix)))))
+    (cond ((not (= rows (array-dimension initial-contents 0)))
+	   (error "Invalid number of rows of data."))
+	  ((not (= columns (array-dimension initial-contents 1)))
+	   (error "Invalid number of columns of data."))
+	  (t (let ((row -1))
+               (map-into
+		(setf (contents matrix) (make-array rows :element-type 'fixnum))
+		(lambda ()
+		  (incf row)
+		  (do ((column 0 (1+ column)))
+		      ((cond
+			 ((>= column columns)
+			  (error "Invalid permutation data."))
+			 ((= 1 (aref initial-contents row column))))
+                       column))))
+               ;; FIXME : Find a better way to identify duplicates.
+               (unless (= rows (length (remove-duplicates (contents matrix) :test #'=)))
+		 (error "Invalid permutation in data."))
+               matrix)))))
 
 (defmethod matrix-in-bounds-p
     ((matrix permutation-matrix) (row integer) (column integer))
   "Return true if row and column do not exceed the dimensions of matrix."
   (let ((size (length (contents matrix))))
-    (and
-     (<= 0 row)    (< row    size)
-     (<= 0 column) (< column size))))
+    (and (<= 0 row)    (< row    size)
+	 (<= 0 column) (< column size))))
 
 (defmethod matrix-element-type ((matrix permutation-matrix))
   "Element type of the permutation matrix."
@@ -149,20 +126,14 @@ columns."
 
 (defmethod copy-matrix ((matrix permutation-matrix))
   "Return a copy of the permutation matrix."
-  (make-instance
-   'permutation-matrix
-   :contents (copy-array (contents matrix))))
+  (make-instance 'permutation-matrix :contents (copy-array (contents matrix))))
 
 (defmethod transpose ((matrix permutation-matrix))
   "Transpose the permutation matrix."
-  (make-instance
-   'permutation-matrix
-   :contents
-   (loop
-    with contents = (contents matrix)
-    with permuted =
-    (make-array (length contents) :element-type 'fixnum)
-    for column across contents
-    as  row = 0 then (1+ row)
-    do (setf (aref permuted column) row)
-    finally (return permuted))))
+  (make-instance 'permutation-matrix :contents (loop
+						 with contents = (contents matrix)
+						 with permuted = (make-array (length contents) :element-type 'fixnum)
+						 for column across contents
+						 as  row = 0 then (1+ row)
+						 do (setf (aref permuted column) row)
+						 finally (return permuted))))

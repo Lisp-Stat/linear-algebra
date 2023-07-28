@@ -3,7 +3,7 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra-kernel)
+(in-package #:linear-algebra-kernel)
 
 ;;; Initialization
 
@@ -92,38 +92,3 @@
     #'aref array
     (or subscripts
         (make-list (array-rank array) :initial-element 0)))))
-
-;;; Equality predicates
-
-;;; (COMPLEX-EQUAL number1 number2) => true or false
-(defun complex-equal (complex1 complex2 &optional (epsilon *epsilon*))
-  "Return true if both numbers are complex and equal."
-  (cond
-    ((or
-      (typep complex1 '(complex float))
-      (typep complex2 '(complex float)))
-     (float-equal complex1 complex2 epsilon))
-    ((or
-      (typep complex1 '(complex integer))
-      (typep complex2 '(complex integer)))
-     (= complex1 complex2))
-    (t (error "Arguments are not complex."))))
-
-;;; (NUMBER-EQUAL number1 number2) => true or false
-(defun number-equal (number1 number2 &optional (epsilon *epsilon*))
-  "Return true if the numbers are equal using the appropriate
-comparison."
-  (cond
-    ((or (floatp number1) (floatp number2))
-     (float-equal number1 number2 epsilon))
-    ((and (rationalp number1) (rationalp number2))
-     (= number1 number2))
-    ((or
-      (typep number1 '(complex float))
-      (typep number2 '(complex float)))
-     (float-equal number1 number2 epsilon))
-    ((and
-      (typep number1 '(complex rational))
-      (typep number2 '(complex rational)))
-     (= number1 number2))
-    (t (error "Non-numeric arguments."))))

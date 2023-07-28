@@ -76,12 +76,11 @@
 
 * [closer-mop](https://github.com/pcostanza/closer-mop)
 * [alexandria](https://gitlab.common-lisp.net/alexandria/alexandria)
-
-<!-- Not yet -->
-<!-- * [array-operations](https://github.com/lisp-stat/array-operations) -->
-<!-- * [select](https://github.com/lisp-stat/select) -->
-<!-- * [let-plus](https://github.com/sharplispers/let-plus) -->
-<!-- * [numerical-utilities](https://github.com/lisp-stat/numerical-utilities) -->
+* [array-operations](https://github.com/lisp-stat/array-operations)
+* [array-operations](https://github.com/lisp-stat/array-operations)
+* [numerical-utilities](https://github.com/lisp-stat/numerical-utilities)
+* [select](https://github.com/lisp-stat/select)
+* [let-plus](https://github.com/sharplispers/let-plus)
 
 
 <!-- GETTING STARTED -->
@@ -156,9 +155,8 @@ sources.
 `linear-algebra` is in a usable state for pure lisp operations.  Future plans include:
 
 * Merging functionality from [numerical-utilities](https://github.com/Lisp-Stat/numerical-utilities) where there is duplication
-* Merge the BLAS/LAPACK backend from [LLA](https://github.com/Lisp-Stat/lla)
 * Add a backend for CUDA for GPU based linear algebra operations
-* Improve [documentation](https://lisp-stat.dev/docs/manuals/lla/)
+* Improve [documentation](https://lisp-stat.dev/docs/manuals/linear-algebra/)
 
 See the [open issues](https://github.com/lisp-stat/linear-algebra/issues) for a list of proposed features (and known issues).
 

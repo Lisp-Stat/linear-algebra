@@ -1,17 +1,17 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-Lisp; Package: LINEAR-ALGEBRA-TEST -*-
 ;;; Copyright (c) 2011-2014, Odonata Research LLC
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
+;;; Copyright (c) 2023 Ten Factor Growth, LLC
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra-test)
+(in-package #:linear-algebra-test)
+
+(defsuite interface (matrix))
 
 ;;; Matrix object predicate
 
-(define-test matrixp
-  (:tag :matrix)
-  (assert-true
-   (linear-algebra:matrixp
-    (make-instance 'linear-algebra:matrix-object)))
+(deftest matrixp (interface)
+  (assert-true (linear-algebra:matrixp (make-instance 'linear-algebra:matrix-object)))
   (assert-false (linear-algebra:matrixp t)))
 
 ;;; Matrix bounds
@@ -25,22 +25,15 @@
              10 10 :matrix-type ,matrix-type
              ,@(when initial-contents-p
                  `(:initial-contents ,initial-contents)))))
-      (assert-true
-       (linear-algebra:matrix-in-bounds-p
-        ,mat (random 10) (random 10)))
-      (assert-false
-       (linear-algebra:matrix-in-bounds-p ,mat -1 0))
-      (assert-false
-       (linear-algebra:matrix-in-bounds-p ,mat 0 -1))
-      (assert-false
-       (linear-algebra:matrix-in-bounds-p ,mat 10 0))
-      (assert-false
-       (linear-algebra:matrix-in-bounds-p ,mat 0 10)))))
+      (assert-true (linear-algebra:matrix-in-bounds-p ,mat (random 10) (random 10)))
+      (assert-false (linear-algebra:matrix-in-bounds-p ,mat -1 0))
+      (assert-false (linear-algebra:matrix-in-bounds-p ,mat 0 -1))
+      (assert-false (linear-algebra:matrix-in-bounds-p ,mat 10 0))
+      (assert-false (linear-algebra:matrix-in-bounds-p ,mat 0 10)))))
 
 ;;; Matrix element type
 
-(defmacro test-matrix-element-type
-          (matrix-type &optional (test-real-p t) (test-complex-p t))
+(defmacro test-matrix-element-type (matrix-type &optional (test-real-p t) (test-complex-p t))
   (let ((numeric-types (gensym "NUMERIC-TYPES-"))
         (mtype (gensym "MTYPE-"))
         (ntype (gensym "NTYPE-")))
@@ -152,22 +145,22 @@
          (assert-eql (min ,col1 ,col2) v2)
          (assert-eql (max ,row1 ,row2) v3)
          (assert-eql (max ,col1 ,col2) v4))
-      (assert-error
-       'error
+      (assert-condition
+       error
        (linear-algebra:matrix-validated-range ,matrix (1+ ,rows) ,col1))
-      (assert-error
-       'error
+      (assert-condition
+       error
        (linear-algebra:matrix-validated-range ,matrix ,row1 (1+ ,columns)))
-      (assert-error
-       'error
+      (assert-condition
+       error
        (linear-algebra:matrix-validated-range
         ,matrix (1- ,rows) ,col1 1))
-      (assert-error
-       'error
+      (assert-condition
+       error
        (linear-algebra:matrix-validated-range
         ,matrix ,row1 (1- ,columns) ,rows 1))
-      (assert-error
-       'error
+      (assert-condition
+       error
        (linear-algebra:matrix-validated-range
         ,matrix
         (1- ,rows) (1- ,columns) 1 1)))))

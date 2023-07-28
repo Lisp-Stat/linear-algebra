@@ -3,7 +3,7 @@
 ;;; Copyright (c) 2023 Symbolics Pte Ltd
 ;;; SPDX-License-identifier: MS-PL
 
-(in-package :linear-algebra)
+(in-package #:linear-algebra)
 
 (defclass identity-matrix (matrix-object)
   ((size
@@ -16,8 +16,7 @@
     :type    (array * (2))
     :initarg :contents
     :reader  contents))
-  (:documentation
-   "Identity matrix object."))
+  (:documentation "Identity matrix object."))
 
 (defun identity-matrix-p (object)
   "Return true if object is an identity-matrix."
@@ -27,20 +26,21 @@
     ((self identity-matrix) &rest initargs
      &key dimensions element-type initial-element initial-contents)
   "Initialize the identity matrix."
+  (declare (ignore initargs))
   (cond
-   ((slot-boundp self 'contents))
-   ((or initial-element initial-contents)
-    (error "Initial data is invalid for an identity matrix."))
-   ((not (apply #'= dimensions))
-    (error "Rows and columns are not equal."))
-   (t
-    (setf
-     (slot-value self 'size) (first dimensions)
-     (slot-value self 'contents)
-     (make-array
-      2 :element-type element-type
-      :initial-contents
-      (list (coerce 0 element-type) (coerce 1 element-type)))))))
+    ((slot-boundp self 'contents))
+    ((or initial-element initial-contents)
+     (error "Initial data is invalid for an identity matrix."))
+    ((not (apply #'= dimensions))
+     (error "Rows and columns are not equal."))
+    (t
+     (setf
+      (slot-value self 'size) (first dimensions)
+      (slot-value self 'contents)
+      (make-array
+       2 :element-type element-type
+	 :initial-contents
+	 (list (coerce 0 element-type) (coerce 1 element-type)))))))
 
 (defmethod matrix-in-bounds-p
     ((matrix identity-matrix) (row integer) (column integer))
