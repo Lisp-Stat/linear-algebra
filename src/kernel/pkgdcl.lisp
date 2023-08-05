@@ -6,6 +6,10 @@
 (uiop:define-package #:linear-algebra-kernel
   (:use #:cl)
   (:import-from #:num-utils #:num=)
+  (:import-from #:num-utils.arithmetic       #:sum #:seq-min #:seq-max #:square)
+  (:import-from #:num-utils.elementwise      #:eexpt #:eabs #:e/ #:esquare)
+  (:import-from #:num-utils.matrix-shorthand #:vec)
+
   ;; Utility functions
   (:export #:copy-array
            #:common-class-of
@@ -15,8 +19,7 @@
   (:export #:right-permute
            #:left-permute)
   ;; Unary operations
-  (:export #:sumsq2 #:sumsq3
-           #:sumsq #:sump
+  (:export #:sumsq #:sump
            #:sumsq-row
            #:sumsq-column
            #:norm-vector

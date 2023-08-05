@@ -13,7 +13,9 @@
 
 (defmethod %norm ((data list) (measure (eql 2)))
   "Return the Euclidean norm of the vector."
-  (multiple-value-bind (scale sumsq) (sumsq (loop for val in data collect (abs val)))
+  (multiple-value-bind (scale sumsq)
+      (nu:sum (nu:esquare (coerce (loop for val in data collect (abs val)) 'vector))) ;temporary, we'll remove lists soon
+      ;;(sumsq (loop for val in data collect (abs val)))
     (* scale (sqrt sumsq))))
 
 (defmethod %norm ((data list) (measure integer))

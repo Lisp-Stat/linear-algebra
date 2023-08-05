@@ -7,6 +7,9 @@
 
 (uiop:define-package #:linear-algebra-test
   (:use #:cl #:clunit #:linear-algebra)
+  (:import-from #:num-utils.arithmetic  #:sum #:seq-min #:seq-max #:square)
+  (:import-from #:num-utils.elementwise #:eexpt #:eabs #:e/ #:esquare)
+  (:import-from #:num-utils.matrix-shorthand #:vec)
   (:import-from #:num-utils #:num=))
 
 

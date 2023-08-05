@@ -4,7 +4,7 @@
 ;;; SPDX-License-identifier: MS-PL
 
 (defsystem "linear-algebra"
-  :version "0.2.0"
+  :version "0.3.0"
   :license :MS-PL
   :author "Thomas M. Hermann <thomas.m.hermann@odonata-research.com>"
   :maintainer "Steve Nunez <steve@symbolics.tech>"
@@ -17,7 +17,7 @@
   :source-control (:git "https://github.com/Lisp-Stat/linear-algebra.git")
   :bug-tracker "https://github.com/Lisp-Stat/linear-algebra/issues"
   :pathname "src/"
-  :depends-on ("closer-mop")
+  :depends-on ("closer-mop" "num-utils")
   :components
   ((:file "pkgdcl" :depends-on ("kernel"))
 

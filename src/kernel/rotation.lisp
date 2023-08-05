@@ -7,12 +7,11 @@
 
 (defun givens-rotation (f g)
   "Return c,s,r defined from the Givens rotation."
-  (cond ((zerop g)
-	 (values 1 0 f))
-	((zerop f)
-	 (values 0 (signum (conjugate g)) (abs g)))
+  (nu:check-types (f g) number)
+  (cond ((zerop g) (values 1 0 f))
+	((zerop f) (values 0 (signum (conjugate g)) (abs g)))
 	(t (let ((abs-f (abs f))
-		 (sqrtfg (sumsq2 f g)))
+		 (sqrtfg (sqrt (sum (esquare (eabs `#(,f ,g)))))))
 	     (values (/ abs-f sqrtfg)
 		     (/ (* (signum f) (conjugate g)) sqrtfg)
 		     (* (signum f) sqrtfg))))))
@@ -41,9 +40,8 @@
 
 (defun householder-reflection (alpha vector)
   "Return Beta, Tau and the Householder vector."
-  (let* ((beta (- (float-sign
-		   (realpart alpha)
-		   (sumsq2 alpha (norm-vector vector 2)))))
+  (let* ((beta (- (float-sign (realpart alpha)
+			      (sqrt (sum (esquare (eabs `#(,alpha ,(norm-vector vector 2)))))))))
          (tau  (- 1 (/ alpha beta))))
     (values beta tau (dotimes (index (length vector) vector)
 		       (setf (aref vector index)

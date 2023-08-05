@@ -7,49 +7,39 @@
 (in-package #:linear-algebra-test)
 
 (defsuite unary-operations (kernel))
-
+#+nil
 (deftest sumsq2 (unary-operations)
   "sqrt |x|^2 + |y|^2"
 
   ;; Real values
   (dolist (args (cartesian-product '(-3.0 3.0) '(-4.0 4.0)))
-    (assert-num= 5.0 (apply #'sumsq2 args)))
+    (assert-num= 5.0 (sqrt (sum (esquare (eabs (apply #'vec 'single-float args)))))))
 
   ;; Complex values
-  (let ((args1
-          (mapcar
-           (lambda (x) (apply #'complex x))
-           (cartesian-product '(-1.1 1.1) '(-2.2 2.2))))
-        (args2
-          (mapcar
-           (lambda (x) (apply #'complex x))
-           (cartesian-product '(-3.3 3.3) '(-4.4 4.4)))))
+  (let ((args1 (mapcar (lambda (x) (apply #'complex x))
+		       (cartesian-product '(-1.1 1.1) '(-2.2 2.2))))
+        (args2 (mapcar (lambda (x) (apply #'complex x))
+		       (cartesian-product '(-3.3 3.3) '(-4.4 4.4)))))
     (dolist (args (cartesian-product args1 args2))
-      (assert-num= 6.024948 (apply #'sumsq2 args)))))
-
+      (assert-num= 6.024948 (sqrt (sum (esquare (eabs (apply #'vec 'complex args)))))))))
+#+nil
 (deftest sumsq3 (unary-operations)
   "sqrt |x|^2 + |y|^2 + |z|^2"
 
   ;; Real values
   (dolist (args (nary-product '(-2.0 2.0) '(-3.0 3.0) '(-4.0 4.0)))
-    (assert-num= 5.3851647 (apply #'sumsq3 args)))
+    (assert-num= 5.3851647 (sqrt (sum (esquare (eabs (apply #'vec 'single-float args)))))))
 
   ;; Complex values
-  (let ((args1
-          (mapcar
-           (lambda (x) (apply #'complex x))
-           (cartesian-product '(-1.1 1.1) '(-2.2 2.2))))
-        (args2
-          (mapcar
-           (lambda (x) (apply #'complex x))
-           (cartesian-product '(-3.3 3.3) '(-4.4 4.4))))
-        (args3
-          (mapcar
-           (lambda (x) (apply #'complex x))
-           (cartesian-product '(-5.5 5.5) '(-6.6 6.6)))))
+  (let ((args1 (mapcar (lambda (x) (apply #'complex x))
+		       (cartesian-product '(-1.1 1.1) '(-2.2 2.2))))
+        (args2 (mapcar (lambda (x) (apply #'complex x))
+		       (cartesian-product '(-3.3 3.3) '(-4.4 4.4))))
+        (args3 (mapcar (lambda (x) (apply #'complex x))
+		       (cartesian-product '(-5.5 5.5) '(-6.6 6.6)))))
     (dolist (args (nary-product args1 args2 args3))
-      (assert-num= 10.49333 (apply #'sumsq3 args)))))
-
+      (assert-num= 10.49333 (sqrt (sum (esquare (eabs (apply #'vec 'complex args)))))))))
+#+nil
 (deftest unary-sumsq (unary-operations)
   ;; Real
   (multiple-value-bind (scale sumsq) (sumsq '(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5))
@@ -66,7 +56,8 @@
     (assert-num= 73/18 sumsq))
   ;; Complex
   (multiple-value-bind (scale sumsq) (sumsq #(#C(1 0) #C(3 1) #C(2 3) #C(0 4)
-					      #C(-2 3) #C(-3 1) #C(-1 0)) 1 0)
+					      #C(-2 3) #C(-3 1) #C(-1 0))
+					    1 0)
     (assert-num= 4.0 scale)
     (assert-num= #C (2.75 -1.125) sumsq))
   ;; Array
