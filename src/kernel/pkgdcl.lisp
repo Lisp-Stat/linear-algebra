@@ -20,7 +20,6 @@
            #:left-permute)
   ;; Unary operations
   (:export #:norm
-	   #:sump
            #:sumsq-row
            #:sumsq-column)
   ;; Binary operations
