@@ -51,8 +51,7 @@
    (:module sequence
     :depends-on ("interface")
     :components
-    ((:file "list")
-     (:file "vector")
+    ((:file "vector")
      (:file "array")))
 
    ;; Linear algebra classes and operations

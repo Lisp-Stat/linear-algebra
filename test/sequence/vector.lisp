@@ -87,7 +87,8 @@
     (assert-num= #(#C(4.4 8.8) #C(13.2 17.6)) (linear-algebra:add vector1 vector2 :scalar1 2.0 :scalar2 2.0))))
 
 ;;; Destructive vector addition
-
+#|
+None of these test vectors, they test lists
 (defun sequence-equal-p (seq1 seq2)
   "Assumes SEQ1 is a VECTOR and SEQ2 is a cons."
   (loop
@@ -110,7 +111,7 @@
                     #C(4.0 4.0) #C(5.0 5.0))))
     (assert-eq list (linear-algebra:nscale #C(2.0 2.0) list))
     (assert-true (sequence-equal-p #(#C(0.0 4.0) #C(0.0 8.0) #C(0.0 12.0) #C(0.0 16.0) #C(0.0 20.0)) list))))
-
+|#
 ;;; Vector addition
 
 (deftest add-vector (vector)
