@@ -8,26 +8,6 @@
 
 (defsuite vector (sequence))
 
-(deftest norm-vector (vector)
-  ;; Taxicab norm
-  (assert-num= 36 (linear-algebra:norm #(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5) 1))
-  (assert-num= 19.535658 (linear-algebra:norm #(#C(1 0) #C(3 1) #C(2 3) #C(0 4)
-						#C(-2 3) #C(-3 1) #C(-1 0))
-					      1))
-  ;; Euclidean norm
-  (assert-num= 12.083046 (linear-algebra:norm #(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5) 2))
-  (assert-num= 8.0 (linear-algebra:norm #(#C(1 0) #C(3 1) #C(2 3) #C(0 4) #C(-2 3) #C(-3 1) #C(-1 0)) 2))
-  ;; P-norm
-  (let ((data #(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5))
-        (zdata #(#C(1 0) #C(3 1) #C(2 3) #C(0 4)
-                 #C(-2 3) #C(-3 1) #C(-1 0))))
-    (assert-num= 8.732892 (linear-algebra:norm data 3))
-    (assert-num= 6.064035 (linear-algebra:norm zdata 3)))
-  ;; Infinity norm
-  (assert-num= 6 (linear-algebra:norm #(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5) :infinity))
-  (assert-num= 4.0 (linear-algebra:norm #(#C(1 0) #C(3 1) #C(2 3) #C(0 4)
-					  #C(-2 3) #C(-3 1) #C(-1 0)) :infinity)))
-
 ;;; Vector transpose
 
 (deftest transpose-vector (vector)

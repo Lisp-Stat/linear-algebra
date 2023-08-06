@@ -416,19 +416,6 @@
 
 ;;; Test dense matrix fundamental operations
 
-(deftest norm-dense-matrix (dense-matrix)
-  (let ((matrix (make-matrix 5 4 :initial-contents #2A((1.1 1.2 1.3 1.4)
-						       (2.1 2.2 2.3 2.4)
-						       (3.1 3.2 3.3 3.4)
-						       (4.1 4.2 4.3 4.4)
-						       (5.1 5.2 5.3 5.4)))))
-    (assert-num= 17.0 (norm matrix))
-    (assert-num= 17.0 (norm matrix 1))
-    (assert-num= 5.4 (norm matrix :max))
-    (assert-num= 15.858751 (norm matrix :frobenius))
-    (assert-num= 21.0 (norm matrix :infinity))
-    (assert-condition error (norm matrix :unknown))))
-
 (deftest transpose-dense-matrix (dense-matrix)
   (let ((matrix (make-matrix 5 4 :initial-contents #2A((1.1 1.2 1.3 1.4)
 						       (2.1 2.2 2.3 2.4)

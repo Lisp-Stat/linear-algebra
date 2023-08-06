@@ -37,6 +37,7 @@
     :pathname "kernel/"
     :components
     ((:file "pkgdcl")
+     (:file "norms" :depends-on ("pkgdcl"))
      (:file "utility" :depends-on ("pkgdcl"))
      (:file "permute" :depends-on ("pkgdcl"))
      (:file "unary-operations" :depends-on ("pkgdcl"))

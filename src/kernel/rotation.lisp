@@ -41,7 +41,7 @@
 (defun householder-reflection (alpha vector)
   "Return Beta, Tau and the Householder vector."
   (let* ((beta (- (float-sign (realpart alpha)
-			      (sqrt (sum (esquare (eabs `#(,alpha ,(norm-vector vector 2)))))))))
+			      (sqrt (sum (esquare (eabs `#(,alpha ,(norm vector 2)))))))))
          (tau  (- 1 (/ alpha beta))))
     (values beta tau (dotimes (index (length vector) vector)
 		       (setf (aref vector index)

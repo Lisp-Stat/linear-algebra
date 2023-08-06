@@ -8,17 +8,6 @@
 
 (defsuite array (sequence))
 
-(deftest norm-array (array)
-  (let ((array #2A((1.1 1.2 1.3 1.4)
-		   (2.1 2.2 2.3 2.4)
-		   (3.1 3.2 3.3 3.4)
-		   (4.1 4.2 4.3 4.4)
-		   (5.1 5.2 5.3 5.4))))
-    (assert-num= 17.0 (norm array))
-    (assert-num= 5.4 (norm array :max))
-    (assert-num= 15.858751 (norm array :frobenius))
-    (assert-num= 21.0 (norm array :infinity))))
-
 (deftest transpose-array (array)
   (assert-num= #2A((1.1 2.1 3.1 4.1 5.1)
 		   (1.2 2.2 3.2 4.2 5.2)

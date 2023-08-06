@@ -58,7 +58,7 @@
     do (setf solution (nadd-vector solution residual nil alpha)
 	     -residual (nadd-vector -residual adk nil alpha))
        ;; Test convergence
-    until (< (norm-vector -residual :infinity) epsilon) do
+    until (< (norm -residual :inf) epsilon) do
       (setf residual (nsubtract-vector
 		      residual -residual
 		      (/ (inner-product-vector -residual adk nil) denominator)

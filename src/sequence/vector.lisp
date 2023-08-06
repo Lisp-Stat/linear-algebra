@@ -7,9 +7,6 @@
 
 (in-package #:linear-algebra)
 
-(defmethod norm ((data vector) &optional (measure 1))
-  (norm-vector data measure))
-
 (defmethod transpose ((data vector))
   "Return a row vector."
   (let ((result (make-array (length data) :element-type (array-element-type data))))

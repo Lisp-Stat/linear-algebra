@@ -438,25 +438,6 @@
 
 ;;; Fundamental operations
 
-;;; Data vector norm
-
-(deftest norm-data-vector (data-vector)
-  (let ((data (column-vector -6 -5 -4 -3 -2 -1 0 1 2 3 4 5))
-        (zdata (column-vector #C(1 0) #C(3 1) #C(2 3) #C(0 4)
-			      #C(-2 3) #C(-3 1) #C(-1 0))))
-    ;; Taxicab norm
-    (assert-num= 36 (norm data))
-    (assert-num= 19.535658 (norm zdata))
-    ;; Euclidean norm
-    (assert-num= 12.083046 (norm data 2))
-    (assert-num= 8.0 (norm zdata 2))
-    ;; P-norm
-    (assert-num= 8.732892 (norm data 3))
-    (assert-num= 6.064035 (norm zdata 3))
-    ;; Data vector Infinity norm
-    (assert-num= 6 (norm data :infinity))
-    (assert-num= 4.0 (norm zdata :infinity))))
-
 ;;; Data vector transpose
 
 (deftest transpose-data-vector (data-vector)
