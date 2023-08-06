@@ -17,7 +17,7 @@
   :source-control (:git "https://github.com/Lisp-Stat/linear-algebra.git")
   :bug-tracker "https://github.com/Lisp-Stat/linear-algebra/issues"
   :pathname "src/"
-  :depends-on ("closer-mop" "num-utils")
+  :depends-on ("closer-mop" "num-utils" "array-operations")
   :components
   ((:file "pkgdcl" :depends-on ("kernel"))
 
