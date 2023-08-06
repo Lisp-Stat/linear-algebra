@@ -24,7 +24,7 @@
 
 (defun %initialize-cg-solution (array)
   "Return an initial solution vector for the conjugate gradient."
-  (zero-vector (array-dimension array 0) (array-element-type array)))
+  (zeros (array-dimension array 0) (array-element-type array)))
 
 (defun %initialize-cg-residual (array vector solution)
   "Return the initial residual vector for the conjugate gradient."
@@ -34,7 +34,7 @@
   "Return the negative of the residual."
   (loop
     with size = (length residual)
-    with result = (zero-vector size (array-element-type residual))
+    with result = (zeros size (array-element-type residual))
     for index below size
     do (setf (aref result index) (- (aref residual index)))
     finally (return result)))

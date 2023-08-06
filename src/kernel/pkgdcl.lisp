@@ -9,10 +9,10 @@
   (:import-from #:num-utils.arithmetic       #:sum #:seq-min #:seq-max #:square #:absolute-square)
   (:import-from #:num-utils.elementwise      #:eexpt #:eabs #:e/ #:esquare)
   (:import-from #:num-utils.matrix-shorthand #:vec)
+  (:import-from #:aops #:zeros)
 
   ;; Utility functions
-  (:export #:copy-array
-           #:common-class-of
+  (:export #:common-class-of
            #:common-array-element-type
            #:specific-array-element-type)
   ;; Permutation
