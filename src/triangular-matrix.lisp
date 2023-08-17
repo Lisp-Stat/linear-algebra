@@ -43,11 +43,13 @@
         (unless (zerop (aref contents i0 i1))
           (error "Data is not lower triangular."))))))
 
-(defmethod initialize-matrix ((matrix upper-triangular-matrix) (data number) (rows fixnum) (columns fixnum)
-                              &optional (element-type t))
+(defmethod initialize-matrix-contents ((matrix upper-triangular-matrix) (data number) initargs)
   "Initialize the upper triangular matrix with an initial element."
-  (let ((contents (setf (contents matrix)
-                        (make-array (list rows columns)
+  (let* ((element-type (getf initargs :element-type))
+         (dimensions (getf initargs :dimensions))
+         (columns (second dimensions))
+         (contents (setf (contents matrix)
+                        (make-array dimensions
                                     :element-type element-type
                                     :initial-element (coerce 0 element-type)))))
     (dotimes (i1 columns matrix)
@@ -55,42 +57,59 @@
       (dotimes (i0 i1)
         (setf (aref contents i0 i1) data)))))
 
-(defmethod initialize-matrix ((matrix lower-triangular-matrix) (data number) (rows fixnum) (columns fixnum)
-                              &optional (element-type t))
+(defmethod initialize-matrix-contents ((matrix lower-triangular-matrix) (data number) initargs)
   "Initialize the lower triangular matrix with an initial element."
-  (let ((contents (setf (contents matrix)
-                        (make-array (list rows columns)
-                                    :element-type element-type
-                                    :initial-element (coerce 0 element-type)))))
+  (let* ((element-type (getf initargs :element-type))
+         (dimensions (getf initargs :dimensions))
+         (rows (first (getf initargs :dimensions)))
+         (contents (setf (contents matrix)
+                         (make-array dimensions
+                                     :element-type element-type
+                                     :initial-element (coerce 0 element-type)))))
     (dotimes (i0 rows matrix)
       (setf (aref contents i0 i0) data)
       (dotimes (i1 i0)
         (setf (aref contents i0 i1) data)))))
 
-(defmethod initialize-matrix ((matrix upper-triangular-matrix) (data list) (rows integer) (columns integer)
-                              &optional (element-type t))
-  "Initialize the upper triangular matrix with a nested sequence."
-  (%initialize-upper-triangular-matrix-with-seq matrix data rows columns element-type))
+(defmethod initialize-matrix-contents ((matrix upper-triangular-matrix) (data list) initargs)
+  (let* ((dimensions (getf initargs :dimensions))
+         (element-type (getf initargs :element-type))
+         (rows (first (getf initargs :dimensions)))
+         (columns (second (getf initargs :dimensions))))
+    "Initialize the upper triangular matrix with a nested sequence."
+    (%initialize-upper-triangular-matrix-with-seq matrix data rows columns element-type)))
 
-(defmethod initialize-matrix ((matrix lower-triangular-matrix) (data list) (rows integer) (columns integer)
-                              &optional (element-type t))
+(defmethod initialize-matrix-contents ((matrix lower-triangular-matrix) (data list) initargs)
+  (let* ((dimensions (getf initargs :dimensions))
+         (element-type (getf initargs :element-type))
+         (rows (first (getf initargs :dimensions)))
+         (columns (second (getf initargs :dimensions))))
   "Initialize the lower triangular matrix with a nested sequence."
-  (%initialize-lower-triangular-matrix-with-seq matrix data rows columns element-type))
+    (%initialize-lower-triangular-matrix-with-seq matrix data rows columns element-type)))
 
-(defmethod initialize-matrix ((matrix upper-triangular-matrix) (data vector) (rows integer) (columns integer)
-                              &optional (element-type t))
+(defmethod initialize-matrix-contents ((matrix upper-triangular-matrix) (data vector) initargs)
   "Initialize the upper triangular matrix with a nested sequence."
-  (%initialize-upper-triangular-matrix-with-seq matrix data rows columns element-type))
+  (let* ((dimensions (getf initargs :dimensions))
+         (element-type (getf initargs :element-type))
+         (rows (first (getf initargs :dimensions)))
+         (columns (second (getf initargs :dimensions))))
+    (%initialize-upper-triangular-matrix-with-seq matrix data rows columns element-type)))
 
-(defmethod initialize-matrix ((matrix lower-triangular-matrix) (data vector) (rows integer) (columns integer)
-                              &optional (element-type t))
+(defmethod initialize-matrix-contents ((matrix lower-triangular-matrix) (data vector) initargs)
   "Initialize the lower triangular matrix with a nested sequence."
-  (%initialize-lower-triangular-matrix-with-seq matrix data rows columns element-type))
+  (let* ((dimensions (getf initargs :dimensions))
+         (element-type (getf initargs :element-type))
+         (rows (first (getf initargs :dimensions)))
+         (columns (second (getf initargs :dimensions))))
+    (%initialize-lower-triangular-matrix-with-seq matrix data rows columns element-type)))
 
-(defmethod initialize-matrix ((matrix upper-triangular-matrix) (data array) (rows integer) (columns integer)
-                              &optional (element-type t))
+(defmethod initialize-matrix-contents ((matrix upper-triangular-matrix) (data array) initargs)
   "Initialize the upper triangular matrix with a 2D array."
-  (let ((contents (setf (contents matrix)
+  (let* ((dimensions (getf initargs :dimensions))
+         (element-type (getf initargs :element-type))
+         (rows (first dimensions))
+         (columns (second dimensions))
+         (contents (setf (contents matrix)
                         (make-array (list rows columns)
                                     :element-type element-type
                                     :initial-element (coerce 0 element-type)))))
@@ -101,10 +120,13 @@
             (setf (aref contents i0 i1) (aref data i0 i1))
             (error "Data is not upper triangular."))))))
 
-(defmethod initialize-matrix ((matrix lower-triangular-matrix) (data array) (rows integer) (columns integer)
-                              &optional (element-type t))
+(defmethod initialize-matrix-contents ((matrix lower-triangular-matrix) (data array) initargs)
   "Initialize the lower triangular matrix with a 2D array."
-  (let ((contents (setf (contents matrix)
+  (let* ((dimensions (getf initargs :dimensions))
+         (element-type (getf initargs :element-type))
+         (rows (first dimensions))
+         (columns (second dimensions))
+         (contents (setf (contents matrix)
                         (make-array (list rows columns)
                                     :element-type element-type
                                     :initial-element (coerce 0 element-type)))))
@@ -196,7 +218,7 @@
 (defmethod submatrix ((matrix upper-triangular-matrix) (row integer) (column integer)
 		      &key end-row end-column)
   "Return a matrix created from the submatrix of matrix."
-  (destructuring-bind (row column end-row end-column)
+  (multiple-value-bind (row column end-row end-column)
       (matrix-validated-range matrix row column end-row end-column)
     (let* ((numrows (- end-row row))
            (numcols (- end-column column))
@@ -216,7 +238,7 @@
 (defmethod submatrix ((matrix lower-triangular-matrix) (row integer) (column integer)
                       &key end-row end-column)
   "Return a matrix created from the submatrix of matrix."
-  (destructuring-bind (row column end-row end-column)
+  (multiple-value-bind (row column end-row end-column)
       (matrix-validated-range matrix row column end-row end-column)
     (let* ((numrows (- end-row row))
            (numcols (- end-column column))
@@ -236,7 +258,7 @@
 (defmethod (setf submatrix) ((data upper-triangular-matrix) (matrix upper-triangular-matrix) (row integer) (column integer)
                              &key end-row end-column)
   "Set a submatrix of matrix with data."
-  (destructuring-bind (row column end-row end-column)
+  (multiple-value-bind (row column end-row end-column)
       (matrix-validated-range matrix row column end-row end-column)
     (let ((numrows (min (- end-row row) (matrix-row-dimension data)))
           (numcols (min (- end-column column) (matrix-column-dimension data))))
@@ -250,7 +272,7 @@
 (defmethod (setf submatrix) ((data lower-triangular-matrix) (matrix lower-triangular-matrix) (row integer) (column integer)
                              &key end-row end-column)
   "Set a submatrix of matrix with data."
-  (destructuring-bind (row column end-row end-column)
+  (multiple-value-bind (row column end-row end-column)
       (matrix-validated-range matrix row column end-row end-column)
     (let ((numrows (min (- end-row row) (matrix-row-dimension data)))
           (numcols (min (- end-column column) (matrix-column-dimension data))))
@@ -264,7 +286,7 @@
 (defmethod (setf submatrix) ((data dense-matrix) (matrix upper-triangular-matrix)(row integer) (column integer)
                              &key end-row end-column)
   "Set the submatrix of matrix with data."
-  (destructuring-bind (row column end-row end-column)
+  (multiple-value-bind (row column end-row end-column)
       (matrix-validated-range matrix row column end-row end-column)
     (let ((numrows (min (- end-row row) (matrix-row-dimension data)))
           (numcols (min (- end-column column)(matrix-column-dimension data))))
@@ -276,7 +298,7 @@
 (defmethod (setf submatrix) ((data dense-matrix) (matrix lower-triangular-matrix) (row integer) (column integer)
                              &key end-row end-column)
   "Set the submatrix of matrix with data."
-  (destructuring-bind (row column end-row end-column)
+  (multiple-value-bind (row column end-row end-column)
       (matrix-validated-range matrix row column end-row end-column)
     (let ((numrows (min (- end-row row) (matrix-row-dimension data)))
           (numcols (min (- end-column column) (matrix-column-dimension data))))
@@ -348,9 +370,9 @@
                              (start-row2 0) end-row2
 			     (start-column2 0) end-column2)
   "Replace the elements of matrix1 with matrix2."
-  (destructuring-bind (start-row1 start-column1 end-row1 end-column1)
+  (multiple-value-bind (start-row1 start-column1 end-row1 end-column1)
       (matrix-validated-range matrix1 start-row1 start-column1 end-row1 end-column1)
-    (destructuring-bind (start-row2 start-column2 end-row2 end-column2)
+    (multiple-value-bind (start-row2 start-column2 end-row2 end-column2)
         (matrix-validated-range matrix2 start-row2 start-column2 end-row2 end-column2)
       (let ((numrows (min (- end-row1 start-row1) (- end-row2 start-row2)))
             (numcols (min (- end-column1 start-column1) (- end-column2 start-column2))))
@@ -368,9 +390,9 @@
                              (start-row2 0) end-row2
 			     (start-column2 0) end-column2)
   "Replace the elements of matrix1 with matrix2."
-  (destructuring-bind (start-row1 end-column1 end-row1 end-column1)
+  (multiple-value-bind (start-row1 start-column1 end-row1 end-column1)
       (matrix-validated-range matrix1 start-row1 start-column1 end-row1 end-column1)
-    (destructuring-bind (start-row2 start-column2 end-row2 end-column2)
+    (multiple-value-bind (start-row2 start-column2 end-row2 end-column2)
         (matrix-validated-range matrix2 start-row2 start-column2 end-row2 end-column2)
       (let ((numrows (min (- end-row1 start-row1) (- end-row2 start-row2)))
             (numcols (min (- end-column1 start-column1) (- end-column2 start-column2))))
@@ -388,9 +410,9 @@
                              (start-row2 0) end-row2
 			     (start-column2 0) end-column2)
   "Replace the elements of matrix1 with matrix2."
-  (destructuring-bind (start-row1 start-column1 end-row1 end-column1)
+  (multiple-value-bind (start-row1 start-column1 end-row1 end-column1)
       (matrix-validated-range matrix1 start-row1 start-column1 end-row1 end-column1)
-    (destructuring-bind (start-row2 start-column2 end-row2 end-column2)
+    (multiple-value-bind (start-row2 start-column2 end-row2 end-column2)
         (matrix-validated-range matrix2 start-row2 start-column2 end-row2 end-column2)
       (let ((numrows (min (- end-row1 start-row1) (- end-row2 start-row2)))
             (numcols (min (- end-column1 start-column1) (- end-column2 start-column2))))
@@ -406,9 +428,9 @@
                              (start-row2 0) end-row2
 			     (start-column2 0) end-column2)
   "Replace the elements of matrix1 with matrix2."
-  (destructuring-bind (start-row1 start-column1 end-row1 end-column1)
+  (multiple-value-bind (start-row1 start-column1 end-row1 end-column1)
       (matrix-validated-range matrix1 start-row1 start-column1 end-row1 end-column1)
-    (destructuring-bind (start-row2 start-column2 end-row2 end-column2)
+    (multiple-value-bind (start-row2 start-column2 end-row2 end-column2)
         (matrix-validated-range matrix2 start-row2 start-column2 end-row2 end-column2)
       (let ((numrows (min (- end-row1 start-row1) (- end-row2 start-row2)))
             (numcols (min (- end-column1 start-column1) (- end-column2 start-column2))))
