@@ -431,15 +431,6 @@
 
 ;;; Symmetric matrix fundamental operations
 
-(deftest norm-symmetric-matrix (symmetric-matrix)
-  (let ((matrix (symmetric-matrix)))
-    (assert-num= 94.5 (norm matrix))
-    (assert-num= 94.5 (norm matrix 1))
-    (assert-num= 9.9 (norm matrix :max))
-    (assert-num= 68.94671 (norm matrix :frobenius))
-    (assert-num= 94.5 (norm matrix :infinity))
-    (assert-condition error (norm matrix :unknown))))
-
 (deftest transpose-symmetric-matrix (symmetric-matrix)
   (let ((matrix (symmetric-matrix))
         (transpose (symmetric-array)))

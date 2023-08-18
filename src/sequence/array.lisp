@@ -7,13 +7,6 @@
 
 (in-package #:linear-algebra)
 
-(defmethod norm ((data array) &optional (measure 1))
-  "Return the norm of the array."
-  (if (= 2 (array-rank data))
-      (norm-array data measure)
-      (error "Array rank(~D) must be 2."
-             (array-rank data))))
-
 (defmethod transpose ((data array))
   "Return the transpose of the array."
   (let* ((m-rows (array-dimension data 0))

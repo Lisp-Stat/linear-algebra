@@ -349,20 +349,6 @@
     (assert-condition error (matrix-validated-range matrix row1 9 10 1))
     (assert-condition error (matrix-validated-range matrix 9 9 1 1))))
 
-(deftest norm-hermitian-matrix (hermitian-matrix)
-  (let ((matrix (make-matrix 5 5 :matrix-type 'hermitian-matrix
-				 :initial-contents '((#C(1  0) #C(1  2) #C(1  3) #C(1  4) #C(1 5))
-										    (#C(1 -2) #C(2  0) #C(2  3) #C(2  4) #C(2 5))
-										    (#C(1 -3) #C(2 -3) #C(3  0) #C(3  4) #C(3 5))
-										    (#C(1 -4) #C(2 -4) #C(3 -4) #C(4  0) #C(4 5))
-										    (#C(1 -5) #C(2 -5) #C(3 -5) #C(4 -5) #C(5 0))))))
-    (assert-num= 27.71826 (norm matrix))
-    (assert-num= 27.71826 (norm matrix 1))
-    (assert-num= 6.4031243 (norm matrix :max))
-    (assert-num= 22.248597 (norm matrix :frobenius))
-    (assert-num= 27.71826 (norm matrix :infinity))
-    (assert-condition error (norm matrix :unknown))))
-
 (deftest transpose-hermitian-matrix (hermitian-matrix)
   (let ((matrix (make-matrix 4 4 :matrix-type 'hermitian-matrix
 				 :initial-contents '((#C(1.0  0.0) #C(1.0  2.0) #C(1.0  3.0) #C(1.0 4.0))

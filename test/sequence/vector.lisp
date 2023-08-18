@@ -8,26 +8,6 @@
 
 (defsuite vector (sequence))
 
-(deftest norm-vector (vector)
-  ;; Taxicab norm
-  (assert-num= 36 (linear-algebra:norm #(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5) 1))
-  (assert-num= 19.535658 (linear-algebra:norm #(#C(1 0) #C(3 1) #C(2 3) #C(0 4)
-						#C(-2 3) #C(-3 1) #C(-1 0))
-					      1))
-  ;; Euclidean norm
-  (assert-num= 12.083046 (linear-algebra:norm #(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5) 2))
-  (assert-num= 8.0 (linear-algebra:norm #(#C(1 0) #C(3 1) #C(2 3) #C(0 4) #C(-2 3) #C(-3 1) #C(-1 0)) 2))
-  ;; P-norm
-  (let ((data #(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5))
-        (zdata #(#C(1 0) #C(3 1) #C(2 3) #C(0 4)
-                 #C(-2 3) #C(-3 1) #C(-1 0))))
-    (assert-num= 8.732892 (linear-algebra:norm data 3))
-    (assert-num= 6.064035 (linear-algebra:norm zdata 3)))
-  ;; Infinity norm
-  (assert-num= 6 (linear-algebra:norm #(-6 -5 -4 -3 -2 -1 0 1 2 3 4 5) :infinity))
-  (assert-num= 4.0 (linear-algebra:norm #(#C(1 0) #C(3 1) #C(2 3) #C(0 4)
-					  #C(-2 3) #C(-3 1) #C(-1 0)) :infinity)))
-
 ;;; Vector transpose
 
 (deftest transpose-vector (vector)
@@ -87,7 +67,8 @@
     (assert-num= #(#C(4.4 8.8) #C(13.2 17.6)) (linear-algebra:add vector1 vector2 :scalar1 2.0 :scalar2 2.0))))
 
 ;;; Destructive vector addition
-
+#|
+None of these test vectors, they test lists
 (defun sequence-equal-p (seq1 seq2)
   "Assumes SEQ1 is a VECTOR and SEQ2 is a cons."
   (loop
@@ -110,7 +91,7 @@
                     #C(4.0 4.0) #C(5.0 5.0))))
     (assert-eq list (linear-algebra:nscale #C(2.0 2.0) list))
     (assert-true (sequence-equal-p #(#C(0.0 4.0) #C(0.0 8.0) #C(0.0 12.0) #C(0.0 16.0) #C(0.0 20.0)) list))))
-
+|#
 ;;; Vector addition
 
 (deftest add-vector (vector)

@@ -232,10 +232,6 @@ applying the function to each element of the vectors."
 
 ;;; Data vector fundamental operations
 
-(defmethod norm ((vector data-vector) &optional (measure 1))
-  "Return the p-norm of the vector."
-  (norm-vector (contents vector) measure))
-
 (defmethod transpose ((vector column-vector))
   "Return a row vector."
   (make-instance

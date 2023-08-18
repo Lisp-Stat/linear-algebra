@@ -466,25 +466,6 @@
 
 ;;; Square matrix fundamental operations
 
-(deftest norm-square-matrix (square-matrix)
-  (let ((matrix (make-matrix 4 4 :matrix-type 'square-matrix :initial-contents #2A((1.1 1.2 1.3 1.4)
-										   (2.1 2.2 2.3 2.4)
-										   (3.1 3.2 3.3 3.4)
-										   (4.1 4.2 4.3 4.4)))))
-    (assert-num=
-	11.6 (norm matrix))
-    (assert-num=
-	11.6 (norm matrix 1))
-    (assert-num=
-	4.4 (norm matrix :max))
-    (assert-num=
-	11.882762 (norm matrix :frobenius))
-    (assert-num=
-	17.0 (norm matrix :infinity))
-    (assert-condition
-	error
-	(norm matrix :unknown))))
-
 (deftest transpose-square-matrix (square-matrix)
   (let ((matrix (make-matrix 4 4 :matrix-type 'square-matrix :initial-contents #2A((1.1 1.2 1.3 1.4)
 										   (2.1 2.2 2.3 2.4)

@@ -8,11 +8,6 @@
 
 (defsuite utility (kernel))
 
-(deftest copy-array (utility)
-  (assert-num= #(1.1 2.2 3.3 4.4 5.5) (copy-array #(1.1 2.2 3.3 4.4 5.5)))
-  (assert-num= #2A((1.1 1.2 1.3) (2.1 2.2 2.3) (3.1 3.2 3.3))
-    (copy-array #2A((1.1 1.2 1.3) (2.1 2.2 2.3) (3.1 3.2 3.3)))))
-
 (defclass class-0 () ())
 (defclass class-1 (class-0) ())
 (defclass class-a (class-1) ())

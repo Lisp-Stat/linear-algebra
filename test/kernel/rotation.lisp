@@ -41,7 +41,7 @@
     (assert-num= 0 c)
     (assert-num= #C(0.70710677 -0.70710677) s)
     (assert-num=  1.4142135 r))
-  ;; Rational f and g
+  ;; Fixnum f and g ;; this fails
   (multiple-value-bind (c s r) (givens-rotation 1 2)
     (assert-num= 0.4472136 c)
     (assert-num= 0.8944272 s)

@@ -6,21 +6,22 @@
 (uiop:define-package #:linear-algebra-kernel
   (:use #:cl)
   (:import-from #:num-utils #:num=)
+  (:import-from #:num-utils.arithmetic       #:sum #:seq-min #:seq-max #:square #:absolute-square)
+  (:import-from #:num-utils.elementwise      #:eexpt #:eabs #:e/ #:esquare)
+  (:import-from #:num-utils.matrix-shorthand #:vec)
+  (:import-from #:aops #:zeros)
+
   ;; Utility functions
-  (:export #:copy-array
-           #:common-class-of
+  (:export #:common-class-of
            #:common-array-element-type
            #:specific-array-element-type)
   ;; Permutation
   (:export #:right-permute
            #:left-permute)
   ;; Unary operations
-  (:export #:sumsq2 #:sumsq3
-           #:sumsq #:sump
+  (:export #:norm
            #:sumsq-row
-           #:sumsq-column
-           #:norm-vector
-           #:norm-array)
+           #:sumsq-column)
   ;; Binary operations
   (:export #:compatible-dimensions-p
            #:scaled-binary-op

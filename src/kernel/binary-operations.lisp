@@ -9,8 +9,7 @@
 
 ;;; Interface
 
-(defgeneric compatible-dimensions-p
-    (operation vector-or-matrix-1 vector-or-matrix-2)
+(defgeneric compatible-dimensions-p (operation vector-or-matrix-1 vector-or-matrix-2)
   (:documentation "Return true if the vector and matrix dimensions are compatible for the operation."))
 
 (defgeneric scaled-binary-op (op scalar1 scalar2)
@@ -18,38 +17,31 @@
 
 ;;; Scaled binary operations
 
-(defmethod scaled-binary-op
-    (op (scalar1 (eql nil)) (scalar2 (eql nil)))
+(defmethod scaled-binary-op (op (scalar1 (eql nil)) (scalar2 (eql nil)))
   "Return the operation."
   op)
 
-(defmethod scaled-binary-op
-    ((op (eql #'+)) (scalar1 number) (scalar2 (eql nil)))
+(defmethod scaled-binary-op ((op (eql #'+)) (scalar1 number) (scalar2 (eql nil)))
   "Return the scaled operation."
   (lambda (n1 n2) (+ (* scalar1 n1) n2)))
 
-(defmethod scaled-binary-op
-    ((op (eql #'-)) (scalar1 number) (scalar2 (eql nil)))
+(defmethod scaled-binary-op ((op (eql #'-)) (scalar1 number) (scalar2 (eql nil)))
   "Return the scaled operation."
   (lambda (n1 n2) (- (* scalar1 n1) n2)))
 
-(defmethod scaled-binary-op
-    ((op (eql #'+)) (scalar1 (eql nil)) (scalar2 number))
+(defmethod scaled-binary-op ((op (eql #'+)) (scalar1 (eql nil)) (scalar2 number))
   "Return the scaled operation."
   (lambda (n1 n2) (+ n1 (* scalar2 n2))))
 
-(defmethod scaled-binary-op
-    ((op (eql #'-)) (scalar1 (eql nil)) (scalar2 number))
+(defmethod scaled-binary-op ((op (eql #'-)) (scalar1 (eql nil)) (scalar2 number))
   "Return the scaled operation."
   (lambda (n1 n2) (- n1 (* scalar2 n2))))
 
-(defmethod scaled-binary-op
-    ((op (eql #'+)) (scalar1 number) (scalar2 number))
+(defmethod scaled-binary-op ((op (eql #'+)) (scalar1 number) (scalar2 number))
   "Return the scaled operation."
   (lambda (n1 n2) (+ (* scalar1 n1) (* scalar2 n2))))
 
-(defmethod scaled-binary-op
-    ((op (eql #'-)) (scalar1 number) (scalar2 number))
+(defmethod scaled-binary-op ((op (eql #'-)) (scalar1 number) (scalar2 number))
   "Return the scaled operation."
   (lambda (n1 n2) (- (* scalar1 n1) (* scalar2 n2))))
 
@@ -78,10 +70,8 @@
               (aref vector1 index)
               (aref vector2 index)))))
 
-(defmethod compatible-dimensions-p
-    ((operation (eql :add)) (vector1 vector) (vector2 vector))
-  "Return true if the vector dimensions are compatible for an
-addition."
+(defmethod compatible-dimensions-p ((operation (eql :add)) (vector1 vector) (vector2 vector))
+  "Return true if the vector dimensions are compatible for an addition."
   (= (array-dimension vector1 0) (array-dimension vector2 0)))
 
 (defun add-vector (vector1 vector2 scalar1 scalar2)
@@ -120,25 +110,21 @@ addition."
 
 ;;; Binary array/vector operations
 
-(defmethod compatible-dimensions-p
-    ((operation (eql :product)) (vector vector) (array array))
+(defmethod compatible-dimensions-p ((operation (eql :product)) (vector vector) (array array))
   "Return true if the array dimensions are compatible for product."
-  (and
-   (= 2 (array-rank array))
-   (= (length vector) (array-dimension array 0))))
+  (and (= 2 (array-rank array))
+       (= (length vector) (array-dimension array 0))))
 
-(defmethod compatible-dimensions-p
-    ((operation (eql :product)) (array array) (vector vector))
+(defmethod compatible-dimensions-p ((operation (eql :product)) (array array) (vector vector))
   "Return true if the array dimensions are compatible for product."
-  (and
-   (= 2 (array-rank array))
-   (= (array-dimension array 1) (length vector))))
+  (and (= 2 (array-rank array))
+       (= (array-dimension array 1) (length vector))))
 
 (defun %product-vector-array (vector array &optional result)
   "Return the result of the array premultiplied by the vector."
   (loop
     with (m-rows n-columns) = (array-dimensions array)
-    with result = (or result (zero-vector n-columns (array-element-type vector)))
+    with result = (or result (zeros n-columns (array-element-type vector)))
     for column below n-columns
     do (setf (aref result column) (loop
 				    for row below m-rows
@@ -149,7 +135,7 @@ addition."
   "Return the result of the array premultiplied by the vector and scaled."
   (loop
     with (m-rows n-columns) = (array-dimensions array)
-    with result = (or result (zero-vector n-columns (array-element-type vector)))
+    with result = (or result (zeros n-columns (array-element-type vector)))
     for column below n-columns
     do (setf (aref result column) (loop
 				    for row below m-rows
@@ -167,7 +153,7 @@ addition."
   "Return the result of the array postmultiplied by the vector."
   (loop
     with (m-rows n-columns) = (array-dimensions array)
-    with result = (or result (zero-vector m-rows (array-element-type vector)))
+    with result = (or result (zeros m-rows (array-element-type vector)))
     for row below m-rows
     do (setf (aref result row) (loop
 				 for column below n-columns
@@ -179,7 +165,7 @@ addition."
   "Return the result of the array postmultiplied by the vector and scaled."
   (loop
     with (m-rows n-columns) = (array-dimensions array)
-    with result =  (or result (zero-vector m-rows (array-element-type vector)))
+    with result =  (or result (zeros m-rows (array-element-type vector)))
     for row below m-rows
     do (setf (aref result row) (loop
 				 for column below n-columns
@@ -255,7 +241,7 @@ addition."
   (loop
     with (m-rows l-columns) = (array-dimensions array1)
     with n-columns = (array-dimension array2 1)
-    with result = (or result (zero-array m-rows n-columns (array-element-type array1)))
+    with result = (or result (zeros `(,m-rows ,n-columns) (array-element-type array1)))
     for row below m-rows
     do (loop
 	 for column below n-columns
@@ -264,13 +250,12 @@ addition."
 					     sum (* (aref array1 row index) (aref array2 index column)))))
     finally (return result)))
 
-(defun %scaled-product-array-array
-    (scalar array1 array2 &optional result)
+(defun %scaled-product-array-array (scalar array1 array2 &optional result)
   "Return the scaled result of the product of 2 arrays."
   (loop
     with (m-rows l-columns) = (array-dimensions array1)
     with n-columns = (array-dimension array2 1)
-    with result = (or result (zero-array m-rows n-columns (array-element-type array1)))
+    with result = (or result (zeros `(,m-rows ,n-columns) (array-element-type array1)))
     for row below m-rows
     do (loop
 	 for column below n-columns

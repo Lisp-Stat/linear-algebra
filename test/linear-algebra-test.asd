@@ -23,6 +23,7 @@
     :components
     ((:file "suite")
      (:file "utility" :depends-on ("suite"))
+     (:file "norms" :depends-on ("suite"))
      (:file "permute" :depends-on ("suite"))
      (:file "unary-operations" :depends-on ("suite"))
      (:file "binary-operations" :depends-on ("suite"))

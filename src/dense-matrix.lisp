@@ -183,10 +183,6 @@
 
 ;;; Dense matrix fundamental operations
 
-(defmethod norm ((matrix dense-matrix) &optional (measure 1))
-  "Return the norm of the matrix."
-  (norm-array (contents matrix) measure))
-
 (defmethod transpose ((matrix dense-matrix))
   "Return the transpose of the matrix."
   (make-instance

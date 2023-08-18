@@ -96,6 +96,7 @@
     (assert-true (typep matrix 'lower-triangular-matrix))
     (assert-num= (make-array '(10 10) :initial-element 0) matrix))
 
+
   ;; Specify the lower triangular matrix element type
   (let* ((data '((1.1 0.0 0.0 0.0)
                  (1.2 2.2 0.0 0.0)
@@ -113,8 +114,9 @@
   (let ((matrix (make-matrix 10 10 :matrix-type 'lower-triangular-matrix :initial-element 1.0)))
     (assert-true (matrixp matrix))
     (assert-true (typep matrix 'lower-triangular-matrix))
-    (assert-num= matrix (lower-triangular-array)))
-
+    (assert-num= matrix (lower-triangular-array))
+    )
+  
   ;; Specify the lower triangular matrix contents - Nested list
   (let* ((data '((1.1 0.0 0.0 0.0)
                  (1.2 2.2 0.0 0.0)
@@ -336,7 +338,7 @@
         (submat (make-matrix 10 10 :matrix-type 'dense-matrix :initial-contents (upper-triangular-array))))
     (assert-num= (upper-triangular-array) (submatrix matrix 0 0)) ;entire matrix
     (assert-num= (upper-triangular-array 3) (submatrix matrix 3 3)) ;start row and column to the end
-    (assert-num= (upper-triangular-array 3 5) (submatrix matrix 3 3 :row-end 5 :column-end 5)) ;end row and column
+    (assert-num= (upper-triangular-array 3 5) (submatrix matrix 3 3 :end-row 5 :end-column 5)) ;end row and column
     (assert-true (typep (submatrix matrix 1 2) 'dense-matrix)) ;submatrix is a dense matrix
     #+nil
     (assert-num= (submatrix submat 1 2)	(submatrix matrix 1 2)
@@ -344,7 +346,7 @@
        (linear-algebra::contents (submatrix submat 1 2))
        (linear-algebra::contents (submatrix matrix 1 2))))
     (assert-true (typep (submatrix matrix 1 1 :end-row 5) 'dense-matrix))
-    (assert-num= (submatrix submat 1 1 :row-end 5) (submatrix matrix 1 1 :row-end 5))
+    (assert-num= (submatrix submat 1 1 :end-row 5) (submatrix matrix 1 1 :end-row 5))
     (assert-true (typep (submatrix matrix 1 1 :end-column 8) 'dense-matrix))
     (assert-num= (submatrix submat 1 1 :end-column 8) (submatrix matrix 1 1 :end-column 8))
     (assert-condition error (submatrix matrix 11 5));start row exceeds dimensions
@@ -360,7 +362,7 @@
         (submat (make-matrix 10 10 :matrix-type 'dense-matrix :initial-contents (lower-triangular-array))))
     (assert-num= (lower-triangular-array) (submatrix matrix 0 0)) ;the entire matrix
     (assert-num= (lower-triangular-array 3) (submatrix matrix 3 3)) ;start row and column to the end
-    (assert-num= (lower-triangular-array 3 5) (submatrix matrix 3 3 :row-end 5 :end-column 5)) ;end row and column
+    (assert-num= (lower-triangular-array 3 5) (submatrix matrix 3 3 :end-row 5 :end-column 5)) ;end row and column
 
     ;; Submatrix is a dense matrix
     (assert-true (typep (submatrix matrix 2 1) 'dense-matrix))

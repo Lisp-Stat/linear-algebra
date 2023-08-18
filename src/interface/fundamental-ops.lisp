@@ -9,10 +9,6 @@
 
 ;;; External Interface
 
-(defgeneric norm (vector-or-matrix &optional measure)
-  (:documentation
-   "Return the norm according to measure."))
-
 (defgeneric transpose (vector-or-matrix)
   (:documentation "Transpose the vector or matrix."))
 

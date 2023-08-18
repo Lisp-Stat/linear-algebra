@@ -6,6 +6,7 @@
 (uiop:define-package #:linear-algebra
   (:use #:cl)
   (:import-from #:num-utils #:num=)
+  (:import-from #:alexandria #:copy-array)
   (:use-reexport #:linear-algebra-kernel)
   ;; Fundamental operations
   (:export #:norm
