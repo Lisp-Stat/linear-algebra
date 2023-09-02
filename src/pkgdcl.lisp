@@ -74,8 +74,8 @@
 (uiop:define-package #:linalg
   (:use #:cl #:let-plus #:num-utils.elementwise)
   ;; Need to use-reexport #:transpose from num-utils
-  (:import-from #:num-utils.arithmetic #:sum)
-  (:import-from #:aops #:each-index #:sum-index #:recycle #:&dims #:sub)
+  (:import-from #:num-utils.arithmetic #:sum #:absolute-square)
+  (:import-from #:aops #:each-index #:sum-index #:recycle #:&dims #:sub #:reshape-col)
   ;; (:import-from #:num-utils.elementwise #:e* #:e/ #:e+ #:e-)
   (:export :multiply
 	   :add
