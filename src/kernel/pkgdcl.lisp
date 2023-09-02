@@ -4,12 +4,13 @@
 ;;; SPDX-License-identifier: MS-PL
 
 (uiop:define-package #:linear-algebra-kernel
-  (:use #:cl)
+  (:use #:cl #:let-plus)
   (:import-from #:num-utils #:num=)
   (:import-from #:num-utils.arithmetic       #:sum #:seq-min #:seq-max #:square #:absolute-square)
-  (:import-from #:num-utils.elementwise      #:eexpt #:eabs #:e/ #:esquare)
+  (:import-from #:num-utils.elementwise      #:eexpt #:eabs #:e/ #:e* #:e+ #:e- #:esquare)
   (:import-from #:num-utils.matrix-shorthand #:vec)
-  (:import-from #:aops #:zeros)
+  (:import-from #:num-utils.matrix           #:transpose)
+  (:import-from #:aops #:zeros #:each-index #:sum-index #:outer #:recycle #:&dims #:sub)
 
   ;; Utility functions
   (:export #:common-class-of

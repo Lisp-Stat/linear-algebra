@@ -4,7 +4,7 @@
 ;;; SPDX-License-identifier: MS-PL
 
 (defsystem "linear-algebra"
-  :version "0.3.0"
+  :version "0.4.0"
   :license :MS-PL
   :author "Thomas M. Hermann <thomas.m.hermann@odonata-research.com>"
   :maintainer "Steve Nunez <steve@symbolics.tech>"
@@ -17,9 +17,10 @@
   :source-control (:git "https://github.com/Lisp-Stat/linear-algebra.git")
   :bug-tracker "https://github.com/Lisp-Stat/linear-algebra/issues"
   :pathname "src/"
-  :depends-on ("closer-mop" "num-utils" "array-operations" "alexandria")
+  :depends-on ("closer-mop" "num-utils" "array-operations" "alexandria" "let-plus")
   :components
   ((:file "pkgdcl" :depends-on ("kernel"))
+   (:file "linalg" :depends-on ("pkgdcl"))
 
    ;; Interface
    (:module interface

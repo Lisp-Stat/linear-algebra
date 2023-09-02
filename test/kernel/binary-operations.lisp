@@ -8,8 +8,9 @@
 
 (defsuite binary-operations (kernel))
 
-;;; Scaled binary operations
+;;; Scaled binary operations -- We don't need these.
 
+#+nil
 (deftest scaled-binary-op (binary-operations)
 
   ;; No scalars
@@ -164,14 +165,27 @@
     (assert-num= #(2.2 4.4 6.6 8.8)  (add-vector vector1 vector2 nil nil))
     (assert-num= #(3.3 6.6 9.9 13.2) (add-vector vector1 vector2 2.0 nil))
     (assert-num= #(3.3 6.6 9.9 13.2) (add-vector vector1 vector2 nil 2.0))
-    (assert-num= #(4.4 8.8 13.2 17.6)(add-vector vector1 vector2 2.0 2.0)))
+    (assert-num= #(4.4 8.8 13.2 17.6)(add-vector vector1 vector2 2.0 2.0))
+
+    ;; linalg tests
+    (assert-num= #(2.2 4.4 6.6 8.8)  (linalg:add vector1 vector2))
+    (assert-num= #(3.3 6.6 9.9 13.2) (linalg:add (linalg:scale vector1 2) vector2))
+    (assert-num= #(3.3 6.6 9.9 13.2) (linalg:add vector1 (linalg:scale vector2 2.0)))
+    (assert-num= #(4.4 8.8 13.2 17.6)(linalg:add (linalg:scale vector1 2) (linalg:scale vector2 2.0))))
   ;; Complex
   (let ((vector1 #(#C(1.1 2.2) #C(3.3 4.4)))
         (vector2 #(#C(1.1 2.2) #C(3.3 4.4))))
     (assert-num= #(#C(2.2 4.4) #C(6.6 8.8))  (add-vector vector1 vector2 nil nil))
     (assert-num= #(#C(3.3 6.6) #C(9.9 13.2)) (add-vector vector1 vector2 2.0 nil))
     (assert-num= #(#C(3.3 6.6) #C(9.9 13.2)) (add-vector vector1 vector2 nil 2.0))
-    (assert-num= #(#C(4.4 8.8) #C(13.2 17.6))(add-vector vector1 vector2 2.0 2.0))))
+    (assert-num= #(#C(4.4 8.8) #C(13.2 17.6))(add-vector vector1 vector2 2.0 2.0))
+
+    ;; linalg tests
+    (assert-num= #(#C(2.2 4.4) #C(6.6 8.8))  (linalg:add vector1 vector2))
+    (assert-num= #(#C(3.3 6.6) #C(9.9 13.2)) (linalg:add (linalg:scale vector1 2) vector2))
+    (assert-num= #(#C(3.3 6.6) #C(9.9 13.2)) (linalg:add vector1 (linalg:scale vector2 2.0)))
+    (assert-num= #(#C(4.4 8.8) #C(13.2 17.6))(linalg:add (linalg:scale vector1 2) (linalg:scale vector2 2.0)))))
+
 
 ;;; Destructive vector addition
 
